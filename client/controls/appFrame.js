@@ -21,12 +21,11 @@ class appFrame extends ui {
                 <div id="@{_videoPlayerDiv}" class=""></div>
 
                 <!-- child controls -->
-                <!--div id="@{_controlsDiv}" class=""></div-->
+                <div id="@{_controlsDiv}" class="overflow-y-scroll flex flex-wrap gap-4"></div>
             </div>
 
             <!-- menu -->
             <div class="fixed bottom-0 left-0 right-0 h-14 bg-slate-900">
-
             </div>
         </div>
         `;
@@ -38,8 +37,24 @@ class appFrame extends ui {
             videoPlayer: {
                 controlType: "videoPlayer",
                 parentElement: "_videoPlayerDiv",
-                hlsUrl: "https://za-scc-stream.bccsa.org/toplevelmanifest.m3u8",
-                imageUrl: "img/live-poster.jpg"
+                visible: false
+            },
+
+            tile1: {
+                controlType: "videoTile",
+                title: "Test Title",
+                description: "Test Description Test Description",
+                publishDate: "2023-03-26",
+                hlsUrl: "",
+                imageUrl: "img/vod-test.jpg",
+            },
+            tile2: {
+                controlType: "videoTile",
+                title: "Test Title2",
+                description: "Test Description2 Test Description2",
+                publishDate: "2023-03-26",
+                hlsUrl: "",
+                imageUrl: "img/live-poster.jpg",
             }
         })
     }

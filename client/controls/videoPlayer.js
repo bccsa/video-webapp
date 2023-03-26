@@ -30,7 +30,7 @@ class videoPlayer extends ui {
         // Initialize player
         this._player = videojs(this._playerElement.id);
         if (this.hlsUrl) {
-            this._player.src(this.hlsUrl);
+            this._player.src({ type: 'application/x-mpegURL', src: this.hlsUrl});
         }
         if (this.imageUrl) {
             this._player.poster(this.imageUrl);
@@ -38,7 +38,7 @@ class videoPlayer extends ui {
 
         // Update player source on hlsUrl change
         this.on('hlsUrl', url => {
-            this._player.source(url);
+            this._player.src({ type: 'application/x-mpegURL', src: url});
         });
 
         // Update player posert on imageUrl change
