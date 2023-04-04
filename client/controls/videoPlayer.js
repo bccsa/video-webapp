@@ -3,11 +3,15 @@ class videoPlayer extends ui {
         super();
         this.imageUrl = "";
         this.hlsUrl = "";
+        this.title = "";
         this._player = undefined;   // Used for videoJS player object reference
     }
 
     get html() {
         return `
+        <div class="mb-2">
+            <span class="text-slate-100 font-sans font-bold text-md">@{title}</span>
+        </div>
         <!-- video div -->
         <div class="aspect-video max-w-[600pt] rounded-lg m-auto mb-4 overflow-hidden">
             <video

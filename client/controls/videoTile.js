@@ -26,6 +26,7 @@ class videoTile extends ui {
         this._image.addEventListener('click', e => {
             this._parent.videoPlayer.imageUrl = this.imageUrl;
             this._parent.videoPlayer.hlsUrl = this.hlsUrl;
+            this._parent.videoPlayer.title = this.title;
             this._parent.videoPlayer.Show();
         });
     }

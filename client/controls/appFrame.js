@@ -11,8 +11,8 @@ class appFrame extends ui {
         return `
         <div class="flex flex-col h-screen bg-slate-800">
             <!-- title -->
-            <div class="w-full pl-4 pr-4 h-12  bg-slate-900 flex ">
-                <span class="text-slate-400 font-sans text-lg flex items-center">@{title}</span>
+            <div class="fixed top-0 left-0 right-0 pl-4 pr-4 h-12  bg-slate-900 flex ">
+                <h1 class="text-slate-400 font-sans text-lg flex items-center">@{title}</h1>
             </div>
 
             <!-- contents -->
@@ -25,7 +25,7 @@ class appFrame extends ui {
             </div>
 
             <!-- menu -->
-            <div class="fixed bottom-0 left-0 right-0 h-14 bg-slate-900">
+            <div class="fixed bottom-0 left-0 right-0 h-20 bg-slate-900">
             </div>
         </div>
         `;
@@ -42,16 +42,16 @@ class appFrame extends ui {
 
             tile1: {
                 controlType: "videoTile",
-                title: "Test Title",
-                description: "Test Description Test Description",
+                title: "Live",
+                description: "BCC Africa Online live stream",
                 publishDate: "2023-03-26",
                 hlsUrl: "",
                 imageUrl: "img/vod-test.jpg",
             },
             tile2: {
                 controlType: "videoTile",
-                title: "Test Title2",
-                description: "Test Description2 Test Description2",
+                title: "Live PiP",
+                description: "Picture in Picture for hearing impaired",
                 publishDate: "2023-03-26",
                 hlsUrl: "",
                 imageUrl: "img/live-poster.jpg",
