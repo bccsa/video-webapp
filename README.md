@@ -9,3 +9,10 @@ Start the tailwind build script to monitor for code changes and automatically bu
 cd client-tailwind
 ./build.sh
 ```
+
+
+## Start directus
+```shell
+cd cms
+npx directus start
+```

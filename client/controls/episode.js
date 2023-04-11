@@ -1,4 +1,4 @@
-class videoTile extends ui {
+class episode extends ui {
     constructor() {
         super();
 
@@ -12,7 +12,7 @@ class videoTile extends ui {
     get html() {
         return `
         <div class="max-w-sm min-h-[50pt] bg-slate-700 rounded-lg overflow-hidden flex">
-            <img src="@{imageUrl}" id="@{_image}" class="h-[60pt] w-[100pt] min-w-[100pt] bg-cover"></img>
+            <img loading="lazy" src="@{imageUrl}" id="@{_image}" class="h-[60pt] w-[100pt] min-w-[100pt] bg-cover"></img>
             <div class="p-2">
                 <span class="text-slate-900 font-sans font-bold text-md">@{title}</span>
                 <p class="text-slate-400 font-sans text-sm">@{description}</p>

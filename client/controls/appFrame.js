@@ -3,6 +3,7 @@ class appFrame extends ui {
         super();
 
         this.title = "Title comes here"
+        this.sectionName = "";
         this.description = "Description comes here. Description comes here. Description comes here. Description comes here. Description comes here. Description comes here.";
 
     }
@@ -12,7 +13,11 @@ class appFrame extends ui {
         <div class="flex flex-col h-screen bg-slate-800">
             <!-- title -->
             <div class="fixed top-0 left-0 right-0 pl-4 pr-4 h-12  bg-slate-900 flex ">
-                <h1 class="text-slate-400 font-sans text-lg flex items-center">@{title}</h1>
+                <h1 class="text-slate-400 font-sans text-lg flex items-center">
+                    <span>@{title}</span>
+                    <span id="@{_titleDivider}" class="ml-2 mr-2" hidden>|</span>
+                    <span>@{sectionName}</span>
+                </h1>
             </div>
 
             <!-- contents -->
@@ -32,30 +37,22 @@ class appFrame extends ui {
     }
 
     Init() {
-        // // Add video player
+        // Add video player
         this.SetData({
             videoPlayer: {
                 controlType: "videoPlayer",
                 parentElement: "_videoPlayerDiv",
                 visible: false
             },
-
-            tile1: {
-                controlType: "videoTile",
-                title: "Live",
-                description: "BCC Africa Online live stream",
-                publishDate: "2023-03-26",
-                hlsUrl: "",
-                imageUrl: "img/vod-test.jpg",
-            },
-            tile2: {
-                controlType: "videoTile",
-                title: "Live PiP",
-                description: "Picture in Picture for hearing impaired",
-                publishDate: "2023-03-26",
-                hlsUrl: "",
-                imageUrl: "img/live-poster.jpg",
-            }
         })
+
+        // Title divider
+        this.on('sectionName', data => {
+            if (data) {
+                this._titleDivider.hidden = false;
+            } else {
+                this._titleDivider.hidden = true;
+            }
+        });
     }
 }
