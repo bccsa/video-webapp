@@ -1,7 +1,7 @@
 class videoPlayer extends ui {
     constructor() {
         super();
-        this.imageUrl = "";
+        this.imgUrl = "";
         this.hlsUrl = "";
         this.title = "";
         this._player = undefined;   // Used for videoJS player object reference
@@ -36,8 +36,8 @@ class videoPlayer extends ui {
         if (this.hlsUrl) {
             this._player.src({ type: 'application/x-mpegURL', src: this.hlsUrl});
         }
-        if (this.imageUrl) {
-            this._player.poster(this.imageUrl);
+        if (this.imgUrl) {
+            this._player.poster(this.imgUrl);
         }
 
         // Update player source on hlsUrl change
@@ -45,8 +45,8 @@ class videoPlayer extends ui {
             this._player.src({ type: 'application/x-mpegURL', src: url});
         });
 
-        // Update player posert on imageUrl change
-        this.on('imageUrl', url => {
+        // Update player posert on imgUrl change
+        this.on('imgUrl', url => {
             this._player.poster(url);
         });
     }

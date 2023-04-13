@@ -7,7 +7,7 @@ class collection extends ui {
 
     get html() {
         return `
-            <h3 class="text-slate-400 font-sans text-md">@{displayName}</h3>
+            <h3 class="text-slate-200 font-sans text-md mb-2">@{displayName}</h3>
             <div id="@{_controlsDiv}" class="w-full overflow-x-scroll scrollbar-hide touch-pan-y">
             </div>
         `;
