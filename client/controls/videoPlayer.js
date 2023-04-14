@@ -4,6 +4,7 @@ class videoPlayer extends ui {
         this.imgUrl = "";
         this.hlsUrl = "";
         this.title = "";
+        this.description = "";
         this._player = undefined;   // Used for videoJS player object reference
     }
 
@@ -13,7 +14,7 @@ class videoPlayer extends ui {
             <span class="text-slate-100 font-sans font-bold text-md">@{title}</span>
         </div>
         <!-- video div -->
-        <div class="aspect-video max-w-[600pt] rounded-lg m-auto mb-4 overflow-hidden">
+        <div class="aspect-video max-w-[600pt] rounded-lg m-auto mb-1 overflow-hidden">
             <video
                 id="@{_playerElement}"
                 class="video-js w-full h-full rounded-lg"
@@ -27,7 +28,11 @@ class videoPlayer extends ui {
                     <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
                 </p>
             </video>
-        </div>`;
+        </div>
+        <div class="border border-b-slate-700 border-l-0 border-r-0 border-t-0 mb-4">
+            <p class="font-sans text-slate-500 text-xs text-justify mb-2">@{description}</p>
+        </div>
+        `;
     }
 
     Init() {
