@@ -1,35 +1,33 @@
 // Create modular-ui top level control
 var controls = new uiTopLevelContainer('controls', 'controls');
 
-controls.SetData({
-    appFrame: {
-        controlType: "appFrame",
-        title: "Title",
-        // tile1: {
-        //     controlType: "videoTile",
-        //     title: "Live",
-        //     description: "BCC Africa Online live stream",
-        //     publishDate: "2023-03-26",
-        //     hlsUrl: "",
-        //     imageUrl: "img/vod-test.jpg",
-        // },
-        // tile2: {
-        //     controlType: "videoTile",
-        //     title: "Live PiP",
-        //     description: "Picture in Picture for hearing impaired",
-        //     publishDate: "2023-03-26",
-        //     hlsUrl: "",
-        //     imageUrl: "img/live-poster.jpg",
-        // }
-    }
-});
+// Get env settings
+fetch('env.json')
+    .then(response => response.json())
+    .then(json => {
+        let env = json;
 
-// Wait for appFrame to be initialized before connecting to socket.io server
-controls.on('appFrame', appFrame => {
-    const socket = io();
+        // Create appFrame
+        controls.SetData({
+            appFrame: {
+                controlType: "appFrame",
+                title: "Title"
+            }
+        });
 
-    // Forward data events to modular-ui controls
-    socket.on('data', data => {
-        controls.appFrame.SetData(data);
+        // Wait for appFrame to be initialized
+        controls.on('appFrame', appFrame => {
+            // Connect to Socket.io server
+            if (env && env.socketUrl)
+            {
+                var socket = io(env.socketUrl);
+            }
+            
+
+            // Listen for data events, and forward to modular-ui controls
+            socket.on('data', data => {
+                appFrame.SetData(data);
+            })
+        });
     });
-})
+

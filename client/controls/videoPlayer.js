@@ -37,7 +37,49 @@ class videoPlayer extends ui {
 
     Init() {
         // Initialize player
-        this._player = videojs(this._playerElement.id);
+        let options = {
+            fluid: false,
+            html5: {
+                vhs: {
+                    overrideNative: true,
+                    bandwidth: 100000,
+                },
+                nativeAudioTracks: videojs.browser.IS_SAFARI,
+                nativeVideoTracks: videojs.browser.IS_SAFARI,
+            },
+            // controls: true,
+            autoplay: false,
+            // preload: "auto",
+            // preferFullWindow: true,
+            // fullscreen: {
+            //     options: {
+            //         navigationUi: 'hide'
+            //     }
+            // }
+            
+            // "webkit-playinline": true // does not seem to work to make it play in safari-ios
+        }
+
+        if (videojs.browser.IS_SAFARI) {
+            delete options.html5.vhs.bandwidth;
+        }
+
+        this._player = videojs(this._playerElement.id, options);
+
+        this._player.playsinline(true); // allow player to play in-place on page.
+
+        // if (!videojs.browser.IS_SAFARI) {
+            this._player.landscapeFullscreen({  // player full-screen settings (see https://www.npmjs.com/package/videojs-landscape-fullscreen)
+                fullscreen: {
+                    enterOnRotate: true,
+                    exitOnRotate: true,
+                    alwaysInLandscapeMode: true,
+                    iOS: videojs.browser.IS_SAFARI,
+                }
+            });
+        // }
+        
+
         if (this.hlsUrl) {
             this._player.src({ type: 'application/x-mpegURL', src: this.hlsUrl});
         }

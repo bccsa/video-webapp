@@ -37,7 +37,12 @@ if (config) {
     clientApp.use(express.static(path.join(__dirname, "../client")));
 
     // Client socket.io messaging
-    const clientIO = new Server(clientHttp);
+    const clientIO = new Server(clientHttp, {
+        cors: {
+            origin: '*',
+            methods: ["GET", "POST"]
+        }
+    });
 
     // Client socket.io messaging
     clientIO.on('connection', socket => {

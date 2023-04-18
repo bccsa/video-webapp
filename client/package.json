@@ -1,5 +1,35 @@
 {
-  "devDependencies": {
-    "video.js": "^8.0.4"
-  }
+  "name": "client",
+  "version": "0.0.1",
+  "description": "Streaming web-app",
+  "main": "index.html",
+  "dependencies": {
+    "aes-decrypter": "^4.0.1",
+    "dom-walk": "^0.1.2",
+    "global": "^4.4.0",
+    "individual": "^2.0.0",
+    "is-function": "^1.0.2",
+    "keycode": "^2.2.0",
+    "m3u8-parser": "^6.0.0",
+    "min-document": "^2.19.0",
+    "mpd-parser": "^1.1.0",
+    "mux.js": "^6.3.0",
+    "pkcs7": "^1.0.4",
+    "process": "^0.11.10",
+    "regenerator-runtime": "^0.13.11",
+    "rust-result": "^1.0.0",
+    "safe-json-parse": "^4.0.0",
+    "socket.io-client": "^4.6.1",
+    "url-toolkit": "^2.2.5",
+    "video.js": "^8.0.4",
+    "videojs-contrib-quality-levels": "^3.0.0",
+    "videojs-font": "^3.2.0",
+    "videojs-landscape-fullscreen": "^11.1111.0",
+    "videojs-vtt.js": "^0.15.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT"
 }
