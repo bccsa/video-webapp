@@ -1,0 +1,6 @@
+{
+  "appId": "bcc.africa.online",
+  "appName": "BCC Africa Online",
+  "webDir": "client",
+  "bundledWebRuntime": true
+}
