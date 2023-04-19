@@ -3,6 +3,11 @@ Video web-app for live and VOD content
 
 
 ## Development
+### Init submodules
+```shell
+git submodule update --init --recursive
+```
+
 ### Configure database
 To do
 
