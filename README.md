@@ -25,16 +25,18 @@ To do
 
 ### Tailwind
 Start the tailwind build script to monitor for code changes and automatically build client/tailwind.css:
+
+Mac & Linux:
 ```shell
-# Mac & linux
 cd client-tailwind
 ./build.sh
 ```
 or
-```batch
-rem Windows
+
+Windows:
+```powershell
 cd client-tailwind
-build.cmd
+./build.cmd
 ```
 
 ### Start directus
