@@ -8,6 +8,18 @@ Video web-app for live and VOD content
 git submodule update --init --recursive
 ```
 
+### Install npm packages
+```shell
+npm install
+cd client
+npm install
+cd ../client-tailwind
+npm install
+cd ../cms
+npm install
+cd ../server
+npm install
+
 ### Configure database
 To do
 
