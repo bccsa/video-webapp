@@ -19,12 +19,12 @@ class appFrame extends ui {
             </div>
 
             <!-- contents -->
-            <div class="fixed top-12 bottom-16 left-0 right-0 p-4">
+            <div class="fixed top-12 bottom-16 left-0 right-0 p-4 flex flex-col">
                 <!-- video player div -->
                 <div id="@{_videoPlayerDiv}" class=""></div>
 
                 <!-- child controls -->
-                <div id="@{_controlsDiv}" class="overflow-y-scroll scrollbar-hide flex flex-wrap gap-4"></div>
+                <div id="@{_controlsDiv}" class="overflow-y-scroll scrollbar-hide w-full flex-1"></div>
             </div>
 
             <!-- menu -->

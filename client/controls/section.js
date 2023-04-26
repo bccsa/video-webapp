@@ -4,14 +4,13 @@ class section extends ui {
 
         this.displayName = "";
         this.visible = false;
+        this.cssClass = "w-full";
     }
 
     get html() {
         return `
-            <div class="relative flex-grow flex-shrink-0"></div>
-            <div id="@{_controlsDiv}" class="flex swiper swiper-slide swiper-navigation-disabled swiper-initialized swiper-horizontal items-start scroll-auto space-x-3 h-full w-full overflow-scroll  scrollbar-hide">
+            <div id="@{_controlsDiv}" class="w-full">
             </div>
-           
         `;
     }
 
