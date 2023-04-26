@@ -24,7 +24,7 @@ class appFrame extends ui {
                 <div id="@{_videoPlayerDiv}" class=""></div>
 
                 <!-- child controls -->
-                <div id="@{_controlsDiv}" class="overflow-y-scroll flex flex-wrap gap-4"></div>
+                <div id="@{_controlsDiv}" class="overflow-y-scroll scrollbar-hide flex flex-wrap gap-4"></div>
             </div>
 
             <!-- menu -->
