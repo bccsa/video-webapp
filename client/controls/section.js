@@ -4,6 +4,7 @@ class section extends ui {
 
         this.displayName = "";
         this.visible = false;
+        this.cssClass = "w-full";
     }
 
     get html() {

@@ -24,7 +24,7 @@ class appFrame extends ui {
                 <div id="@{_videoPlayerDiv}" class=""></div>
 
                 <!-- child controls -->
-                <div id="@{_controlsDiv}" class="overflow-y-scroll flex flex-wrap gap-4"></div>
+                <div id="@{_controlsDiv}" class="overflow-y-scroll flex flex-wrap gap-4 w-full"></div>
             </div>
 
             <!-- menu -->
@@ -70,6 +70,9 @@ class appFrame extends ui {
         this._btnLive.addEventListener('click', e => {
             this.setLive();
         });
+        this._btnUser.addEventListener('click', e => {
+            this.setUser();
+        });
     }
 
     resetBtn(ref) {
@@ -99,6 +102,15 @@ class appFrame extends ui {
             this.setBtn(this._btnLive);
             this.resetBtn(this._btnHome);
             this.resetBtn(this._btnUser);
+        }
+    }
+
+    setUser() {
+        if (this.User) {
+            this.User.Show();
+            this.setBtn(this._btnUser);
+            this.resetBtn(this._btnHome);
+            this.resetBtn(this._btnLive);
         }
     }
 }
