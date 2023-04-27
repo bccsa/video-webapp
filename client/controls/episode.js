@@ -12,10 +12,10 @@ class episode extends ui {
     get html() {
         return `
         <div class="w-fit">
-            <img loading="lazy" src="@{imgUrl}" id="@{_image}" class="h-[200pt] rounded-md w-[300pt] bg-cover "></img>
-            <div class="p-2">
+            <img loading="lazy" src="@{imgUrl}" id="@{_image}" class="h-[100pt] aspect-video rounded-md bg-cover "></img>
+            <div class="pt-2 pb-2">
                 <span class="text-slate-200 font-sans font-semibold text-md">@{displayName}</span>
-                <p class="text-slate-400 font-sans w-[300pt] text-md text-sm">@{description}</p>
+                <p class="text-slate-400 font-sans break-all text-md text-sm">@{description}</p>
             </div>
         </div>
         
