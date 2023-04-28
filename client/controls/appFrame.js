@@ -4,6 +4,11 @@ class appFrame extends ui {
 
         this.title = "Title comes here"
         this.sectionName = "";
+        this.hlsTitle = "";
+        this.hlsDescription = "";
+        this.imgUrl = "";
+        this.hlsUrl = "";
+        this._player = undefined;   // Used for videoJS player object reference
     }
 
     get html() {
@@ -19,12 +24,34 @@ class appFrame extends ui {
             </div>
 
             <!-- contents -->
-            <div class="fixed top-12 bottom-16 left-0 right-0 p-4 flex flex-col">
-                <!-- video player div -->
-                <div id="@{_videoPlayerDiv}" class=""></div>
+            <div class="absolute flex top-12 left-0 right-0 bottom-16 landscape:flex-row portrait:flex-col gap-4 p-4">
 
+                <!-- video div -->
+                <div id="@{_videoDiv}" style="display: none;" class="landscape:max-w-[66%] aspect-[3/2]">
+                    <!-- video player -->
+                    <div class="aspect-video w-full rounded-lg mb-1 overflow-hidden">
+                        <video
+                            id="@{_playerElement}"
+                            class="video-js w-full h-full rounded-lg"
+                            controls
+                            preload="auto"
+                            data-setup="{}"
+                        >
+                            <p class="vjs-no-js">
+                                To view this video please enable JavaScript, and consider upgrading to a
+                                web browser that
+                                <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                            </p>
+                        </video>
+                    </div>
+                    <!-- video data -->
+                    <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
+                    <p class="font-sans text-slate-500 text-xs text-justify mb-2">@{hlsDescription}</p>
+                </div>
+                
                 <!-- child controls -->
-                <div id="@{_controlsDiv}" class="overflow-y-scroll scrollbar-hide w-full flex-1"></div>
+                <div id="@{_controlsDiv}" class="overflow-y-scroll scrollbar-hide w-full flex-1 block"></div>
+
             </div>
 
             <!-- menu -->
@@ -41,13 +68,12 @@ class appFrame extends ui {
 
     Init() {
         // Add video player
-        this.SetData({
-            videoPlayer: {
-                controlType: "videoPlayer",
-                parentElement: "_videoPlayerDiv",
-                visible: false
-            },
-        });
+        // this.SetData({
+        //     videoPlayer: {
+        //         controlType: "videoPlayer",
+        //         parentElement: "_videoPlayerDiv",
+        //     },
+        // });
 
         // Title divider
         this.on('sectionName', data => {
@@ -70,6 +96,9 @@ class appFrame extends ui {
         this._btnLive.addEventListener('click', e => {
             this.setLive();
         });
+
+        this._initPlayer();
+        
     }
 
     resetBtn(ref) {
@@ -100,5 +129,76 @@ class appFrame extends ui {
             this.resetBtn(this._btnHome);
             this.resetBtn(this._btnUser);
         }
+    }
+
+    ShowPlayer() {
+        this._videoDiv.style.display = "block";
+    }
+
+    HidePlayer() {
+        this._videoDiv.style.display = "none";
+    }
+
+    _initPlayer() {
+        // Initialize player
+        let options = {
+            fluid: false,
+            html5: {
+                vhs: {
+                    overrideNative: true,
+                    bandwidth: 100000,
+                },
+                nativeAudioTracks: videojs.browser.IS_SAFARI,
+                nativeVideoTracks: videojs.browser.IS_SAFARI,
+            },
+            // controls: true,
+            autoplay: false,
+            // preload: "auto",
+            // preferFullWindow: true,
+            // fullscreen: {
+            //     options: {
+            //         navigationUi: 'hide'
+            //     }
+            // }
+            
+            // "webkit-playinline": true // does not seem to work to make it play in safari-ios
+        }
+
+        if (videojs.browser.IS_SAFARI) {
+            delete options.html5.vhs.bandwidth;
+        }
+
+        this._player = videojs(this._playerElement.id, options);
+
+        this._player.playsinline(true); // allow player to play in-place on page.
+
+        // if (!videojs.browser.IS_SAFARI) {
+            this._player.landscapeFullscreen({  // player full-screen settings (see https://www.npmjs.com/package/videojs-landscape-fullscreen)
+                fullscreen: {
+                    enterOnRotate: true,
+                    exitOnRotate: true,
+                    alwaysInLandscapeMode: true,
+                    iOS: videojs.browser.IS_SAFARI,
+                }
+            });
+        // }
+        
+
+        if (this.hlsUrl) {
+            this._player.src({ type: 'application/x-mpegURL', src: this.hlsUrl});
+        }
+        if (this.imgUrl) {
+            this._player.poster(this.imgUrl);
+        }
+
+        // Update player source on hlsUrl change
+        this.on('hlsUrl', url => {
+            this._player.src({ type: 'application/x-mpegURL', src: url});
+        });
+
+        // Update player posert on imgUrl change
+        this.on('imgUrl', url => {
+            this._player.poster(url);
+        });
     }
 }
