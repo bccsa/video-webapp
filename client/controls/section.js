@@ -9,7 +9,7 @@ class section extends ui {
 
     get html() {
         return `
-            <div id="@{_controlsDiv}" class="h-full w-full overflow-y-scroll scrollbar-hide">
+            <div id="@{_controlsDiv}" class="w-full">
             </div>
         `;
     }

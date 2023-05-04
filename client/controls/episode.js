@@ -11,26 +11,24 @@ class episode extends ui {
 
     get html() {
         return `
-        <div class="max-w-sm min-h-[50pt] bg-slate-700 rounded-lg overflow-hidden flex">
-            <img loading="lazy" src="@{imgUrl}" id="@{_image}" class="h-[60pt] w-[100pt] min-w-[100pt] bg-cover"></img>
-            <div class="p-2">
-                <span class="text-slate-900 font-sans font-bold text-md">@{displayName}</span>
-                <p class="text-slate-400 font-sans text-sm">@{description}</p>
+        <div class="w-36 md:w-44 lg:w-50 xl:w-60">
+            <img loading="lazy" src="@{imgUrl}" id="@{_image}" class="aspect-video rounded-md bg-cover "></img>
+            <div class="pt-0 pb-2 text-xs md:text-sm">
+                <p class="text-slate-400 font-sans text-md">@{displayName}</p>
             </div>
         </div>
-        
         `;
     }
 
     Init() {
-        let videoPlayer = this._topLevelParent.appFrame.videoPlayer;
+        let appFrame = this._topLevelParent.appFrame;
 
         this._image.addEventListener('click', e => {
-            videoPlayer.imgUrl = this.imgUrl;
-            videoPlayer.hlsUrl = this.hlsUrl;
-            videoPlayer.title = this.displayName;
-            videoPlayer.description = this.description;
-            videoPlayer.Show();
+            appFrame.imgUrl = this.imgUrl;
+            appFrame.hlsUrl = this.hlsUrl;
+            appFrame.hlsTitle = this.displayName;
+            appFrame.hlsDescription = this.description;
+            appFrame.ShowPlayer();
         });
     }
 }
