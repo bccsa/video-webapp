@@ -51,7 +51,6 @@ class appFrame extends ui {
                 
                 <!-- child controls -->
                 <div id="@{_controlsDiv}" class="overflow-y-scroll scrollbar-hide w-full flex-1 block"></div>
-
             </div>
 
             <!-- menu -->
@@ -99,6 +98,9 @@ class appFrame extends ui {
 
         this._initPlayer();
         
+        this._btnUser.addEventListener('click', e => {
+            this.setUser();
+        });
     }
 
     resetBtn(ref) {
@@ -200,5 +202,14 @@ class appFrame extends ui {
         this.on('imgUrl', url => {
             this._player.poster(url);
         });
+    }
+    
+    setUser() {
+        if (this.User) {
+            this.User.Show();
+            this.setBtn(this._btnUser);
+            this.resetBtn(this._btnHome);
+            this.resetBtn(this._btnLive);
+        }
     }
 }

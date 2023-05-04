@@ -1,7 +1,30 @@
 {
   "dependencies": {
+    "connect-sqlite3": "^0.9.13",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "mkdirp": "^3.0.0",
+    "passport": "^0.6.0",
+    "passport-openidconnect": "^0.1.1",
     "pg": "^8.10.0",
     "socket.io": "^4.6.1"
-  }
+  },
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bccsa/video-webapp.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bccsa/video-webapp/issues"
+  },
+  "homepage": "https://github.com/bccsa/video-webapp#readme",
+  "description": ""
 }
