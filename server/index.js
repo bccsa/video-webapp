@@ -71,7 +71,7 @@ clientIO.engine.use(sessionMiddleware);
 clientIO.on('connection', socket => {
     // Send initial data to client
     dbObjects.sections().then(data => {
-        setUserView(socket, data);
+        // setUserView(socket, data);
         socket.emit('data', data);
     });
 

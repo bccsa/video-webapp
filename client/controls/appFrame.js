@@ -9,6 +9,7 @@ class appFrame extends ui {
         this.imgUrl = "";
         this.hlsUrl = "";
         this._player = undefined;   // Used for videoJS player object reference
+        this.isAuthenticated = false;
     }
 
     get html() {
