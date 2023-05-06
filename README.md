@@ -46,13 +46,33 @@ npx directus start
 ```
 
 ### Start server
+Create a .env environmental variables file in the project root:
 ```shell
-cd server
-node index.js
+# Postgres database connection
+DB_USER="postgres"
+DB_PASSWORD="postgrespw"
+DB_HOST="localhost"
+DB_DATABASE="cms"
+DB_PORT="5432"
+
+# Server settings
+SERVER_PROTOCOL="http"
+SERVER_HOSTNAME="localhost"
+SERVER_PORT="8080"
+
+# App settings
+APP_TITLE="Video WebApp"
+
+# Auth0 settings
+AUTH0_DOMAIN="your.auth0.domain"
+AUTH0_CLIENT_ID="your_auth0_client_id"
+AUTH0_CLIENT_SECRET="your_auth0_client_secret"
 ```
 
+Start the server in debug mode from the Visual Studio Code debug menu.
+
 ### Client notes
-#### env.json
+
 
 
 ### Capacitor notes

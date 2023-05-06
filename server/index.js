@@ -4,7 +4,7 @@ const { Server } = require("socket.io");
 const express = require("express");
 const http = require("http");
 const path = require("path");
-require('dotenv').config();
+require('dotenv').config({path: path.join(__dirname, "../.env")});
 var { authRouter, authSocketIO } = require('./routes/auth');
 var session = require('express-session');
 var passport = require('passport');
@@ -36,6 +36,22 @@ clientApp.get("/", (req, res) => {
 
 // Serve static files
 clientApp.use(express.static(path.join(__dirname, "../client")));
+
+// Serve client env
+var clientEnv = {
+    app: {
+        title: process.env.APP_TITLE,
+        socketUrl: process.env.SERVER_PROTOCOL + "://" + process.env.SERVER_HOSTNAME + ":" + process.env.SERVER_PORT
+    },
+    auth0: {
+        domain: process.env.AUTH0_DOMAIN,
+        clientId: process.env.AUTH0_CLIENT_ID
+    }
+}
+clientApp.get("/env", (req, res) => {
+    res.setHeader('content-type', 'text/plain');
+    res.send(JSON.stringify(clientEnv));
+});
 
 // Create and setup session database
 mkdirp.sync('./var/db')

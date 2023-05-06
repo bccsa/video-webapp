@@ -5,7 +5,7 @@ var env;
 var socket;
 
 // Get env settings
-fetch('env.json')
+fetch('env')
     .then(response => response.json())
     .then(json => {
         env = json;
@@ -28,7 +28,7 @@ fetch('env.json')
 
 // Wait for appFrame to be initialized
 controls.on('appFrame', appFrame => {
-    // Auth0
+    // Auth0 ref: https://auth0.com/docs/quickstart/spa/vanillajs/01-login
     auth0.createAuth0Client({
         domain: env.auth0.domain,
         clientId: env.auth0.clientId,
