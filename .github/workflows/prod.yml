@@ -1,0 +1,29 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ "releases/prod" ]
+    paths: 
+      - 'client/**'
+      - 'server/**'
+      - 'Dockerfile'
+      
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Build docker container image 
+    - run: docker build . -t app-bcc-africa
+    # Stop and remove old docker container (https://stackoverflow.com/questions/34228864/stop-and-delete-docker-container-if-its-running)
+    - run: docker ps -q --filter "name=app-bcc-africa-prod" | grep -q . && docker stop app-bcc-africa-prod && docker rm -fv app-bcc-africa-prod
+    # Start new container
+    - run: docker run -d --restart unless-stopped --env-file ~/app-bcc-africa/server/.env.prod --name=app-bcc-africa-prod app-bcc-africa
+
+
+
