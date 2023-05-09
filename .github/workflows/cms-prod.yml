@@ -23,7 +23,7 @@ jobs:
     - run: docker stop app-bcc-africa-prod-cms || true && docker rm app-bcc-africa-prod-cms || true
     # Start new container
     - run: > 
-        docker run -d -p 8055:8055
+        docker run -d -p "8055":"8055"
         --env="DB_CLIENT=${{ secrets.DB_CLIENT }}"
         --env="DB_HOST=${{ secrets.DB_HOST }}"
         --env="DB_PORT=${{ secrets.DB_PORT }}"
