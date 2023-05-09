@@ -23,7 +23,7 @@ jobs:
     # Stop and remove old docker container (https://stackoverflow.com/questions/34228864/stop-and-delete-docker-container-if-its-running)
     - run: docker stop app-bcc-africa-prod-server || true && docker rm app-bcc-africa-prod-server || true
     # Start new container
-    - run: docker run -d -p 8080:8080 --restart unless-stopped --env-file ~/app-bcc-africa/server/.env.prod --name=app-bcc-africa-prod-server app-bcc-africa-prod-server
+    - run: docker run -d -p "8080":"8080" --restart unless-stopped --env-file ~/app-bcc-africa/server/.env.prod --name=app-bcc-africa-prod-server app-bcc-africa-prod-server
 
 
 
