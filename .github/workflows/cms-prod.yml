@@ -13,29 +13,26 @@ on:
 jobs:
   build:
     runs-on: self-hosted
-    environment: releases/prod-cms
     steps:
     - name: Checkout
       uses: actions/checkout@v3
 
     # Build docker container image 
-    - run: >
-        docker build 
-        --build-arg DB_CLIENT="${{ secrets.DB_CLIENT }}"
-        --build-arg DB_HOST="${{ secrets.DB_HOST }}"
-        --build-arg DB_PORT="${{ secrets.DB_PORT }}"
-        --build-arg DB_DATABASE="${{ secrets.DB_DATABASE }}"
-        --build-arg DB_USER="${{ secrets.DB_USER }}"
-        --build-arg DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
-        --build-arg DB_SSL="${{ secrets.DB_SSL }}"
-        --build-arg KEY="${{ secrets.CMS_KEY }}"
-        --build-arg SECRET="${{ secrets.CMS_SECRET }}"
-        cms/ -t app-bcc-africa-prod-cms
+    - run: docker build cms/ -t app-bcc-africa-prod-cms
     # Stop and remove old docker container (https://stackoverflow.com/questions/34228864/stop-and-delete-docker-container-if-its-running)
     - run: docker stop app-bcc-africa-prod-cms || true && docker rm app-bcc-africa-prod-cms || true
     # Start new container
     - run: > 
         docker run -d -p "8055":"8055"
+        --env="DB_CLIENT=${{ secrets.DB_CLIENT }}"
+        --env="DB_HOST=${{ secrets.DB_HOST }}"
+        --env="DB_PORT=${{ secrets.DB_PORT }}"
+        --env="DB_DATABASE=${{ secrets.DB_DATABASE }}"
+        --env="DB_USER=${{ secrets.DB_USER }}"
+        --env="DB_PASSWORD=${{ secrets.DB_PASSWORD }}"
+        --env="DB_SSL=${{ secrets.DB_SSL }}"
+        --env="KEY=${{ secrets.CMS_KEY }}"
+        --env="SECRET=${{ secrets.CMS_SECRET }}"
         --restart unless-stopped 
         --name=app-bcc-africa-prod-cms 
         app-bcc-africa-prod-cms
