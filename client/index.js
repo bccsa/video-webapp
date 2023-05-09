@@ -75,7 +75,13 @@ controls.on('appFrame', appFrame => {
                 });
             } else {
                 // Connect to Socket.io server with empty auth token (unauthenticated connection)
-                initSocket('');
+                // This can be used to show content to non-logged in users
+                // initSocket('');
+
+                // Show user page (with login)
+                controls.appFrame.one('User', () => {
+                    controls.appFrame.ShowUser();
+                });
             }
         });
     });
