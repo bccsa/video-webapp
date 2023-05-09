@@ -21,15 +21,15 @@ jobs:
     # Build docker container image 
     - run: >
         docker build 
-        --build-arg DB_CLIENT=${{ secrets.DB_CLIENT }}
-        --build-arg DB_HOST=${{ secrets.DB_HOST }}
-        --build-arg DB_PORT=${{ secrets.DB_PORT }}
-        --build-arg DB_DATABASE=${{ secrets.DB_DATABASE }}
-        --build-arg DB_USER=${{ secrets.DB_USER }}
-        --build-arg DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-        --build-arg DB_SSL=${{ secrets.DB_SSL }}
-        --build-arg KEY=${{ secrets.CMS_KEY }}
-        --build-arg SECRET=${{ secrets.CMS_SECRET }}
+        --build-arg DB_CLIENT="${{ secrets.DB_CLIENT }}"
+        --build-arg DB_HOST="${{ secrets.DB_HOST }}"
+        --build-arg DB_PORT="${{ secrets.DB_PORT }}"
+        --build-arg DB_DATABASE="${{ secrets.DB_DATABASE }}"
+        --build-arg DB_USER="${{ secrets.DB_USER }}"
+        --build-arg DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
+        --build-arg DB_SSL="${{ secrets.DB_SSL }}"
+        --build-arg KEY="${{ secrets.CMS_KEY }}"
+        --build-arg SECRET="${{ secrets.CMS_SECRET }}"
         cms/ -t app-bcc-africa-prod-cms
     # Stop and remove old docker container (https://stackoverflow.com/questions/34228864/stop-and-delete-docker-container-if-its-running)
     - run: docker stop app-bcc-africa-prod-cms || true && docker rm app-bcc-africa-prod-cms || true
