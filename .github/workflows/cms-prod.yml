@@ -1,0 +1,40 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ "releases/prod" ]
+    paths: 
+      - 'cms/**'
+      - 'cms/Dockerfile'
+      
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Set environment
+
+    # Build docker container image 
+    - run: docker build . -t app-bcc-africa-prod-cms
+    # Stop and remove old docker container (https://stackoverflow.com/questions/34228864/stop-and-delete-docker-container-if-its-running)
+    - run: docker stop app-bcc-africa-prod-cms || true && docker rm app-bcc-africa-prod-cms || true
+    # Start new container
+    - run: > 
+        docker run -d -p 8055:8055
+        --env="DB_CLIENT=${{ secrets.DB_CLIENT }}"
+        --env="DB_HOST=${{ secrets.DB_HOST }}"
+        --env="DB_PORT=${{ secrets.DB_PORT }}"
+        --env="DB_DATABASE=${{ secrets.DB_DATABASE }}"
+        --env="DB_USER=${{ secrets.DB_USER }}"
+        --env="DB_PASSWORD=${{ secrets.DB_PASSWORD }}"
+        --env="DB_SSL=${{ secrets.DB_SSL }}"
+        --restart unless-stopped 
+        --name=app-bcc-africa-prod-cms 
+        app-bcc-africa-prod-cms
+
+
+
