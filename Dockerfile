@@ -4,7 +4,7 @@ FROM node:18
 # Create app work dir
 WORKDIR /usr/src/video-webapp
 
-# Copy package lock files
+# Copy package/package-lock files
 COPY client/package*.json /usr/src/video-webapp/client/
 COPY server/package*.json /usr/src/video-webapp/server/
 
