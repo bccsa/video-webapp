@@ -11,4 +11,4 @@ COPY package*.json /usr/src/app-bcc-africa-cms/
 RUN npm --prefix /usr/src/app-bcc-africa-cms ci --omit=dev
 
 # Start server 
-CMD [ "npx", "directus start" ]
+CMD ["npm", "--prefix /usr/src/app-bcc-africa-cms", "run", "prod"]
