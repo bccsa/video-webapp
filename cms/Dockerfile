@@ -5,7 +5,7 @@ FROM node:18
 WORKDIR /usr/src/app-bcc-africa-cms
 
 # Copy package/package-lock files
-COPY cms/package*.json /usr/src/app-bcc-africa-cms/
+COPY package*.json /usr/src/app-bcc-africa-cms/
 
 # Install NPM pacakges 
 RUN npm --prefix /usr/src/app-bcc-africa-cms ci --omit=dev
