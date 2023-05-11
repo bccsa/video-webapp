@@ -81,9 +81,13 @@ controls.on('appFrame', appFrame => {
                 // initSocket('');
 
                 // Show user page (with login)
-                controls.appFrame.one('User', () => {
+                if (controls.appFrame.User) {
                     controls.appFrame.ShowUser();
-                });
+                } else {
+                    controls.appFrame.one('User', () => {
+                        controls.appFrame.ShowUser();
+                    });
+                }   
             }
         });
     });
