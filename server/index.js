@@ -40,7 +40,7 @@ clientApp.use(express.static(path.join(__dirname, "../client")));
 var clientEnv = {
     app: {
         title: process.env.APP_TITLE,
-        socketUrl: process.env.SERVER_PROTOCOL + "://" + process.env.SERVER_HOSTNAME + ":" + process.env.PORT
+        socketUrl: process.env.SOCKET_URL
     },
     auth0: {
         domain: process.env.AUTH0_DOMAIN,

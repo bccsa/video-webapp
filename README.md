@@ -58,13 +58,12 @@ DB_PORT="5432"
 
 # Server (api) settings
 # ---------------------
-SERVER_PROTOCOL="http"
-SERVER_HOSTNAME="localhost"
 PORT="8080"
 
 # App settings
 # ------------
 APP_TITLE="Video WebApp"
+SOCKET_URL="http://localhost:8080"
 
 # Auth0 settings
 # --------------
