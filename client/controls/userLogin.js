@@ -32,23 +32,12 @@ class userLogin extends ui {
 
     Init() {
         this.showLogin(this._topLevelParent.appFrame.isAuthenticated);
+        this.getUser(this._topLevelParent.appFrame.isAuthenticated);
 
         this._topLevelParent.appFrame.on('isAuthenticated', auth => {
             this.showLogin(auth);
-
-            if (auth) {
-                // Get the username
-                auth0Client.getUser().then(data => {
-                    if (data && data.name) {
-                        this.userName = data.name;
-                        this.userPicture = data.picture;
-                    }
-                });
-            } else {
-                this.userName = "";
-                this.userPicture = "";
-            }
-        });        
+            this.getUser(auth);
+        });
 
         this._login.addEventListener('click', e => {
             auth0Client.loginWithRedirect({
@@ -56,7 +45,6 @@ class userLogin extends ui {
                     redirect_uri: window.location.origin
                 }
             });
-            // window.location.href = '/login';
         });
 
         this._logout.addEventListener('click', e => {
@@ -65,7 +53,6 @@ class userLogin extends ui {
                     returnTo: window.location.origin
                 }
             });
-            // window.location.href = '/logout';
         });
     }
 
@@ -84,6 +71,23 @@ class userLogin extends ui {
             this._userDetails.style.display = "none";
         }
     }
-}
 
-//<div id="@{_userDetails}" style="display: none;" class="grid justify-items-center">
+    /**
+     * Get user name from Auth0 client
+     * @param {Boolean} auth - authentication status
+     */
+    getUser(auth) {
+        if (auth) {
+            // Get the username
+            auth0Client.getUser().then(data => {
+                if (data && data.name) {
+                    this.userName = data.name;
+                    this.userPicture = data.picture;
+                }
+            });
+        } else {
+            this.userName = "";
+            this.userPicture = "";
+        }
+    }
+}

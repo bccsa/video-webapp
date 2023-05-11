@@ -35,7 +35,9 @@ controls.on('appFrame', appFrame => {
         authorizationParams: {
             // Audience is needed that Auth0 returns a JWT formatted token. This token is passed to the API for verification.
             audience: env.auth0.audience
-        }
+        },
+        cacheLocation: 'localstorage',
+        useRefreshTokens: true
     }).then(res => {
         // Set global reference to Auth0 client
         auth0Client = res;
