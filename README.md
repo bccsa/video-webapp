@@ -79,7 +79,15 @@ Start the server in debug mode from the Visual Studio Code debug menu.
 
 ### Client notes
 
+### Auth0 configuration
+Create a new application in Auth0's control panel with the following settings (only non-default settings listed):
+* Application type: Single Page Application
+* Allowed Callback URLs: http://localhost:8080,https://your.app.url
+* Allowed Logout URLs: http://localhost:8080,https://your.app.url
+* Allowed Web Origins: http://localhost:8080,https://your.app.url
+* Refresh Token Rotation: Rotation selected
 
+Create an API for your application in the Auth0 control panel. The API identifier should be set as the AUTH0_AUDIENCE environmental variable.
 
 ### Capacitor notes
 Disable build error for custom (vanilla JS) project: Added the following to the ionic capacitor project's package.json (root folder):
