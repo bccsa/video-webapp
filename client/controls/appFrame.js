@@ -67,14 +67,6 @@ class appFrame extends ui {
     }
 
     Init() {
-        // Add video player
-        // this.SetData({
-        //     videoPlayer: {
-        //         controlType: "videoPlayer",
-        //         parentElement: "_videoPlayerDiv",
-        //     },
-        // });
-
         // Title divider
         this.on('sectionName', data => {
             if (data) {
@@ -86,21 +78,21 @@ class appFrame extends ui {
 
         // Subscribe to VOD section created event
         this.on('VOD', section => {
-            this.setHome();
+            this.ShowHome();
         });
 
         // Buttons event handlers
         this._btnHome.addEventListener('click', e => {
-            this.setHome();
+            this.ShowHome();
         });
         this._btnLive.addEventListener('click', e => {
-            this.setLive();
+            this.ShowLive();
         });
 
         this._initPlayer();
         
         this._btnUser.addEventListener('click', e => {
-            this.setUser();
+            this.ShowUser();
         });
     }
 
@@ -116,7 +108,7 @@ class appFrame extends ui {
         ref.classList.add('text-indigo-400');
     }
 
-    setHome() {
+    ShowHome() {
         if (this.VOD) {
             this.VOD.Show();
             this.setBtn(this._btnHome);
@@ -125,12 +117,21 @@ class appFrame extends ui {
         }
     }
 
-    setLive() {
+    ShowLive() {
         if (this.Live) {
             this.Live.Show();
             this.setBtn(this._btnLive);
             this.resetBtn(this._btnHome);
             this.resetBtn(this._btnUser);
+        }
+    }
+
+    ShowUser() {
+        if (this.User) {
+            this.User.Show();
+            this.setBtn(this._btnUser);
+            this.resetBtn(this._btnHome);
+            this.resetBtn(this._btnLive);
         }
     }
 
@@ -203,14 +204,5 @@ class appFrame extends ui {
         this.on('imgUrl', url => {
             this._player.poster(url);
         });
-    }
-    
-    setUser() {
-        if (this.User) {
-            this.User.Show();
-            this.setBtn(this._btnUser);
-            this.resetBtn(this._btnHome);
-            this.resetBtn(this._btnLive);
-        }
     }
 }
