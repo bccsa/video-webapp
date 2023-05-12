@@ -19,12 +19,12 @@ jobs:
       uses: actions/checkout@v3
 
     # Build docker container image 
-    - run: docker build cms/ -t app-bcc-africa-prod-cms
+    - run: docker build cms/ -t ${{ secrets.DOCKER_IMAGE }}
     # Stop and remove old docker container (https://stackoverflow.com/questions/34228864/stop-and-delete-docker-container-if-its-running)
-    - run: docker stop app-bcc-africa-prod-cms || true && docker rm app-bcc-africa-prod-cms || true
+    - run: docker stop ${{ secrets.DOCKER_CONTAINER }} || true && docker rm ${{ secrets.DOCKER_CONTAINER }} || true
     # Start new container
     - run: > 
-        docker run -d -p "8055":"8055"
+        docker run -d -p "${{ secrets.CMS_PORT }}":"${{ secrets.CMS_PORT }}"
         --env="DB_CLIENT=${{ secrets.DB_CLIENT }}"
         --env="DB_HOST=${{ secrets.DB_HOST }}"
         --env="DB_PORT=${{ secrets.DB_PORT }}"
@@ -34,6 +34,7 @@ jobs:
         --env="DB_SSL=${{ secrets.DB_SSL }}"
         --env="KEY=${{ secrets.CMS_KEY }}"
         --env="SECRET=${{ secrets.CMS_SECRET }}"
+        --env="PORT=${{ secrets.CMS_PORT }}"
         --restart unless-stopped 
-        --name=app-bcc-africa-prod-cms 
-        app-bcc-africa-prod-cms
+        --name=${{ secrets.DOCKER_CONTAINER }}
+        ${{ secrets.DOCKER_IMAGE }}
