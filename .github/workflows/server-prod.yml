@@ -25,9 +25,9 @@ jobs:
     - run: docker stop ${{ secrets.OCKER_CONTAINER }} || true && docker rm ${{ secrets.OCKER_CONTAINER }} || true
     # Start new container
     - run: > 
-      docker run -d -p "${{ secrets.DOCKER_PORT }}":"${{ secrets.DOCKER_PORT }}" 
-      --env="AUTH0_SECRET=${{ secrets.AUTH0_SECRET }}" 
-      --env-file ${{ secrets.ENV_PATH }} 
-      --restart unless-stopped 
-      --name=${{ secrets.OCKER_CONTAINER }} 
-      ${{ secrets.DOCKER_IMAGE }}
+        docker run -d -p "${{ secrets.DOCKER_PORT }}":"${{ secrets.DOCKER_PORT }}" 
+        --env="AUTH0_SECRET=${{ secrets.AUTH0_SECRET }}" 
+        --env-file ${{ secrets.ENV_PATH }} 
+        --restart unless-stopped 
+        --name=${{ secrets.OCKER_CONTAINER }} 
+        ${{ secrets.DOCKER_IMAGE }}
