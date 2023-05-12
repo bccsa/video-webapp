@@ -19,9 +19,9 @@ jobs:
       uses: actions/checkout@v3
 
     # Build docker container image 
-    - run: docker build cms/ -t ${{ secrets.DOCKER_IMAGE }}
+    - run: docker build cms/ -t "${{ secrets.DOCKER_IMAGE }}"
     # Stop and remove old docker container (https://stackoverflow.com/questions/34228864/stop-and-delete-docker-container-if-its-running)
-    - run: docker stop ${{ secrets.DOCKER_CONTAINER }} || true && docker rm ${{ secrets.DOCKER_CONTAINER }} || true
+    - run: docker stop "${{ secrets.DOCKER_CONTAINER }}" || true && docker rm "${{ secrets.DOCKER_CONTAINER }}" || true
     # Start new container
     - run: > 
         docker run -d -p "${{ secrets.CMS_PORT }}":"${{ secrets.CMS_PORT }}"
