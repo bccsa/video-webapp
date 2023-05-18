@@ -4,13 +4,11 @@ const { Server } = require("socket.io");
 const express = require("express");
 const http = require("http");
 const path = require("path");
-require('dotenv').config();
-var { authRouter, authSocketIO } = require('./routes/auth');
-var session = require('express-session');
-var passport = require('passport');
-var SQLiteStore = require('connect-sqlite3')(session);
-var { mkdirp } = require('mkdirp');
+require('dotenv').config({ path: path.join(__dirname, "../.env") });
+var jwt = require('jsonwebtoken');
 
+// PostgreSQL database connection
+// ------------------------------
 let db;
 db = new postgres({
     user: process.env.DB_USER,
@@ -22,11 +20,12 @@ db = new postgres({
 let dbObjects = new dataObjects(db);
 
 // Express client web-server
+// -------------------------
 const clientApp = express();
 const clientHttp = http.createServer(clientApp);
 
-clientHttp.listen(process.env.SERVER_PORT, () => {
-    console.log(`Client WebApp running on http://*:${process.env.SERVER_PORT}`);
+clientHttp.listen(process.env.PORT, () => {
+    console.log(`Web-App running on http://*:${process.env.PORT}`);
 });
 
 // Serve the default file
@@ -37,26 +36,25 @@ clientApp.get("/", (req, res) => {
 // Serve static files
 clientApp.use(express.static(path.join(__dirname, "../client")));
 
-// Create and setup session database
-mkdirp.sync('./var/db')
-
-let sessionMiddleware = session({
-    secret: 'keyboard cat', // To do: Create random secrets periodically as array with newest in top of array - see https://www.npmjs.com/package/express-session#secret
-    resave: false,
-    saveUninitialized: false,
-    store: new SQLiteStore({
-        db: 'sessions.db',
-        dir: './var/db'
-    })
+// Serve client env
+var clientEnv = {
+    app: {
+        title: process.env.APP_TITLE,
+        socketUrl: process.env.SOCKET_URL
+    },
+    auth0: {
+        domain: process.env.AUTH0_DOMAIN,
+        clientId: process.env.AUTH0_CLIENT_ID,
+        audience: process.env.AUTH0_AUDIENCE
+    }
+}
+clientApp.get("/env", (req, res) => {
+    res.setHeader('content-type', 'text/plain');
+    res.send(JSON.stringify(clientEnv));
 });
 
-clientApp.use(sessionMiddleware);
-clientApp.use(passport.authenticate('session'));
-
-// Routes
-clientApp.use('/', authRouter);
-
 // Client socket.io messaging
+// --------------------------
 const clientIO = new Server(clientHttp, {
     cors: {
         origin: '*',
@@ -64,43 +62,26 @@ const clientIO = new Server(clientHttp, {
     }
 });
 
-// Pass session to socket.io to identify socket users
-clientIO.engine.use(sessionMiddleware);
-
-// Client socket.io messaging
+// Client socket.io connections
 clientIO.on('connection', socket => {
-    // Send initial data to client
-    dbObjects.sections().then(data => {
-        setUserView(socket, data);
-        socket.emit('data', data);
-    });
-
-    // if (socket.request.session.passport) {
-    //     socket.emit('user', {
-    //         userName: socket.request.session.passport.user.name,
-    //     });
-    // }
-});
-
-/**
- * Set control data for user account controls
- * @param {*} socket 
- * @param {*} data - Data message to be sent to the Socket.io client
- */
-function setUserView(socket, data) {
-    let userName = '';
-    if (socket.request.session.passport) {
-        userName = socket.request.session.passport.user.name;
-    }
-
-    data.User = {
-        controlType: "section",
-        displayName: "User",
-        login: {
-            controlType: "userLogin",
-            userName: userName,
+    if (socket.handshake && socket.handshake.auth && socket.handshake.auth.token) {
+        try {
+            // verify JWT token. ref: https://github.com/auth0/node-jsonwebtoken
+            let decoded = jwt.verify(socket.handshake.auth.token, process.env.AUTH0_SECRET, { algorithms: [process.env.AUTH0_ALGORITHM] });
+            if (decoded) {
+                // Mark socket as authenticated
+                socket.data.authenticated = true;
+            }
+        } catch (err) {
+            console.log('unable to decode JWT: ' + err.message);
         }
     }
-}
 
-
+    if (socket.data.authenticated) {
+        // Send initial data to client
+        dbObjects.sections().then(data => {
+            // setUserView(socket, data);
+            socket.emit('data', data);
+        });
+    }
+});
