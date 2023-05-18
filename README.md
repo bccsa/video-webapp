@@ -46,14 +46,48 @@ npx directus start
 ```
 
 ### Start server
+Create a .env environmental variables file in the project root:
 ```shell
-cd server
-node index.js
+# Postgres database connection
+# ----------------------------
+DB_USER="postgres"
+DB_PASSWORD="postgrespw"
+DB_HOST="localhost"
+DB_DATABASE="cms"
+DB_PORT="5432"
+
+# Server (api) settings
+# ---------------------
+PORT="8080"
+
+# App settings
+# ------------
+APP_TITLE="Video WebApp"
+SOCKET_URL="http://localhost:8080"
+
+# Auth0 settings
+# --------------
+AUTH0_DOMAIN="your.auth0.domain"
+AUTH0_CLIENT_ID="your_auth0_client_id"
+AUTH0_AUDIENCE="https://your.api.identifier"
+AUTH0_ALGORITHM="RS256"
+# Auth0 application secret or public certificate (insert cert for RS256 algorithm)
+AUTH0_SECRET="Auth0 secret or cert"
 ```
 
-### Client notes
-#### env.json
+Start the server in debug mode from the Visual Studio Code debug menu.
 
+### Client notes
+
+### Auth0 configuration
+Create a new application in Auth0's control panel with the following settings (only non-default settings listed):
+* Application type: Single Page Application
+* Allowed Callback URLs: http://localhost:8080,https://your.app.url
+* Allowed Logout URLs: http://localhost:8080,https://your.app.url
+* Allowed Web Origins: http://localhost:8080,https://your.app.url
+* Refresh Token Rotation: Rotation selected
+
+Create an API for your application in the Auth0 control panel. The API identifier should be set as the AUTH0_AUDIENCE environmental variable.
 
 ### Capacitor notes
 Disable build error for custom (vanilla JS) project: Added the following to the ionic capacitor project's package.json (root folder):
