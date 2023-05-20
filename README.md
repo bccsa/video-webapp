@@ -17,7 +17,9 @@ cd ../client-tailwind
 npm install
 cd ../cms
 npm install
-cd ../server
+cd scripts
+npm install
+cd ../../server
 npm install
 
 ### Configure database

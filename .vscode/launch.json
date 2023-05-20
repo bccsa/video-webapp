@@ -13,6 +13,16 @@
             ],
             "program": "${workspaceFolder}/server/index.js",
             "cwd":"${workspaceFolder}/server"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "dr-update",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/cms/scripts/directus-update.js",
+            "cwd":"${workspaceFolder}/cms/scripts"
         }
     ]
 }
