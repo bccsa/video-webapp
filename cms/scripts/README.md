@@ -1,23 +1,68 @@
-# Script used for directus CI/CD
+## [Link to Pyrseas docs](https://pyrseas.readthedocs.io/_/downloads/en/latest/pdf/)
 
-Make sure you have installed the npm packages for the scripts to work
-```npm install```
+## 1. [pg-dbtoyaml.sh](./pg-dbtoyaml.sh)
 
-## 1. directus-snapshot.js
+Bash script used to create a snapshot from your DEV DB (snpashot will be used to update the production DB)
 
-Script used to create a snaptshot from the dev directus setup, to be used to update the staging/production directus 
+prerequisite:
+1. python (https://www.python.org/downloads/)
+2. pyrseas (https://pyrseas.readthedocs.io/en/latest/install.html)
+3. pip install psycopg2
+4. pip3 install psycopg_c
+5. pip3 install psycopg_binary
+6. pip3 install libpq
+
 run: 
-```node directus-snapshot.js <BASE_SNAPSHOT_PATH> <BASE_DIRECTUS_URL> <BASE_ACCESS_TOKEN>```
+```bash cms/scripts/pg-dbtoyaml.sh <HOST> <PORT> <USER> <DB> <OUTPUTFILE>```
 
-1. BASE_SNAPSHOT_PATH: path where to dump base snapshot.
-2. BASE_DIRECTUS_URL: base directus server url.
-3. BASE_ACCESS_TOKEN: base directus access token (see https://learndirectus.com/how-to-create-an-api-authentication-token/).
+env variables: 
+1. HOST: DB server hostname/ip 
+2. PORT: DB server port
+3. USER: User with access to DB
+4. DB: Database name to export to yaml
+5. OUTPUTFILE: Output path where script should dump yaml file
 
-## 2. directus-update.js
+Links to docks: 
+1. https://pyrseas.readthedocs.io/en/latest/dbtoyaml.html?highlight=dbtoyaml
 
-Script used to update Target directus with snapshot taken with the above script
-```node directus-update.js <BASE_SNAPSHOT_PATH> <TARGET_DIRECTUS_URL> <TARGET_ACCESS_TOKEN>```
+## 2. [pg-yamltodb.sh](./pg-yamltodb.sh)
 
-1. BASE_SNAPSHOT_PATH: path where to find base snapshot.
-2. TARGET_DIRECTUS_URL: target directus server url.
-3. TARGET_ACCESS_TOKEN: target directus access token (see https://learndirectus.com/how-to-create-an-api-authentication-token/).
+Bash script used to upload yaml snapshot to DB to create/update DB structure
+
+prerequisite:
+1. python (https://www.python.org/downloads/)
+2. pyrseas (https://pyrseas.readthedocs.io/en/latest/install.html)
+3. pip install psycopg2
+4. pip3 install psycopg_c
+5. pip3 install psycopg_binary
+6. pip3 install libpq
+
+run: 
+```bash cms/scripts/pg-yamltodb.sh <HOST> <PORT> <USER> <DB> <INPUTFILE> <OUTPUTFILE>```
+
+env variables: 
+1. HOST: DB server hostname/ip 
+2. PORT: DB server port
+3. USER: User with access to DB
+4. DB: Database name to export to yaml
+5. INPUTFILE: Path to yaml file to create/update DB from
+6. OUTPUTFILE: Where the update SQL file should be saved
+
+---
+
+## 3. [pg-diff.py](./pg-diff.py) (Old/Deprecated)
+
+Python script to create a diff between 2 yaml snapshots of databases
+
+prerequisite:
+1. python (https://www.python.org/downloads/)
+2. pip install jsondiff
+3. pip install pyyaml
+
+run: 
+```python cms/scripts/pg-diff.py <SRCFILE> <DSTFILE> <OUTPUTFILE>```
+
+env variables: 
+1. SRCFILE: Source yaml file (file created from source db)
+2. DSTFILE: Destination yaml file (file file destination from source db from source db)
+3. OUTPUTFILE: Where the diff should be output
