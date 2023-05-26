@@ -5,8 +5,8 @@
 Bash script used to create a snapshot from your DEV DB (snpashot will be used to update the production DB)
 
 prerequisite:
-1. python (https://www.python.org/downloads/)
-2. pyrseas (https://pyrseas.readthedocs.io/en/latest/install.html)
+1. python (https://www.python.org/downloads/) (apt update; apt install python3)
+2. pyrseas (https://pyrseas.readthedocs.io/en/latest/install.html) (pip install Pyrseas)
 3. pip install psycopg2
 4. pip3 install psycopg_c
 5. pip3 install psycopg_binary

@@ -1,5 +1,5 @@
 # Workflow used to update directus server 
-name: cms-prod
+name: cms-db-prod
 
 on:
   push:
@@ -19,6 +19,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
+    # Install prerequisites (Python)
+    - run: apt update; apt install python3 
+    # Install prerequisites (Python packages)
+    - run: pip install Pyrseas psycopg2 psycopg_c psycopg_binary libpq
     # Create diff from dest DB with the snapshot supplied
     - run: |
         bash cms/scripts/pg-yamltodb.sh ${{ secrets.DB_HOST }} ${{ secrets.DB_PORT }} ${{ secrets.DB_USER }} ${{ secrets.DB_DATABASE }} ${{ secrets.SNAPSHOT_PATH }} ${{ secrets.DIFF_PATH }}
