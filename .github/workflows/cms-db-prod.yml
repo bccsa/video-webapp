@@ -1,0 +1,29 @@
+# Workflow used to update directus server 
+name: cms-prod
+
+on:
+  push:
+    branches: [ "releases/prod" ]
+    paths: 
+      - 'cms/snapshot/CMS-DB.yaml'
+      - 'cms/scripts'
+      
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    environment: releases/prod-cms
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Create diff from dest DB with the snapshot supplied
+    - run: |
+        bash cms/scripts/pg-yamltodb.sh ${{ secrets.DB_HOST }} ${{ secrets.DB_PORT }} ${{ secrets.DB_USER }} ${{ secrets.DB_DATABASE }} ${{ secrets.SNAPSHOT_PATH }} ${{ secrets.DIFF_PATH }}
+        expect "Password:"
+        send "${{ secrets.DB_PASSWORD }}\r"
+        interact
+    # Update Dest DB with diff sql created 
+    - run: psql "host=${{ secrets.DB_HOST }} port=${{ secrets.DB_PORT }} dbname=${{ secrets.DB_DATABASE }} user=${{ secrets.DB_USER }} password=${{ secrets.DB_PASSWORD }}" < ${{ secrets.DIFF_PATH }}
