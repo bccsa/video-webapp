@@ -1,5 +1,5 @@
 # Workflow used to update directus server 
-name: cms-prod
+name: cms-directus-prod
 
 on:
   push:
