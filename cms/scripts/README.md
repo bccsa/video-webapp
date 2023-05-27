@@ -15,6 +15,8 @@ prerequisite:
 run: 
 ```bash cms/scripts/pg-dbtoyaml.sh <HOST> <PORT> <USER> <DB> <OUTPUTFILE>```
 
+Script will promt use to enter a password for the DB_USER supplied
+
 env variables: 
 1. HOST: DB server hostname/ip 
 2. PORT: DB server port
