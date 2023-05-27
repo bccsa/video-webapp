@@ -26,4 +26,4 @@ ENV SNAPSHOT_PATH=$PATH"/CMS-DB.yaml.sh"
 ENV DIFF_PATH=$PATH"/db-diff.sql"
 
 # Update DB with script
-CMD ["bash", $PATH"/pg-update.sh"]
+CMD ["bash", "/usr/src/video-webapp/update-db/pg-update.sh"]
