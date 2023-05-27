@@ -1,6 +1,7 @@
 # video-webapp
 Video web-app for live and VOD content
 
+---
 
 ## Development
 ### Init submodules
@@ -41,11 +42,15 @@ cd client-tailwind
 ./build.cmd
 ```
 
+---
+
 ### Start directus
 ```shell
 cd cms
 npx directus start
 ```
+
+---
 
 ### Start server
 Create a .env environmental variables file in the project root:
@@ -79,6 +84,15 @@ AUTH0_SECRET="Auth0 secret or cert"
 
 Start the server in debug mode from the Visual Studio Code debug menu.
 
+--- 
+
+### Create/update DB [snapshot](cms/snapshot/CMS-DB.yaml) to be used to update (alpha/beta/prod) DB 
+```bash cms/scripts/pg-dbtoyaml <HOST> <PORT> <USER> <DB> <OUTPUTFILE>```
+
+See docs [here](cms/scripts/README.md) for spesifics on env variables
+
+---
+
 ### Client notes
 
 ### Auth0 configuration
@@ -90,6 +104,8 @@ Create a new application in Auth0's control panel with the following settings (o
 * Refresh Token Rotation: Rotation selected
 
 Create an API for your application in the Auth0 control panel. The API identifier should be set as the AUTH0_AUDIENCE environmental variable.
+
+---
 
 ### Capacitor notes
 Disable build error for custom (vanilla JS) project: Added the following to the ionic capacitor project's package.json (root folder):

@@ -1,1 +1,0 @@
-dbtoyaml --host 10.9.200.66 --port 5432 --username jacques --password app-bcc-africa-src > ../cms-snapshot.yaml
