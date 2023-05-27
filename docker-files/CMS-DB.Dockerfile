@@ -21,7 +21,7 @@ RUN pip install Pyrseas psycopg2 psycopg_c psycopg_binary
 
 # Set ENV Varibles 
 ENV SCRIPT_PATH="/usr/src/video-webapp/update-db/pg-yamltodb.sh"
-ENV SNAPSHOT_PATH="/usr/src/video-webapp/update-db/CMS-DB.yaml.sh"
+ENV SNAPSHOT_PATH="/usr/src/video-webapp/update-db/CMS-DB.yaml"
 ENV DIFF_PATH="/usr/src/video-webapp/update-db/db-diff.sql"
 
 # Update DB with script
