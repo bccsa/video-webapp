@@ -20,10 +20,9 @@ RUN apt-get update && apt-get install -y postgresql-client expect
 RUN pip install Pyrseas psycopg2 psycopg_c psycopg_binary
 
 # Set ENV Varibles 
-ENV PATH="/usr/src/video-webapp/update-db"
-ENV SCRIPT_PATH=$PATH"/pg-yamltodb.sh"
-ENV SNAPSHOT_PATH=$PATH"/CMS-DB.yaml.sh"
-ENV DIFF_PATH=$PATH"/db-diff.sql"
+ENV SCRIPT_PATH="/usr/src/video-webapp/update-db/pg-yamltodb.sh"
+ENV SNAPSHOT_PATH="/usr/src/video-webapp/update-db/CMS-DB.yaml.sh"
+ENV DIFF_PATH="/usr/src/video-webapp/update-db/db-diff.sql"
 
 # Update DB with script
 CMD ["bash", "/usr/src/video-webapp/update-db/pg-update.sh"]
