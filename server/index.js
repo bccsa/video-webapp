@@ -23,6 +23,12 @@ let dbObjects = new dataObjects(db);
 // -------------------------
 const clientApp = express();
 const clientHttp = http.createServer(clientApp);
+let maxAge;
+if (process.env.CACHE_MAXAGE) {
+    maxAge = parseInt(process.env.CACHE_MAXAGE) * 1000; // Express uses milliseconds for maxAge setting
+} else {
+    maxAge = 3600 * 1000;
+}
 
 clientHttp.listen(process.env.PORT, () => {
     console.log(`Web-App running on http://*:${process.env.PORT}`);
@@ -30,11 +36,11 @@ clientHttp.listen(process.env.PORT, () => {
 
 // Serve the default file
 clientApp.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/index.html"));
+    res.sendFile(path.join(__dirname, "../client/index.html"), { maxAge: maxAge });
 });
 
 // Serve static files
-clientApp.use(express.static(path.join(__dirname, "../client")));
+clientApp.use(express.static(path.join(__dirname, "../client"), { maxAge: maxAge }));
 
 // Serve client env
 var clientEnv = {
