@@ -66,6 +66,12 @@ PORT="8080"
 # ------------
 APP_TITLE="Video WebApp"
 SOCKET_URL="http://localhost:8080"
+VOD_URL_PREFIX="https://za-scc-stream.bccsa.org/sTVvod/smil:"
+VOD_URL_POSTFIX="/playlist.m3u8"
+LIVE_URL_PREFIX="https://za-scc-stream.bccsa.org/sTVlive/"
+LIVE_URL_POSTFIX=""
+IMG_URL_PREFIX="/img/"
+CACHE_MAXAGE=7200
 
 # Auth0 settings
 # --------------
