@@ -76,7 +76,7 @@ VOD_URL_POSTFIX="/playlist.m3u8"
 LIVE_URL_PREFIX="https://za-scc-stream.bccsa.org/sTVlive/"
 LIVE_URL_POSTFIX=""
 IMG_URL_PREFIX="/img/"
-CACHE_MAXAGE=7200
+CACHE_MAXAGE=0
 
 # Auth0 settings
 # --------------
@@ -86,6 +86,8 @@ AUTH0_AUDIENCE="https://your.api.identifier"
 AUTH0_ALGORITHM="RS256"
 # Auth0 application secret or public certificate (insert cert for RS256 algorithm)
 AUTH0_SECRET="Auth0 secret or cert"
+# Bypass Auth0 authentication for testing purposes
+AUTH0_BYPASS=false
 ```
 
 Start the server in debug mode from the Visual Studio Code debug menu.

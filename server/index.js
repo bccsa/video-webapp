@@ -68,22 +68,24 @@ const clientIO = new Server(clientHttp, {
     }
 });
 
+let auth0_bypass = process.env.AUTH0_BYPASS;
+
 // Client socket.io connections
 clientIO.on('connection', socket => {
-    if (socket.handshake && socket.handshake.auth && socket.handshake.auth.token) {
+    if (socket.handshake && socket.handshake.auth && socket.handshake.auth.token || auth0_bypass) {
         try {
             // verify JWT token. ref: https://github.com/auth0/node-jsonwebtoken
             let decoded = jwt.verify(socket.handshake.auth.token, process.env.AUTH0_SECRET, { algorithms: [process.env.AUTH0_ALGORITHM] });
             if (decoded) {
                 // Mark socket as authenticated
                 socket.data.authenticated = true;
-            }
+            } 
         } catch (err) {
             console.log('unable to decode JWT: ' + err.message);
         }
     }
 
-    if (socket.data.authenticated) {
+    if (socket.data.authenticated || auth0_bypass) {
         // Send initial data to client
         dbObjects.sections().then(data => {
             // setUserView(socket, data);
