@@ -1,10 +1,18 @@
 # Varaibrles 
+#!/usr/bin/expect
 HOST=$1
 PORT=$2
 USER=$3
-DB=$4
-INPUTFILE=$5
-OUTPUTFILE=$6
+PASSWORD=$4
+DB=$5
+INPUTFILE=$6
+OUTPUTFILE=$7
 
-# Create snapshot
-yamltodb --host $HOST --port $PORT --username $USER --password $DB $INPUTFILE > $OUTPUTFILE
+# Export diff from dest DB 
+expect <<END
+spawn yamltodb --host $HOST --port $PORT --username $USER --password $DB $INPUTFILE -o $OUTPUTFILE
+expect "Password: "
+send {'$PASSWORD'}
+send \r
+expect eof
+END

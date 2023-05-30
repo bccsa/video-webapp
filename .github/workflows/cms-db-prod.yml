@@ -5,8 +5,10 @@ on:
   push:
     branches: [ "releases/prod" ]
     paths: 
+      - 'cms/scripts/pg-update.sh'
+      - 'cms/scripts/pg-yamltodb.sh'
       - 'cms/snapshot/CMS-DB.yaml'
-      - 'cms/scripts'
+      - 'docker-files/CMS-DB.Dockerfile'
       
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -19,15 +21,21 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    # Install prerequisites (Python)
-    - run: apt update; apt install python3 
-    # Install prerequisites (Python packages)
-    - run: pip install Pyrseas psycopg2 psycopg_c psycopg_binary libpq
-    # Create diff from dest DB with the snapshot supplied
-    - run: |
-        bash cms/scripts/pg-yamltodb.sh ${{ secrets.DB_HOST }} ${{ secrets.DB_PORT }} ${{ secrets.DB_USER }} ${{ secrets.DB_DATABASE }} ${{ secrets.SNAPSHOT_PATH }} ${{ secrets.DIFF_PATH }}
-        expect "Password:"
-        send "${{ secrets.DB_PASSWORD }}\r"
-        interact
-    # Update Dest DB with diff sql created 
-    - run: psql "host=${{ secrets.DB_HOST }} port=${{ secrets.DB_PORT }} dbname=${{ secrets.DB_DATABASE }} user=${{ secrets.DB_USER }} password=${{ secrets.DB_PASSWORD }}" < ${{ secrets.DIFF_PATH }}
+    # Build docker container image 
+    - run: docker build . -f docker-files/CMS-DB.Dockerfile -t "${{ secrets.DB_DOCKER_IMAGE }}"
+    # Stop and remove old docker container (https://stackoverflow.com/questions/34228864/stop-and-delete-docker-container-if-its-running)
+    - run: docker stop "${{ secrets.DB_DOCKER_CONTAINER }}" || true && docker rm "${{ secrets.DB_DOCKER_CONTAINER }}" || true
+    # Start new container (without -d)
+    - run: > 
+        docker run
+        --env="DB_HOST=${{ secrets.DB_HOST }}"
+        --env="DB_PORT=${{ secrets.DB_PORT }}"
+        --env="DB_DATABASE=${{ secrets.DB_DATABASE }}"
+        --env="DB_USER=${{ secrets.DB_USER }}"
+        --env="DB_PASSWORD=${{ secrets.DB_PASSWORD }}"
+        --name=${{ secrets.DB_DOCKER_CONTAINER }}
+        ${{ secrets.DB_DOCKER_IMAGE }}
+
+    # Delete container
+    - run: docker stop "${{ secrets.DB_DOCKER_CONTAINER }}" || true && docker rm "${{ secrets.DB_DOCKER_CONTAINER }}" || true
+ 
