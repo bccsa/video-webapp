@@ -71,11 +71,6 @@ PORT="8080"
 # ------------
 APP_TITLE="Video WebApp"
 SOCKET_URL="http://localhost:8080"
-VOD_URL_PREFIX="https://za-scc-stream.bccsa.org/sTVvod/smil:"
-VOD_URL_POSTFIX="/playlist.m3u8"
-LIVE_URL_PREFIX="https://za-scc-stream.bccsa.org/sTVlive/"
-LIVE_URL_POSTFIX=""
-IMG_URL_PREFIX="/img/"
 CACHE_MAXAGE=0
 
 # Auth0 settings
@@ -103,7 +98,8 @@ Environment variables needed for the scripts to run:
 * DB_DATABASE="cms"
 * DB_PORT="5432"
 
-!!! See [this README](cms/scripts/README.md) for prerequisites that is needed to run these scripts
+**!!! See [this README](cms/scripts/README.md) for prerequisites that is needed to run these scripts**<br>
+**!!! Important to update your dev DB with the [production latest snapshot](cms/snapshot/CMS-DB.yaml) before you make changes, otherwise you will backdate the Production DB**
 
 #### This script is used to update the DB snapshot from your local dev db to update the production db
 ```bash
