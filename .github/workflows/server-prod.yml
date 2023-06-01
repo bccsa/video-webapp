@@ -39,6 +39,12 @@ jobs:
         --env="APP_TITLE=${{ secrets.APP_TITLE }}" 
         --env="SOCKET_URL=${{ secrets.SOCKET_URL }}" 
         --env="PORT=${{ secrets.DOCKER_PORT }}"
+        --env="VOD_URL_PREFIX=${{ secrets.VOD_URL_PREFIX }}"
+        --env="VOD_URL_POSTFIX=${{ secrets.VOD_URL_POSTFIX }}"
+        --env="LIVE_URL_PREFIX=${{ secrets.LIVE_URL_PREFIX }}"
+        --env="LIVE_URL_POSTFIX=${{ secrets.LIVE_URL_POSTFIX }}"
+        --env="IMG_URL_PREFIX=${{ secrets.IMG_URL_PREFIX }}"
+        --env="CACHE_MAXAGE=${{ env.CACHE_MAXAGE }}"
         --restart unless-stopped 
         --name=${{ secrets.DOCKER_CONTAINER }} 
         ${{ secrets.DOCKER_IMAGE }}

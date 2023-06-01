@@ -71,6 +71,7 @@ PORT="8080"
 # ------------
 APP_TITLE="Video WebApp"
 SOCKET_URL="http://localhost:8080"
+CACHE_MAXAGE=0
 
 # Auth0 settings
 # --------------
@@ -80,6 +81,8 @@ AUTH0_AUDIENCE="https://your.api.identifier"
 AUTH0_ALGORITHM="RS256"
 # Auth0 application secret or public certificate (insert cert for RS256 algorithm)
 AUTH0_SECRET="Auth0 secret or cert"
+# Bypass Auth0 authentication for testing purposes
+AUTH0_BYPASS=false
 ```
 
 Start the server in debug mode from the Visual Studio Code debug menu.
@@ -95,7 +98,8 @@ Environment variables needed for the scripts to run:
 * DB_DATABASE="cms"
 * DB_PORT="5432"
 
-!!! See [this README](cms/scripts/README.md) for prerequisites that is needed to run these scripts
+**!!! See [this README](cms/scripts/README.md) for prerequisites that is needed to run these scripts**<br>
+**!!! Important to update your dev DB with the [production latest snapshot](cms/snapshot/CMS-DB.yaml) before you make changes, otherwise you will backdate the Production DB**
 
 #### This script is used to update the DB snapshot from your local dev db to update the production db
 ```bash
