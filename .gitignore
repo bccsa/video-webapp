@@ -2,3 +2,4 @@ node_modules
 var
 .DS_Store
 .env
+cms/snapshot/CMS-DIFF.sql

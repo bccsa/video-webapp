@@ -1,18 +1,23 @@
 # Varaibrles 
 #!/usr/bin/expect
-HOST=$1
-PORT=$2
-USER=$3
-PASSWORD=$4
-DB=$5
-INPUTFILE=$6
-OUTPUTFILE=$7
+INPUTFILE="../snapshot/CMS-DB.yaml"
+OUTPUTFILE="../snapshot/CMS-DIFF.sql"
 
-# Export diff from dest DB 
+# read env file 
+set -a; source ../../.env; set +a;
+
+# Create a diff sql between ../snapshot/CMS-DB.yaml and destination DB
 expect <<END
-spawn yamltodb --host $HOST --port $PORT --username $USER --password $DB $INPUTFILE -o $OUTPUTFILE
+spawn yamltodb --host $DB_HOST --port $DB_PORT --username $DB_USER --password $DB_DATABASE $INPUTFILE -o $OUTPUTFILE
 expect "Password: "
-send {'$PASSWORD'}
+send {'$DB_PASSWORD'}
 send \r
 expect eof
 END
+
+# Remove all revoke commands from diff 
+grep -v "REVOKE" "$OUTPUTFILE" > tmpfile
+# Remove empty lines 
+grep -v -e '^$' tmpfile > "$OUTPUTFILE"
+# Delete temp file 
+rm -f tmpfile

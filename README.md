@@ -94,10 +94,25 @@ Start the server in debug mode from the Visual Studio Code debug menu.
 
 --- 
 
-### Create/update DB [snapshot](cms/snapshot/CMS-DB.yaml) to be used to update (alpha/beta/prod) DB 
-```bash cms/scripts/pg-dbtoyaml <HOST> <PORT> <USER> <DB> <OUTPUTFILE>```
+### Create/update a DB [snapshot](cms/snapshot/CMS-DB.yaml) to be used to update (alpha/beta/prod) DB (snapshot used for CI/CD)
+Environment variables need to be added to the [.env](./.env) file in the root of the project (See docs [here](cms/scripts/README.md))
+Environment variables needed for the scripts to run: 
+* DB_USER="postgres"
+* DB_PASSWORD="postgrespw"
+* DB_HOST="localhost"
+* DB_DATABASE="cms"
+* DB_PORT="5432"
 
-See docs [here](cms/scripts/README.md) for spesifics on env variables
+!!! See [this README](cms/scripts/README.md) for prerequisites that is needed to run these scripts
+
+#### This script is used to update the DB snapshot from your local dev db to update the production db
+```bash
+cd cms/scripts; bash pg-dbtoyaml.sh
+```
+#### To update your local dev DB with the latest snapshot you can run: 
+```bash
+cd cms/scripts; bash pg-update.sh
+```
 
 ---
 

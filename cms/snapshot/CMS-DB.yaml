@@ -1,23 +1,15 @@
 extension plpgsql:
   description: PL/pgSQL procedural language
-  owner: postgres
   schema: pg_catalog
   version: '1.0'
 schema public:
   description: standard public schema
-  owner: postgres
-  privileges:
-  - PUBLIC:
-    - all
-  - postgres:
-    - all
   sequence collection_id_seq:
     cache_value: 1
     data_type: integer
     increment_by: 1
     max_value: 2147483647
     min_value: null
-    owner: postgres
     owner_column: id
     owner_table: collection
     start_value: 1
@@ -27,7 +19,6 @@ schema public:
     increment_by: 1
     max_value: 2147483647
     min_value: null
-    owner: postgres
     owner_column: id
     owner_table: directus_activity
     start_value: 1
@@ -37,7 +28,6 @@ schema public:
     increment_by: 1
     max_value: 2147483647
     min_value: null
-    owner: postgres
     owner_column: id
     owner_table: directus_fields
     start_value: 1
@@ -47,7 +37,6 @@ schema public:
     increment_by: 1
     max_value: 2147483647
     min_value: null
-    owner: postgres
     owner_column: id
     owner_table: directus_notifications
     start_value: 1
@@ -57,7 +46,6 @@ schema public:
     increment_by: 1
     max_value: 2147483647
     min_value: null
-    owner: postgres
     owner_column: id
     owner_table: directus_permissions
     start_value: 1
@@ -67,7 +55,6 @@ schema public:
     increment_by: 1
     max_value: 2147483647
     min_value: null
-    owner: postgres
     owner_column: id
     owner_table: directus_presets
     start_value: 1
@@ -77,7 +64,6 @@ schema public:
     increment_by: 1
     max_value: 2147483647
     min_value: null
-    owner: postgres
     owner_column: id
     owner_table: directus_relations
     start_value: 1
@@ -87,7 +73,6 @@ schema public:
     increment_by: 1
     max_value: 2147483647
     min_value: null
-    owner: postgres
     owner_column: id
     owner_table: directus_revisions
     start_value: 1
@@ -97,7 +82,6 @@ schema public:
     increment_by: 1
     max_value: 2147483647
     min_value: null
-    owner: postgres
     owner_column: id
     owner_table: directus_settings
     start_value: 1
@@ -107,7 +91,6 @@ schema public:
     increment_by: 1
     max_value: 2147483647
     min_value: null
-    owner: postgres
     owner_column: id
     owner_table: directus_webhooks
     start_value: 1
@@ -117,7 +100,6 @@ schema public:
     increment_by: 1
     max_value: 2147483647
     min_value: null
-    owner: postgres
     owner_column: id
     owner_table: episode_collection
     start_value: 1
@@ -127,7 +109,6 @@ schema public:
     increment_by: 1
     max_value: 2147483647
     min_value: null
-    owner: postgres
     owner_column: id
     owner_table: episode
     start_value: 1
@@ -137,7 +118,6 @@ schema public:
     increment_by: 1
     max_value: 2147483647
     min_value: null
-    owner: postgres
     owner_column: id
     owner_table: section
     start_value: 1
@@ -161,7 +141,6 @@ schema public:
           - id
           schema: public
           table: section
-    owner: postgres
     primary_key:
       collection_pkey:
         columns:
@@ -195,7 +174,6 @@ schema public:
         type: text
     - origin:
         type: character varying(255)
-    owner: postgres
     primary_key:
       directus_activity_pkey:
         columns:
@@ -257,7 +235,6 @@ schema public:
           - collection
           schema: public
           table: directus_collections
-    owner: postgres
     primary_key:
       directus_collections_pkey:
         columns:
@@ -293,7 +270,6 @@ schema public:
           - id
           schema: public
           table: directus_users
-    owner: postgres
     primary_key:
       directus_dashboards_pkey:
         columns:
@@ -348,7 +324,6 @@ schema public:
         type: json
     - validation_message:
         type: text
-    owner: postgres
     primary_key:
       directus_fields_pkey:
         columns:
@@ -430,7 +405,6 @@ schema public:
           - id
           schema: public
           table: directus_users
-    owner: postgres
     primary_key:
       directus_files_pkey:
         columns:
@@ -477,7 +451,6 @@ schema public:
           - id
           schema: public
           table: directus_users
-    owner: postgres
     primary_key:
       directus_flows_pkey:
         columns:
@@ -505,7 +478,6 @@ schema public:
           - id
           schema: public
           table: directus_folders
-    owner: postgres
     primary_key:
       directus_folders_pkey:
         columns:
@@ -521,7 +493,6 @@ schema public:
     - timestamp:
         default: CURRENT_TIMESTAMP
         type: timestamp with time zone
-    owner: postgres
     primary_key:
       directus_migrations_pkey:
         columns:
@@ -570,7 +541,6 @@ schema public:
           - id
           schema: public
           table: directus_users
-    owner: postgres
     primary_key:
       directus_notifications_pkey:
         columns:
@@ -643,7 +613,6 @@ schema public:
           - id
           schema: public
           table: directus_users
-    owner: postgres
     primary_key:
       directus_operations_pkey:
         columns:
@@ -717,7 +686,6 @@ schema public:
           - id
           schema: public
           table: directus_users
-    owner: postgres
     primary_key:
       directus_panels_pkey:
         columns:
@@ -754,7 +722,6 @@ schema public:
           - id
           schema: public
           table: directus_roles
-    owner: postgres
     primary_key:
       directus_permissions_pkey:
         columns:
@@ -811,7 +778,6 @@ schema public:
           - id
           schema: public
           table: directus_users
-    owner: postgres
     primary_key:
       directus_presets_pkey:
         columns:
@@ -844,7 +810,6 @@ schema public:
         default: '''nullify''::character varying'
         not_null: true
         type: character varying(255)
-    owner: postgres
     primary_key:
       directus_relations_pkey:
         columns:
@@ -888,7 +853,6 @@ schema public:
           - id
           schema: public
           table: directus_revisions
-    owner: postgres
     primary_key:
       directus_revisions_pkey:
         columns:
@@ -921,7 +885,6 @@ schema public:
         default: 'true'
         not_null: true
         type: boolean
-    owner: postgres
     primary_key:
       directus_roles_pkey:
         columns:
@@ -963,7 +926,6 @@ schema public:
           - id
           schema: public
           table: directus_users
-    owner: postgres
     primary_key:
       directus_sessions_pkey:
         columns:
@@ -1055,7 +1017,6 @@ schema public:
           - id
           schema: public
           table: directus_folders
-    owner: postgres
     primary_key:
       directus_settings_pkey:
         columns:
@@ -1117,7 +1078,6 @@ schema public:
           - id
           schema: public
           table: directus_users
-    owner: postgres
     primary_key:
       directus_shares_pkey:
         columns:
@@ -1186,7 +1146,6 @@ schema public:
           - id
           schema: public
           table: directus_roles
-    owner: postgres
     primary_key:
       directus_users_pkey:
         columns:
@@ -1233,7 +1192,6 @@ schema public:
         type: character varying(255)
     - headers:
         type: json
-    owner: postgres
     primary_key:
       directus_webhooks_pkey:
         columns:
@@ -1252,7 +1210,6 @@ schema public:
         type: character varying(255)
     - imgUrl:
         type: character varying(255)
-    owner: postgres
     primary_key:
       episode_pkey:
         columns:
@@ -1286,7 +1243,6 @@ schema public:
           - id
           schema: public
           table: episode
-    owner: postgres
     primary_key:
       episode_collection_pkey:
         columns:
@@ -1304,7 +1260,6 @@ schema public:
         type: character varying(255)
     - url_postfix:
         type: character varying(255)
-    owner: postgres
     primary_key:
       section_pkey:
         columns:
@@ -1343,21 +1298,4 @@ schema public:
     - table episode
     - table episode_collection
     - table section
-    owner: postgres
-  view test:
-    columns:
-    - id:
-        type: integer
-    - displayName:
-        type: character varying(255)
-    - section_id:
-        type: integer
-    definition: |2-
-       SELECT collection.id,
-          collection."displayName",
-          collection.section_id
-         FROM public.collection;
-    depends_on:
-    - table collection
-    owner: dbadmin
 
