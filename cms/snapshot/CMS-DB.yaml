@@ -1298,19 +1298,4 @@ schema public:
     - table episode
     - table episode_collection
     - table section
-  view test3:
-    columns:
-    - id:
-        type: integer
-    - displayName:
-        type: character varying(255)
-    - section_id:
-        type: integer
-    definition: |2-
-       SELECT collection.id,
-          collection."displayName",
-          collection.section_id
-         FROM public.collection;
-    depends_on:
-    - table collection
 
