@@ -14,26 +14,26 @@ class appFrame extends ui {
 
     get html() {
         return `
-        <div class="flex flex-col h-screen bg-slate-800">
+        <div class="flex flex-col h-screen bg-slate-800 overflow-hidden scrollbar-hide select-none">
             <!-- title -->
             <div class="fixed top-0 left-0 right-0 pl-4 pr-4 h-12  bg-slate-900 flex ">
                 <h1 class="text-slate-300 font-sans text-lg flex items-center">
                     <span class="font-semibold">@{title}</span>
                     <span id="@{_titleDivider}" class="ml-2 mr-2 font-light" hidden>|</span>
-                    <span class="font-light">@{sectionName}</span>
+                    <span class="font-light float-right">@{sectionName}</span>
                 </h1>
             </div>
 
             <!-- contents -->
-            <div class="absolute flex top-12 left-0 right-0 bottom-16 landscape:flex-row portrait:flex-col gap-4 p-4">
+            <div class="fixed flex top-12 left-0 right-0 bottom-16 landscape:flex-row portrait:flex-col">
 
                 <!-- video div -->
-                <div id="@{_videoDiv}" style="display: none;" class="landscape:max-w-[66%] aspect-[3/2]">
+                <div id="@{_videoDiv}" style="display: none;" class=" landscape:w-6/12 portrait:w-full aspect-[3/2] bg-slate-700 landscape:border-r-2 landscape:border-r-slate-900 portrait:border-b-2 portrait:border-b-slate-900">
                     <!-- video player -->
-                    <div class="aspect-video w-full rounded-lg mb-1 overflow-hidden">
+                    <div class="aspect-video w-full">
                         <video
                             id="@{_playerElement}"
-                            class="video-js w-full h-full rounded-lg"
+                            class="video-js h-full w-full"
                             controls
                             preload="auto"
                             data-setup="{}"
@@ -46,12 +46,14 @@ class appFrame extends ui {
                         </video>
                     </div>
                     <!-- video data -->
-                    <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
-                    <p class="font-sans text-slate-500 text-xs text-justify mb-2">@{hlsDescription}</p>
+                    <div class="pl-4 pr-4 pb-2 pt-2">
+                        <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
+                        <p class="font-sans text-slate-400 text-xs text-justify">@{hlsDescription}</p>
+                    </div>
                 </div>
                 
                 <!-- child controls -->
-                <div id="@{_controlsDiv}" class="overflow-y-scroll scrollbar-hide w-full flex-1 block"></div>
+                <div id="@{_controlsDiv}" class="overflow-y-scroll w-full flex-1 block p-4"></div>
             </div>
 
             <!-- menu -->
