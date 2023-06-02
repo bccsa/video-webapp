@@ -13,6 +13,26 @@
             ],
             "program": "${workspaceFolder}/server/index.js",
             "cwd":"${workspaceFolder}/server"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "test",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/cms/scripts/json-to-directus.js",
+            "cwd":"${workspaceFolder}/cms/scripts/"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "test db to yaml",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/cms/scripts/directus-to-json.js",
+            "cwd":"${workspaceFolder}/cms/scripts/"
         }
     ]
 }

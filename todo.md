@@ -9,7 +9,7 @@
 * Translation streaming in app
 
 # CI/CD
-* DB scripts to read from .env file in DEV environment (to create DB snapshot and to update DEV DB with snapshot)
+* DB scripts to read from .env file in DEV environment (to create DB snapshot and to update DEV DB with snapshot) (Done)
 
 # Documentation
 * Create readme file to explain what dockers do in docker-files/

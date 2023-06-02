@@ -12,3 +12,6 @@ send {'$DB_PASSWORD'}
 send \r
 expect eof
 END
+
+# Create a snapshot of Directus 
+node "directus-to-json"

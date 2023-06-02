@@ -45,8 +45,10 @@ cd client-tailwind
 ---
 
 ### Start directus
+!!! Important to install directus before you use the scripts to populate the DB
 ```shell
 cd cms
+npm directus init
 npx directus start
 ```
 
