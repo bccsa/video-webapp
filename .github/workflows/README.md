@@ -45,7 +45,7 @@ Three: Update the destenation DB ([See docker file at: ../docker-files/CMS-DB.Do
     * CMS_KEY: Directus key
     * CMS_SECRET: Directus secret
     * CMS_PORT: Port used for directus & used for container port mapping
-    * CMS_HOST: IP/hostname that the API should listen on
+    * CMS_PUBLIC_URL: IP/hostname where the directus server can be reached
     * CMS_RATE_LIMITER_ENABLED: Specify to enable rate limiter on the API (true/false)
     * CMS_DOCKER_IMAGE: Name of docker image
     * CMS_DOCKER_CONTAINER: Name of docker container

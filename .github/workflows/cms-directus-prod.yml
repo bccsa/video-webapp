@@ -37,7 +37,7 @@ jobs:
         --env="KEY=${{ secrets.CMS_KEY }}"
         --env="SECRET=${{ secrets.CMS_SECRET }}"
         --env="PORT=${{ secrets.CMS_PORT }}"
-        --env="HOST=${{ secrets.CMS_HOST }}"
+        --env="PUBLIC_URL=${{ secrets.CMS_PUBLIC_URL }}"
         --env="RATE_LIMITER_ENABLED=${{ secrets.CMS_RATE_LIMITER_ENABLED }}"
         --restart unless-stopped 
         --name=${{ secrets.CMS_DOCKER_CONTAINER }}
