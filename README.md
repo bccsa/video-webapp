@@ -43,6 +43,14 @@ cd client-tailwind
 ```
 
 ---
+### Install directus
+```shell
+cd cms
+npx directus init
+```
+
+Edit the newly created .env file and enter the correct PostgreSQL database details
+---
 
 ### Start directus
 ```shell
