@@ -43,13 +43,18 @@ cd client-tailwind
 ```
 
 ---
-### Install directus
+### Install Directus
 ```shell
 cd cms
 npx directus init
 ```
 
 Edit the newly created .env file and enter the correct PostgreSQL database details
+
+Note: The correct way here is probably:
+1. Create an .env file with the required database details
+2. Run ```npx directus bootstrap```, (usint --skipAdminInit in CI/CD use cases)
+See https://docs.directus.io/self-hosted/cli.html for Directus docs
 ---
 
 ### Start directus
