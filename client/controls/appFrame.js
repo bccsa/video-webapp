@@ -159,7 +159,7 @@ class appFrame extends ui {
             },
             // controls: true,
             autoplay: false,
-            // preload: "auto",
+            preload: "auto",
             // preferFullWindow: true,
             // fullscreen: {
             //     options: {
