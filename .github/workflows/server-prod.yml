@@ -44,6 +44,7 @@ jobs:
         --env="LIVE_URL_PREFIX=${{ secrets.LIVE_URL_PREFIX }}"
         --env="LIVE_URL_POSTFIX=${{ secrets.LIVE_URL_POSTFIX }}"
         --env="IMG_URL_PREFIX=${{ secrets.IMG_URL_PREFIX }}"
+        --env="PRIVACY_POLICY=${{ secrets.PRIVACY_POLICY }}"
         --env="CACHE_MAXAGE=${{ env.CACHE_MAXAGE }}"
         --restart unless-stopped 
         --name=${{ secrets.DOCKER_CONTAINER }} 
