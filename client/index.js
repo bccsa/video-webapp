@@ -96,25 +96,6 @@ controls.on('appFrame', appFrame => {
         // Initialize socket without token for free / testing content.
         initSocket('');
     }
-
-    // Add privacy banner
-    let bannerTxt;
-    let savedPolicy = localStorage.getItem("privacy policy");
-    if (!savedPolicy) {
-        bannerTxt = 'By using this website / app you agree to our privacy policy.';
-    } else if (savedPolicy != env.app.privacyPolicy) {
-        bannerTxt = 'We have updated our privacy policy. By using this website / app you agree to our privacy policy.';
-    }
-
-    if (bannerTxt) {
-        controls.Set({
-            privacyBanner: {
-                controlType: 'privacyBanner',
-                text: env.app.privacyPolicy,
-                bannerText: bannerTxt,
-            }
-        });
-    }
 });
 
 /**

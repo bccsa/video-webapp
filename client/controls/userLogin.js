@@ -33,6 +33,7 @@ class userLogin extends ui {
                 </div>
             </button>
         </div>
+        <div id="@{_controlsDiv}"></div>
         `;
     }
 
@@ -60,6 +61,25 @@ class userLogin extends ui {
                 }
             });
         });
+
+        // Add privacy banner
+        let bannerTxt;
+        let savedPolicy = localStorage.getItem("privacy policy");
+        if (!savedPolicy) {
+            bannerTxt = 'By using this website / app you agree to our privacy policy.';
+        } else if (savedPolicy != env.app.privacyPolicy) {
+            bannerTxt = 'We have updated our privacy policy. By using this website / app you agree to our privacy policy.';
+        }
+
+        if (bannerTxt) {
+            this._topLevelParent.Set({
+                privacyBanner: {
+                    controlType: 'privacyBanner',
+                    text: env.app.privacyPolicy,
+                    bannerText: bannerTxt,
+                }
+            });
+        }
 
         this._privacyPolicy.addEventListener('click', e => {
             this._topLevelParent.Set({
