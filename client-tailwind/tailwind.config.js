@@ -11,8 +11,8 @@ module.exports = {
   },
   plugins: [
     // Iconify plugin
-		addDynamicIconSelectors(),
+    addDynamicIconSelectors(),
     require('tailwind-scrollbar-hide')
-      
-    ],
+
+  ],
 }
