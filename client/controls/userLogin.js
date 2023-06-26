@@ -14,16 +14,22 @@ class userLogin extends ui {
                 <img src="@{userPicture}" class="m-auto mb-2 rounded-full w-20" onerror="this.style.display='none'"></img>
                 <p class="text-slate-100">Welcome <span>@{userName}</span>!</p>
             </div>
-            <button id="@{_login}" type="button" class="m-4 rounded bg-slate-400 hover:bg-slate-300 h-12 w-48 max-w-full text-slate-800 font-bold py-2 px-4">
+            <button id="@{_login}" type="button" class="mt-2 mb-2 rounded bg-slate-400 hover:bg-slate-300 h-12 w-48 max-w-full text-slate-800 font-bold py-2 px-4">
                 <div class="w-max inline-flex items-center align-middle">
                     <div class="icon-[material-symbols--login-rounded] h-6 w-6 mr-2"></div>
                     <span class="font-sans">Login</span>
                 </div>
             </button>
-            <button id="@{_logout}" type="button" style="display: none;" class="m-4 rounded bg-slate-400 hover:bg-slate-300 h-12 w-48 max-w-full text-slate-800 font-bold py-2 px-4">
+            <button id="@{_logout}" type="button" style="display: none;" class="mt-2 mb-2 rounded bg-slate-400 hover:bg-slate-300 h-12 w-48 max-w-full text-slate-800 font-bold py-2 px-4">
                 <div class="w-max inline-flex items-center align-middle">
                     <div class="icon-[material-symbols--logout-rounded] h-6 w-6 mr-2"></div>
                     <span class="font-sans">Logout</span>
+                </div>
+            </button>
+            <button id="@{_privacyPolicy}" type="button" class=" mt-2 mb-2 rounded bg-slate-400 hover:bg-slate-300 h-12 w-48 max-w-full text-slate-800 font-bold py-2 px-4">
+                <div class="w-max inline-flex items-center align-middle">
+                    <div class="icon-[material-symbols--privacy-tip-outline-rounded] h-6 w-6 mr-2"></div>
+                    <span class="font-sans">Privacy policy</span>
                 </div>
             </button>
         </div>
@@ -54,6 +60,17 @@ class userLogin extends ui {
                 }
             });
         });
+
+        this._privacyPolicy.addEventListener('click', e => {
+            this._topLevelParent.Set({
+                privacyBanner: {
+                    controlType: 'privacyBanner',
+                    text: env.app.privacyPolicy,
+                    bannerText: "By using this website / app you agree to our privacy policy.",
+                    show: true,
+                }
+            });
+        })
     }
 
     /**

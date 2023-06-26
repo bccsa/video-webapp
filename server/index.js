@@ -6,6 +6,7 @@ const http = require("http");
 const path = require("path");
 require('dotenv').config({ path: path.join(__dirname, "../.env") });
 var jwt = require('jsonwebtoken');
+var showdown  = require('showdown'); // markdown to html converter
 
 // PostgreSQL database connection
 // ------------------------------
@@ -46,7 +47,8 @@ clientApp.use(express.static(path.join(__dirname, "../client"), { maxAge: maxAge
 var clientEnv = {
     app: {
         title: process.env.APP_TITLE,
-        socketUrl: process.env.SOCKET_URL
+        socketUrl: process.env.SOCKET_URL,
+        privacyPolicy: new showdown.Converter().makeHtml(process.env.PRIVACY_POLICY),
     },
     auth0: {
         domain: process.env.AUTH0_DOMAIN,
