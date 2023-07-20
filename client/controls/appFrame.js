@@ -96,8 +96,8 @@ class appFrame extends ui {
                 });
                 break;
             default:
-                this.once('User', section => {
-                    this.ShowUser();
+                this.once('VOD', section => {
+                    this.ShowHome();
                 });
                 break;
         }
