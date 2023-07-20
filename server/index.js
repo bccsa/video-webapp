@@ -2,6 +2,7 @@ const { postgres } = require("./db/postgres");
 const { dataObjects } = require("./db/dataObjects");
 const { Server } = require("socket.io");
 const express = require("express");
+var fallback = require('express-history-api-fallback');
 const http = require("http");
 const path = require("path");
 require('dotenv').config({ path: path.join(__dirname, "../.env") });
@@ -24,6 +25,8 @@ let dbObjects = new dataObjects(db);
 // -------------------------
 const clientApp = express();
 const clientHttp = http.createServer(clientApp);
+let root = path.join(__dirname, "../client");
+
 let maxAge;
 if (process.env.CACHE_MAXAGE) {
     maxAge = parseInt(process.env.CACHE_MAXAGE) * 1000; // Express uses milliseconds for maxAge setting
@@ -35,14 +38,6 @@ clientHttp.listen(process.env.PORT, () => {
     console.log(`Web-App running on http://*:${process.env.PORT}`);
 });
 
-// Serve the default file
-clientApp.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/index.html"), { maxAge: maxAge });
-});
-
-// Serve static files
-clientApp.use(express.static(path.join(__dirname, "../client"), { maxAge: maxAge }));
-
 // Serve client env
 var clientEnv = {
     app: {
@@ -53,13 +48,21 @@ var clientEnv = {
     auth0: {
         domain: process.env.AUTH0_DOMAIN,
         clientId: process.env.AUTH0_CLIENT_ID,
-        audience: process.env.AUTH0_AUDIENCE
+        audience: process.env.AUTH0_AUDIENCE,
+        bypass: process.env.AUTH0_BYPASS
     }
 }
+
 clientApp.get("/env", (req, res) => {
     res.setHeader('content-type', 'text/plain');
     res.send(JSON.stringify(clientEnv));
 });
+
+// Serve static files
+clientApp.use(express.static(root, { maxAge: maxAge }));
+
+// Fallback route - route all other requests to single page application
+clientApp.use(fallback('index.html', { root: root }));
 
 // Client socket.io messaging
 // --------------------------

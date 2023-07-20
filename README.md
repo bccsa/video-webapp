@@ -85,6 +85,8 @@ PORT="8080"
 APP_TITLE="Video WebApp"
 SOCKET_URL="http://localhost:8080"
 CACHE_MAXAGE=0
+PRIVACY_POLICY="Privacy policy text.
+Markdown format is supported."
 
 # Auth0 settings
 # --------------

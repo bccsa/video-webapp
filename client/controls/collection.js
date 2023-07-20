@@ -3,6 +3,7 @@ class collection extends ui {
         super();
 
         this.displayName = "";
+
     }
 
     get html() {
@@ -14,22 +15,37 @@ class collection extends ui {
                         
                     </div>
                 </div>
-                <div class="absolute top-13 hidden md:block left-20 bottom-12 rotate-180">
+                <div class="absolute hidden md:block top-13 left-8 bottom-16 rotate-180">
                     <img id="@{_left}" src="../img/spin.svg" class="h-11 w-11">
                 </div>
-                <div class="absolute top-13 hidden md:block right-20 bottom-12">
-                    <img id="@{_rigth}" src="../img/spin.svg" class="h-11 w-11">
+                <div class="absolute top-13 hidden md:block right-8 bottom-16">
+                    <img id="@{_right}" src="../img/spin.svg" class="h-11 w-11">
                 </div>
             </div>
         `;
     }
-
+    
     Init() {
+
         this._left.addEventListener('click', e => {
             this._carousel.scrollLeft -= 100
         })
-        this._rigth.addEventListener('click', e => {
+        this._right.addEventListener('click', e => {
             this._carousel.scrollLeft += 100
         })
+
+        new ResizeObserver(() => {
+            if (this._carousel.offsetWidth < this._controlsDiv.scrollWidth && window.innerHeight < window.innerWidth){
+                this._left.style.display = 'inherit';
+                this._right.style.display = 'inherit';
+            } else {
+                this._left.style.display = 'none';
+                this._right.style.display = 'none';
+            }
+        }).observe(this._controlsDiv);
+             
     }
+
+    
+    
 }
