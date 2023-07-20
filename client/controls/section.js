@@ -24,6 +24,10 @@ class section extends ui {
             control.Hide();
         });
         this._parent.sectionName = this.displayName;
+
+        // Set the window location to include path
+        window.history.replaceState('', document.title, window.location.origin + '/' + this.displayName.toLowerCase());
+
         super.Show();
     }
 }

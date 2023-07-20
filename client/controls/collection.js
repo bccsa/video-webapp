@@ -38,7 +38,6 @@ class collection extends ui {
             if (this._carousel.offsetWidth < this._controlsDiv.scrollWidth && window.innerHeight < window.innerWidth){
                 this._left.style.display = 'inherit';
                 this._right.style.display = 'inherit';
-                // console.log(this._carousel);
             } else {
                 this._left.style.display = 'none';
                 this._right.style.display = 'none';

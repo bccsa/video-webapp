@@ -78,10 +78,28 @@ class appFrame extends ui {
             }
         });
 
+        // Select initial content based on url
+        switch (window.location.pathname) {
+            case '/vod':
+                this.once('VOD', section => {
+                    this.ShowHome();
+                });
+                break;
+            case '/live':
+                this.once('Live', section => {
+                    this.ShowLive();
+                });
+                break;
+            case '/user':
+                this.once('User', section => {
+                    this.ShowUser();
+                });
+                break;
+            default:
+                break;
+        }
         // Subscribe to VOD section created event
-        this.on('VOD', section => {
-            this.ShowHome();
-        });
+        
 
         // Buttons event handlers
         this._btnHome.addEventListener('click', e => {

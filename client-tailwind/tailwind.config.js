@@ -1,5 +1,4 @@
-//const { addDynamicIconSelectors } = require('@iconify/tailwind');
-
+const { addDynamicIconSelectors } = require('@iconify/tailwind');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -11,7 +10,7 @@ module.exports = {
   },
   plugins: [
     // Iconify plugin
-    //addDynamicIconSelectors(),
+    addDynamicIconSelectors(),
     require('tailwind-scrollbar-hide')
 
   ],
