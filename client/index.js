@@ -28,7 +28,7 @@ fetch('env')
 
 // Wait for appFrame to be initialized
 controls.on('appFrame', appFrame => {
-    if (env.auth0.bypass) {
+    if (env.auth0.bypass == true || env.auth0.bypass == "true") {
         initSocket('');
     } else {
         try {
@@ -45,34 +45,35 @@ controls.on('appFrame', appFrame => {
             }).then(res => {
                 // Set global reference to Auth0 client
                 auth0Client = res;
-    
+
                 // Handle authentication callbacks (via query string parameters)
                 auth0Client.isAuthenticated().then(async auth => {
                     // Set login state
                     controls.appFrame.isAuthenticated = auth;
-    
+
                     // Only parse auth query string if not already authenticated
                     const query = window.location.search;
                     if (!controls.appFrame.isAuthenticated && query.includes("code=") && query.includes("state=")) {
                         await auth0Client.handleRedirectCallback().then(async res => {
                             window.history.replaceState({}, document.title, "/");
-    
+
                             // Set login state after login
                             await auth0Client.isAuthenticated().then(a => {
                                 controls.appFrame.isAuthenticated = a;
                             });
                         }).catch(err => {
+                            console.log(err.message);
                             // Trigger logout if failed to login
                             auth0Client.logout({
                                 logoutParams: {
-                                    returnTo: window.location.origin
+                                    returnTo: window.location.href
                                 }
                             });
                         });
                     } else if (auth && query.includes("code=") && query.includes("state=")) {
                         window.history.replaceState({}, document.title, "/");
                     }
-    
+
                     if (controls.appFrame.isAuthenticated) {
                         // Get the auth token
                         auth0Client.getTokenSilently().then(token => {
@@ -80,15 +81,23 @@ controls.on('appFrame', appFrame => {
                             initSocket(token);
                         }).catch(err => {
                             console.log(err.message);
+                            // Trigger logout if failed to login
+                            auth0Client.logout({
+                                logoutParams: {
+                                    returnTo: window.location.href
+                                }
+                            });
                         });
                     } else {
+                        // Keep track of selected location for redirection after user login
+                        localStorage.setItem("pathname", window.location.pathname);
+
                         // Connect to Socket.io server with empty auth token (unauthenticated connection)
                         // This can be used to show content to non-logged in users
                         if (env.auth0.AUTH0_BYPASS) {
                             initSocket('');
                         }
-    
-    
+
                         // Show user page (with login)
                         if (controls.appFrame.User) {
                             controls.appFrame.ShowUser();

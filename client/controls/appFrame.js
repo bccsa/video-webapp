@@ -78,32 +78,6 @@ class appFrame extends ui {
             }
         });
 
-        // Select initial content based on url
-        switch (window.location.pathname) {
-            case '/vod':
-                this.once('VOD', section => {
-                    this.ShowHome();
-                });
-                break;
-            case '/live':
-                this.once('Live', section => {
-                    this.ShowLive();
-                });
-                break;
-            case '/user':
-                this.once('User', section => {
-                    this.ShowUser();
-                });
-                break;
-            default:
-                this.once('VOD', section => {
-                    this.ShowHome();
-                });
-                break;
-        }
-        // Subscribe to VOD section created event
-        
-
         // Buttons event handlers
         this._btnHome.addEventListener('click', e => {
             this.ShowHome();
@@ -117,6 +91,20 @@ class appFrame extends ui {
         this._btnUser.addEventListener('click', e => {
             this.ShowUser();
         });
+
+        // Select initial content based on stored / current path
+        this.on('isAuthenticated', auth => {
+            if (auth && window.localStorage.getItem('pathname')) {
+                this.ShowLocation(window.localStorage.getItem('pathname'));
+            } else {
+                this.ShowLocation(window.location.pathname);
+            }
+
+            // clear stored path
+            if (auth) {
+                localStorage.removeItem("pathname");
+            }
+        });
     }
 
     resetBtn(ref) {
@@ -129,6 +117,48 @@ class appFrame extends ui {
         ref.classList.remove('text-slate-400');
         ref.classList.remove('hover:text-indigo-300');
         ref.classList.add('text-indigo-400');
+    }
+
+    ShowLocation(location) {
+        // Redirect to previous section after authentication
+        switch (location) {
+            case '/vod':
+                if (!this._controls.VOD) {
+                    this.once('VOD', section => {
+                        this.ShowHome();
+                    });
+                } else {
+                    this.ShowHome();
+                }
+                break;
+            case '/live':
+                if (!this._controls.Live) {
+                    this.once('Live', section => {
+                        this.ShowLive();
+                    });
+                } else {
+                    this.ShowLive();
+                }
+                break;
+            case '/user':
+                if (!this._controls.User) {
+                    this.once('User', section => {
+                        this.ShowUser();
+                    });
+                } else {
+                    this.ShowUser();
+                }
+                break;
+            default:
+                if (!this._controls.VOD) {
+                    this.once('VOD', section => {
+                        this.ShowHome();
+                    });
+                } else {
+                    this.ShowHome();
+                }
+                break;
+        }
     }
 
     ShowHome() {
