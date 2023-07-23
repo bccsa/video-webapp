@@ -38,10 +38,12 @@ class userLogin extends ui {
     }
 
     Init() {
-        this.showLogin(this._topLevelParent.appFrame.isAuthenticated);
-        this.getUser(this._topLevelParent.appFrame.isAuthenticated);
+        let appFrame = this._topLevelParent.appFrame;
 
-        this._topLevelParent.appFrame.on('isAuthenticated', auth => {
+        this.showLogin(appFrame.isAuthenticated);
+        this.getUser(appFrame.isAuthenticated);
+
+        appFrame.on('isAuthenticated', auth => {
             this.showLogin(auth);
             this.getUser(auth);
         });
