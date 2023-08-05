@@ -87,6 +87,7 @@ SOCKET_URL="http://localhost:8080"
 CACHE_MAXAGE=0
 PRIVACY_POLICY="Privacy policy text.
 Markdown format is supported."
+ANALYTICS_URL="Url to analytics server"
 
 # Auth0 settings
 # --------------
