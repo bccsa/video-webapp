@@ -44,6 +44,7 @@ var clientEnv = {
         title: process.env.APP_TITLE,
         socketUrl: process.env.SOCKET_URL,
         privacyPolicy: new showdown.Converter().makeHtml(process.env.PRIVACY_POLICY),
+        analyticsUrl: process.env.ANALYTICS_URL
     },
     auth0: {
         domain: process.env.AUTH0_DOMAIN,
