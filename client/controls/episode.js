@@ -7,6 +7,7 @@ class episode extends ui {
         this.description = "";
         this.hlsUrl = "";
         this.imgUrl = "";
+        this.analytics_type = ""
     }
 
     get html() {
@@ -16,6 +17,7 @@ class episode extends ui {
             <div class="pt-0 pb-2 text-xs md:text-sm">
                 <p class="text-slate-400 font-sans text-md">@{displayName}</p>
             </div>
+            <div id="@{_controlsDiv}"></div>
         </div>
         `;
     }
@@ -29,6 +31,19 @@ class episode extends ui {
             appFrame.hlsTitle = this.displayName;
             appFrame.hlsDescription = this.description;
             appFrame.ShowPlayer();
+            // update instance of analytics
+            if (env.app.analyticsUrl) {
+                this.Set({
+                    analytics: {
+                        controlType: "analytics",
+                        type: this.analytics_type,
+                        title: this.displayName,
+                        analyticsUrl: env.app.analyticsUrl
+                    }
+                })
+                if (this.analytics)
+                this.analytics.Init();
+            }
         });
     }
 }

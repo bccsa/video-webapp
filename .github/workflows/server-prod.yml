@@ -37,6 +37,7 @@ jobs:
         --env="DB_DATABASE=${{ secrets.DB_DATABASE }}" 
         --env="DB_PORT=${{ secrets.DB_PORT }}" 
         --env="APP_TITLE=${{ secrets.APP_TITLE }}" 
+        --env="ANALYTICS_URL=${{ secrets.ANALYTICS_URL }}" 
         --env="SOCKET_URL=${{ secrets.SOCKET_URL }}" 
         --env="PORT=${{ secrets.DOCKER_PORT }}"
         --env="VOD_URL_PREFIX=${{ secrets.VOD_URL_PREFIX }}"
