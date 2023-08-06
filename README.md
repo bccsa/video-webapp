@@ -43,25 +43,57 @@ cd client-tailwind
 ```
 
 ---
-### Install Directus
+
+### Install Directus in your development environment
+https://docs.Directus.io/self-hosted/cli.html#bootstrap-a-project
+
+**1. Create an .env file in the ```cms``` directory with the required database details**
+
 ```shell
-cd cms
-npx directus init
+DB_CLIENT="postgres"
+DB_USER="postgres"
+DB_PASSWORD="postgrespw"
+DB_HOST="localhost"
+DB_DATABASE="YourDBname"
+DB_PORT="5432"
+KEY="YourKey"
+SECRET="YourSecret"
+ADMIN_EMAIL="your@email.choice"
+ADMIN_PASSWORD="YourPassword!"
 ```
 
-Edit the newly created .env file and enter the correct PostgreSQL database details
+The ```KEY``` and ```SECRET``` can be generated with the following OpenSSL command:
+```shell
+openssl rand -base64 24
+```
 
-Note: The correct way here is probably:
-1. Create an .env file with the required database details
-2. Run ```npx directus bootstrap```, (usint --skipAdminInit in CI/CD use cases)
-See https://docs.directus.io/self-hosted/cli.html for Directus docs
+**2. Run ```npx Directus bootstrap```**
+
+**3. Update the database schema**
+```shell
+cd cms/scripts
+bash pg-update.sh
+```
+
+**4. Adopt tables**
+After starting Directus (see below), log into the Directus web-app and adopt all collections (tables) and fields (columns).
+
+**5. Create sections**
+The video-webapp needs two default sections to be added:
+* live
+* vod
+
+These should be manually added in the Directus web-app. Also add some collections and episodes in order to show content in your video-webapp.
+
 ---
 
-### Start directus
+### Start Directus
 ```shell
 cd cms
-npx directus start
+npx Directus start
 ```
+
+The default url is http://localhost:8055
 
 ---
 
@@ -73,7 +105,7 @@ Create a .env environmental variables file in the project root:
 DB_USER="postgres"
 DB_PASSWORD="postgrespw"
 DB_HOST="localhost"
-DB_DATABASE="cms"
+DB_DATABASE="YourDBname"
 DB_PORT="5432"
 
 # Server (api) settings
