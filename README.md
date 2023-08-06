@@ -79,9 +79,9 @@ bash pg-update.sh
 After starting Directus (see below), log into the Directus web-app and adopt all collections (tables) and fields (columns).
 
 **5. Create sections**
-The video-webapp needs two default sections to be added:
-* live
-* vod
+The video-webapp needs two default sections to be added (case sensitive):
+* Live
+* VOD
 
 These should be manually added in the Directus web-app. Also add some collections and episodes in order to show content in your video-webapp.
 
