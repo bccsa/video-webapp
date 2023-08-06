@@ -37,7 +37,7 @@ class episode extends ui {
                     analytics: {
                         controlType: "analytics",
                         type: this.analytics_type,
-                        title: this.displayName,
+                        title: this.description,
                         analyticsUrl: env.app.analyticsUrl
                     }
                 })
