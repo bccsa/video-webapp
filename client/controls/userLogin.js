@@ -116,7 +116,7 @@ class userLogin extends ui {
      * @param {Boolean} auth - authentication status
      */
     getUser(auth) {
-        if (auth) {
+        if (auth && auth0Client) {
             // Get the username
             auth0Client.getUser().then(data => {
                 if (data && data.name) {
