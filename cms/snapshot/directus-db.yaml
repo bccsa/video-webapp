@@ -1,0 +1,802 @@
+version: 1
+directus: 9.24.0
+vendor: postgres
+collections:
+  - collection: collection
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: collection
+      color: null
+      display_template: '{{displayName}}'
+      group: null
+      hidden: false
+      icon: null
+      item_duplication_fields: null
+      note: null
+      singleton: false
+      sort: null
+      sort_field: null
+      translations: null
+      unarchive_value: null
+    schema:
+      name: collection
+  - collection: episode
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: episode
+      color: null
+      display_template: '{{displayName}}'
+      group: null
+      hidden: false
+      icon: null
+      item_duplication_fields:
+        - collection.collection_id
+        - collection.episode_id
+        - description
+        - displayName
+        - hlsUrl
+        - imgUrl
+      note: null
+      singleton: false
+      sort: null
+      sort_field: null
+      translations: null
+      unarchive_value: null
+    schema:
+      name: episode
+  - collection: episode_collection
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: episode_collection
+      color: null
+      display_template: null
+      group: null
+      hidden: true
+      icon: import_export
+      item_duplication_fields: null
+      note: null
+      singleton: false
+      sort: null
+      sort_field: null
+      translations: null
+      unarchive_value: null
+    schema:
+      name: episode_collection
+  - collection: section
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: section
+      color: null
+      display_template: '{{displayName}}'
+      group: null
+      hidden: false
+      icon: null
+      item_duplication_fields: null
+      note: null
+      singleton: false
+      sort: null
+      sort_field: null
+      translations: null
+      unarchive_value: null
+    schema:
+      name: section
+fields:
+  - collection: collection
+    field: displayName
+    type: string
+    meta:
+      collection: collection
+      conditions: null
+      display: null
+      display_options: null
+      field: displayName
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: true
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: displayName
+      table: collection
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: collection
+    field: id
+    type: integer
+    meta:
+      collection: collection
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: collection
+      data_type: integer
+      default_value: nextval('collection_id_seq'::regclass)
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: collection
+    field: section_id
+    type: integer
+    meta:
+      collection: collection
+      conditions: null
+      display: null
+      display_options: null
+      field: section_id
+      group: null
+      hidden: false
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        enableCreate: false
+        template: '{{displayName}}'
+      readonly: false
+      required: true
+      sort: null
+      special:
+        - m2o
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: section_id
+      table: collection
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: section
+      foreign_key_column: id
+  - collection: episode
+    field: collection
+    type: alias
+    meta:
+      collection: episode
+      conditions: null
+      display: related-values
+      display_options:
+        template: '{{collection_id.displayName}}'
+      field: collection
+      group: null
+      hidden: false
+      interface: list-m2m
+      note: null
+      options:
+        fields: []
+        template: null
+      readonly: false
+      required: false
+      sort: null
+      special:
+        - m2m
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: episode
+    field: description
+    type: text
+    meta:
+      collection: episode
+      conditions: null
+      display: null
+      display_options: null
+      field: description
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options:
+        clear: true
+        trim: true
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: description
+      table: episode
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: episode
+    field: displayName
+    type: string
+    meta:
+      collection: episode
+      conditions: null
+      display: null
+      display_options: null
+      field: displayName
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: true
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: displayName
+      table: episode
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: episode
+    field: hlsUrl
+    type: string
+    meta:
+      collection: episode
+      conditions: null
+      display: null
+      display_options: null
+      field: hlsUrl
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: true
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: hlsUrl
+      table: episode
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: episode
+    field: id
+    type: integer
+    meta:
+      collection: episode
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: episode
+      data_type: integer
+      default_value: nextval('episode_id_seq'::regclass)
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: episode
+    field: imgUrl
+    type: string
+    meta:
+      collection: episode
+      conditions: null
+      display: null
+      display_options: null
+      field: imgUrl
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: true
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: imgUrl
+      table: episode
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: episode_collection
+    field: collection_id
+    type: integer
+    meta:
+      collection: episode_collection
+      conditions: null
+      display: null
+      display_options: null
+      field: collection_id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: collection_id
+      table: episode_collection
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: collection
+      foreign_key_column: id
+  - collection: episode_collection
+    field: episode_id
+    type: integer
+    meta:
+      collection: episode_collection
+      conditions: null
+      display: null
+      display_options: null
+      field: episode_id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: episode_id
+      table: episode_collection
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: episode
+      foreign_key_column: id
+  - collection: episode_collection
+    field: id
+    type: integer
+    meta:
+      collection: episode_collection
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: episode_collection
+      data_type: integer
+      default_value: nextval('episode_collection_id_seq'::regclass)
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: section
+    field: analytics_type
+    type: string
+    meta:
+      collection: section
+      conditions: null
+      display: null
+      display_options: null
+      field: analytics_type
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: analytics_type
+      table: section
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: section
+    field: displayName
+    type: string
+    meta:
+      collection: section
+      conditions: null
+      display: null
+      display_options: null
+      field: displayName
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: true
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: displayName
+      table: section
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: true
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: section
+    field: id
+    type: integer
+    meta:
+      collection: section
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: section
+      data_type: integer
+      default_value: nextval('section_id_seq'::regclass)
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: section
+    field: url_postfix
+    type: string
+    meta:
+      collection: section
+      conditions: null
+      display: null
+      display_options: null
+      field: url_postfix
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: url_postfix
+      table: section
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: section
+    field: url_prefix
+    type: string
+    meta:
+      collection: section
+      conditions: null
+      display: null
+      display_options: null
+      field: url_prefix
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: url_prefix
+      table: section
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+relations:
+  - collection: collection
+    field: section_id
+    related_collection: section
+    meta:
+      junction_field: null
+      many_collection: collection
+      many_field: section_id
+      one_allowed_collections: null
+      one_collection: section
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: collection
+      column: section_id
+      foreign_key_table: section
+      foreign_key_column: id
+      constraint_name: collection_section_id_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: episode_collection
+    field: collection_id
+    related_collection: collection
+    meta:
+      junction_field: episode_id
+      many_collection: episode_collection
+      many_field: collection_id
+      one_allowed_collections: null
+      one_collection: collection
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: episode_collection
+      column: collection_id
+      foreign_key_table: collection
+      foreign_key_column: id
+      constraint_name: episode_collection_collection_id_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: episode_collection
+    field: episode_id
+    related_collection: episode
+    meta:
+      junction_field: collection_id
+      many_collection: episode_collection
+      many_field: episode_id
+      one_allowed_collections: null
+      one_collection: episode
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: collection
+      sort_field: null
+    schema:
+      table: episode_collection
+      column: episode_id
+      foreign_key_table: episode
+      foreign_key_column: id
+      constraint_name: episode_collection_episode_id_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL

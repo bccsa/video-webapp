@@ -15,7 +15,7 @@ prerequisite:
 * The following scripts is used for:
 1. Create a yaml snapshot of a db and store it [here](../snapshot/CMS-DB.yaml)
 2. Create a diff between the [snapshot](../snapshot/CMS-DB.yaml) and a destination DB using the snapshot from 1. and saving it [here](../snapshot/CMS-DIFF.sql)
-3. Create & update a destenation DB (this step runs step 2. and 3. in one script)
+3. Create & update a destination DB (this step runs step 2. and 3. in one script)
 
 ## 1. [pg-dbtoyaml.sh](./pg-dbtoyaml.sh)
 
