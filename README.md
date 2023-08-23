@@ -103,22 +103,20 @@ bash pg-update.sh
 
 *Important! The ```pg-update.sh``` script reads database connection details from the ```.env``` file in the project root directory. You should therefore create the root ```.env``` file before running the ```pg-update.sh``` script (see [Start server](https://github.com/bccsa/video-webapp#start-server)).*
 
-**4. Create sections and add data**
+**4. Start Directus
+Ensure you are in the ```cms``` directory, and run
+```shell
+npx Directus start
+```
+
+The default url is http://localhost:8055
+
+**5. Create sections and add data**
 The video-webapp needs two default sections to be added (case sensitive):
 * Live
 * VOD
 
 These should be manually added in the Directus web-app. Also add some collections and episodes in order to show content in your video-webapp.
-
----
-
-### Start Directus
-```shell
-cd cms
-npx Directus start
-```
-
-The default url is http://localhost:8055
 
 ---
 
