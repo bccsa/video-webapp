@@ -30,4 +30,4 @@ RUN cd update-db/scripts; bash pg-update.sh;
 # Start server 
 CMD ["npm", "--prefix /usr/src/video-webapp", "run", "prod"]
 
-# Test comment 
+# Test comment 1
