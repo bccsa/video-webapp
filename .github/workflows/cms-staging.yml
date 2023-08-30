@@ -1,0 +1,23 @@
+# Workflow used to update directus server 
+name: cms-staging
+
+on:
+  push:
+    branches: [ "releases/staging" ]
+    paths: 
+      - 'cms/package*.json'
+      - 'cms/extensions'
+      - 'docker-files/CMS-Directus.Dockerfile'
+      - 'cms/scripts/pg-update.sh'
+      - 'cms/scripts/pg-yamltodb.sh'
+      - 'cms/snapshot/CMS-DB.yaml'
+      - 'cms/snapshot/directus-db.yaml'
+      
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  call-directus-workflow:
+    uses: ./.github/workflows/cms.yml
+    with:
+      environment: releases/staging-cms
