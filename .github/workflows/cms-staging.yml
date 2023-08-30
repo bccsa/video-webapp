@@ -20,4 +20,4 @@ jobs:
   call-directus-workflow:
     uses: ./.github/workflows/cms.yml
     with:
-      environment: releases/staging-cms
+      github_env: releases/staging-cms
