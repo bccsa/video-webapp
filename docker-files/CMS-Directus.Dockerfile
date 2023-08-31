@@ -5,7 +5,9 @@ FROM node:18
 WORKDIR /usr/src/video-webapp
 
 # Install Python
-RUN apt-get update && apt-get install -y python3
+RUN apt-get update && apt-get install -y python3 postgresql-client expect
+RUN python -m pip install --upgrade pip
+RUN pip install Pyrseas psycopg2 psycopg_c psycopg_binary
 
 # Copy package/package-lock files
 COPY cms/package*.json /usr/src/video-webapp/
