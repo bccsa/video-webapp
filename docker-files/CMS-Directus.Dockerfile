@@ -1,14 +1,13 @@
 # Node version
-FROM node:18
+FROM python:3.8
 
 # Create app work dir
 WORKDIR /usr/src/video-webapp
 
 # Install Python
-RUN apt-get update && apt-get install -y python3 postgresql-client expect pipx
-# RUN python3 -m pip install --upgrade pip
-RUN pipx ensurepath;
-RUN pipx install Pyrseas; pipx install psycopg2; pipx install psycopg_c; pipx install psycopg_binary;
+RUN apt-get update && apt-get install -y nodejs npm postgresql-client expect
+RUN python3 -m pip install --upgrade pip
+RUN pip install Pyrseas psycopg2 psycopg_c psycopg_binary
 
 # Copy package/package-lock files
 COPY cms/package*.json /usr/src/video-webapp/
