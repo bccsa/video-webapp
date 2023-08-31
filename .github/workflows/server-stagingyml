@@ -1,0 +1,47 @@
+name: server-prod
+
+on:
+  push:
+    branches: [ "releases/staging" ]
+    paths: 
+      - 'client/**'
+      - 'server/**'
+      - 'docker-files/Server.Dockerfile'
+      
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    environment: releases/staging-server
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Build docker container image 
+    - run: docker build . -f docker-files/Server.Dockerfile -t ${{ secrets.DOCKER_IMAGE }}
+    # Stop and remove old docker container (https://stackoverflow.com/questions/34228864/stop-and-delete-docker-container-if-its-running)
+    - run: docker stop ${{ secrets.DOCKER_CONTAINER }} || true && docker rm ${{ secrets.DOCKER_CONTAINER }} || true
+    # Start new container
+    - run: > 
+        docker run -d -p "${{ secrets.DOCKER_PORT }}":"${{ secrets.DOCKER_PORT }}" 
+        --env="AUTH0_DOMAIN=${{ secrets.AUTH0_DOMAIN }}" 
+        --env="AUTH0_CLIENT_ID=${{ secrets.AUTH0_CLIENT_ID }}" 
+        --env="AUTH0_AUDIENCE=${{ secrets.AUTH0_AUDIENCE }}" 
+        --env="AUTH0_ALGORITHM=${{ secrets.AUTH0_ALGORITHM }}" 
+        --env="AUTH0_SECRET=${{ secrets.AUTH0_SECRET }}" 
+        --env="DB_USER=${{ secrets.DB_USER }}" 
+        --env="DB_PASSWORD=${{ secrets.DB_PASSWORD }}" 
+        --env="DB_HOST=${{ secrets.DB_HOST }}" 
+        --env="DB_DATABASE=${{ secrets.DB_DATABASE }}" 
+        --env="DB_PORT=${{ secrets.DB_PORT }}" 
+        --env="APP_TITLE=${{ secrets.APP_TITLE }}" 
+        --env="ANALYTICS_URL=${{ secrets.ANALYTICS_URL }}" 
+        --env="SOCKET_URL=${{ secrets.SOCKET_URL }}" 
+        --env="PORT=${{ secrets.DOCKER_PORT }}"
+        --env="PRIVACY_POLICY=${{ secrets.PRIVACY_POLICY }}"
+        --env="CACHE_MAXAGE=${{ env.CACHE_MAXAGE }}"
+        --restart unless-stopped 
+        --name=${{ secrets.DOCKER_CONTAINER }} 
+        ${{ secrets.DOCKER_IMAGE }}
