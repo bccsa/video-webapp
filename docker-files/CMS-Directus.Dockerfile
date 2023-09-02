@@ -31,4 +31,4 @@ bash pg-update.sh; \
 cd ../..; \
 npx directus start"]
 
-# Test comment
+# Test comment 1
