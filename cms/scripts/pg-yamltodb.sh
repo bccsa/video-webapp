@@ -10,7 +10,7 @@ set -a; source ../../.env; set +a;
 expect <<END
 spawn yamltodb --host $DB_HOST --port $DB_PORT --username $DB_USER --password $DB_DATABASE $INPUTFILE -o $OUTPUTFILE
 expect "Password: "
-send {"$DB_PASSWORD"}
+send {'$DB_PASSWORD'}
 send \r
 expect eof
 END

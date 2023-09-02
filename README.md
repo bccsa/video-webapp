@@ -12,6 +12,8 @@ Video web-app for live and VOD content
 * Python V3 (used to create database update scripts)
 * expect (Debian/Ubuntu: apt-get update && apt-get install -y expect; MacOS: sudo port install expect;)
 
+*Important: The database password should not contant ```"```, ```{``` or ```}``` characters, as this breaks Postgress database schema migration in [pg-yamltodb.sh](./cms/scripts/pg-yamltodb.sh).*
+
 Pyrseas needs to be installed for database setup and migration:
 
 (See https://pyrseas.readthedocs.io/en/latest/install.html)
