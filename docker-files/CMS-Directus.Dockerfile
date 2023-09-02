@@ -30,3 +30,5 @@ cd update-db/scripts; \
 bash pg-update.sh; \
 cd ../..; \
 npx directus start"]
+
+# Test comment
