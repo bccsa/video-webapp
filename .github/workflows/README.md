@@ -1,5 +1,7 @@
 # Video Web-app CI/CD
 
+*Outdated documentation*
+
 ## Docker setup
 2 Docker containers is used:
 One: The server and web-cleint is packaged into one docker container ([See docker file at: ../docker-files/Server.Dockerfile](../docker-files/Server.Dockerfile))
