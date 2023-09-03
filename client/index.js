@@ -29,6 +29,9 @@ fetch('env')
 // Wait for appFrame to be initialized
 controls.on('appFrame', appFrame => {
     if (env.auth0.bypass == true || env.auth0.bypass == "true") {
+        // Force login state to authenticated in bypass mode
+        controls.appFrame.isAuthenticated = true;
+
         initSocket('');
     } else {
         try {

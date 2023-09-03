@@ -1,0 +1,49 @@
+# Workflow used to update directus server 
+name: cms-prod
+
+on:
+  push:
+    branches: [ "releases/prod" ]
+    paths: 
+      - 'cms/package*.json'
+      - 'cms/extensions'
+      - 'docker-files/CMS-Directus.Dockerfile'
+      - 'cms/scripts/pg-update.sh'
+      - 'cms/scripts/pg-yamltodb.sh'
+      - 'cms/snapshot/CMS-DB.yaml'
+      - 'cms/snapshot/directus-db.yaml'
+      
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    environment: releases/prod-cms
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Build docker container image 
+    - run: docker build . -f docker-files/CMS-Directus.Dockerfile -t "${{ secrets.CMS_DOCKER_IMAGE }}"
+    # Stop and remove old docker container (https://stackoverflow.com/questions/34228864/stop-and-delete-docker-container-if-its-running)
+    - run: docker stop "${{ secrets.CMS_DOCKER_CONTAINER }}" || true && docker rm "${{ secrets.CMS_DOCKER_CONTAINER }}" || true
+    # Start new container
+    - run: > 
+        docker run -d -p "${{ secrets.CMS_PORT }}":"${{ secrets.CMS_PORT }}"
+        --env="DB_CLIENT=${{ secrets.CMS_DB_CLIENT }}"
+        --env="DB_HOST=${{ secrets.DB_HOST }}"
+        --env="DB_PORT=${{ secrets.DB_PORT }}"
+        --env="DB_DATABASE=${{ secrets.DB_DATABASE }}"
+        --env="DB_USER=${{ secrets.DB_USER }}"
+        --env="DB_PASSWORD=${{ secrets.DB_PASSWORD }}"
+        --env="DB_SSL=${{ secrets.CMS_DB_SSL }}"
+        --env="KEY=${{ secrets.CMS_KEY }}"
+        --env="SECRET=${{ secrets.CMS_SECRET }}"
+        --env="PORT=${{ secrets.CMS_PORT }}"
+        --env="PUBLIC_URL=${{ secrets.CMS_PUBLIC_URL }}"
+        --env="RATE_LIMITER_ENABLED=${{ secrets.CMS_RATE_LIMITER_ENABLED }}"
+        --restart unless-stopped 
+        --name=${{ secrets.CMS_DOCKER_CONTAINER }}
+        ${{ secrets.CMS_DOCKER_IMAGE }}
+    

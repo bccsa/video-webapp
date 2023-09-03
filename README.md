@@ -3,8 +3,31 @@ Video web-app for live and VOD content
 
 ---
 
-## Development
-### Init submodules
+## Development environment
+
+### Prerequisites
+* NodeJS V18 or newer
+* NPM V8 or newer
+* Postgresql V12
+* Python V3 (used to create database update scripts)
+* expect (Debian/Ubuntu: apt-get update && apt-get install -y expect; MacOS: sudo port install expect;)
+
+*Important: The database password should not contant ```"```, ```{``` or ```}``` characters, as this breaks Postgress database schema migration in [pg-yamltodb.sh](./cms/scripts/pg-yamltodb.sh).*
+
+Pyrseas needs to be installed for database setup and migration:
+
+(See https://pyrseas.readthedocs.io/en/latest/install.html)
+
+```shell
+pip3 install Pyrseas
+pip3 install psycopg2
+pip3 install psycopg_c
+pip3 install psycopg_binary
+pip3 install libpq
+```
+
+### Clone and Init submodules
+After cloning the project to your development computer, initialize the git sub-modules:
 ```shell
 git submodule update --init --recursive
 ```
@@ -22,9 +45,7 @@ cd scripts
 npm install
 cd ../../server
 npm install
-
-### Configure database
-To do
+```
 
 ### Tailwind
 Start the tailwind build script to monitor for code changes and automatically build client/tailwind.css:
@@ -43,25 +64,61 @@ cd client-tailwind
 ```
 
 ---
-### Install Directus
+
+### Install Directus in your development environment
+https://docs.Directus.io/self-hosted/cli.html#bootstrap-a-project
+
+**1. Create an .env file in the ```cms``` directory with the required database details**
+*Note that this is a different file than the ```.env``` file created in the project root directory. You should however use the same database connection details in this file.*
+
 ```shell
-cd cms
-npx directus init
+DB_CLIENT="postgres"
+DB_USER="postgres"
+DB_PASSWORD="postgrespw"
+DB_HOST="localhost"
+DB_DATABASE="YourDBname"
+DB_PORT="5432"
+KEY="YourKey"
+SECRET="YourSecret"
+ADMIN_EMAIL="your@email.choice"
+ADMIN_PASSWORD="YourPassword!"
 ```
 
-Edit the newly created .env file and enter the correct PostgreSQL database details
-
-Note: The correct way here is probably:
-1. Create an .env file with the required database details
-2. Run ```npx directus bootstrap```, (usint --skipAdminInit in CI/CD use cases)
-See https://docs.directus.io/self-hosted/cli.html for Directus docs
----
-
-### Start directus
+The ```KEY``` and ```SECRET``` can be generated with the following OpenSSL command:
 ```shell
-cd cms
-npx directus start
+openssl rand -base64 24
 ```
+
+**2. Bootstrap the Directus database**
+Navigate to the ```cms``` directory and run
+```shell
+npx Directus bootstrap
+```
+
+**3. Update the database schema**
+Ensure you are in the ```cms``` directory, and run
+```shell
+npx directus schema apply --yes ./snapshot/directus-db.yaml
+cd scripts
+bash pg-update.sh
+```
+
+*Important! The ```pg-update.sh``` script reads database connection details from the ```.env``` file in the project root directory. You should therefore create the root ```.env``` file before running the ```pg-update.sh``` script (see [Start server](https://github.com/bccsa/video-webapp#start-server)).*
+
+**4. Start Directus
+Ensure you are in the ```cms``` directory, and run
+```shell
+npx Directus start
+```
+
+The default url is http://localhost:8055
+
+**5. Create sections and add data**
+The video-webapp needs two default sections to be added (case sensitive):
+* Live
+* VOD
+
+These should be manually added in the Directus web-app. Also add some collections and episodes in order to show content in your video-webapp.
 
 ---
 
@@ -73,7 +130,7 @@ Create a .env environmental variables file in the project root:
 DB_USER="postgres"
 DB_PASSWORD="postgrespw"
 DB_HOST="localhost"
-DB_DATABASE="cms"
+DB_DATABASE="YourDBname"
 DB_PORT="5432"
 
 # Server (api) settings
@@ -105,33 +162,33 @@ Start the server in debug mode from the Visual Studio Code debug menu.
 
 --- 
 
-### Create/update a DB [snapshot](cms/snapshot/CMS-DB.yaml) to be used to update (alpha/beta/prod) DB (snapshot used for CI/CD)
-Environment variables need to be added to the [.env](./.env) file in the root of the project (See docs [here](cms/scripts/README.md))
-Environment variables needed for the scripts to run: 
-* DB_USER="postgres"
-* DB_PASSWORD="postgrespw"
-* DB_HOST="localhost"
-* DB_DATABASE="cms"
-* DB_PORT="5432"
+## Making changes to the database structure/schema
+Whether making changes through Directus or directly to the database (e.g. stored functions, indexing, etc.), you should first ensure your database schema is at the latest revision.
 
-**!!! See [this README](cms/scripts/README.md) for prerequisites that is needed to run these scripts**<br>
-**!!! Important to update your dev DB with the [production latest snapshot](cms/snapshot/CMS-DB.yaml) before you make changes, otherwise you will backdate the Production DB**
+We are using the built-in Directus schema migration tool to migrate Directus-controlled database configuration. But as this tool does not include custom database configuration (stored functions, indexes, etc.) we are using Pyrseas (through the ```pg-update.sh``` script) to migrate the custom changes as well.
 
-#### This script is used to update the DB snapshot from your local dev db to update the production db
-```bash
-cd cms/scripts; bash pg-dbtoyaml.sh
+Ensure you are in the ```cms``` directory, and run:
+```shell
+npx directus schema apply --yes ./snapshot/directus-db.yaml
+cd scripts
+bash pg-update.sh
 ```
-#### To update your local dev DB with the latest snapshot you can run: 
-```bash
-cd cms/scripts; bash pg-update.sh
+
+When you are ready to commit your database changes, you need to create snapshots of the database schema and Directus configuration.
+
+Ensure that you are in the ```cms``` directory, and run:
+```shell
+npx directus schema snapshot --yes ./snapshot/directus-db.yaml
+cd scripts
+bash pg-yamltodb.sh
 ```
 
 ---
 
-### Client notes
-
 ### Auth0 configuration
-Create a new application in Auth0's control panel with the following settings (only non-default settings listed):
+Auth0 can be bypassed in your development environment by setting the ```AUTH0_BYPASS``` parameter in the ```.env``` file in the project route to ```true```.
+
+If you need to work on Auth0 related features, create a new application in Auth0's control panel with the following settings (only non-default settings listed):
 * Application type: Single Page Application
 * Allowed Callback URLs: http://localhost:8080,https://your.app.url
 * Allowed Logout URLs: http://localhost:8080,https://your.app.url

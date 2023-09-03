@@ -1,4 +1,4 @@
-# Varaibrles 
+# Variables 
 #!/usr/bin/expect
 INPUTFILE="../snapshot/CMS-DB.yaml"
 OUTPUTFILE="../snapshot/CMS-DIFF.sql"
