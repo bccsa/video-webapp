@@ -24,8 +24,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - run: echo "${{ secrets.CMS_DB_CLIENT }}"
-    - run: echo "${{ secrets.CMS_DB_SSL }}"
     # Build docker container image 
     - run: docker build . -f docker-files/CMS-Directus.Dockerfile -t "${{ secrets.CMS_DOCKER_IMAGE }}"
     # Stop and remove old docker container (https://stackoverflow.com/questions/34228864/stop-and-delete-docker-container-if-its-running)
