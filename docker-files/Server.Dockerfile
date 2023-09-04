@@ -25,4 +25,4 @@ RUN git submodule update --init --recursive
 # Start server 
 CMD [ "node", "/usr/src/video-webapp/server/index.js" ]
 
-# Test comment 1
+# Test comment
