@@ -110,8 +110,6 @@ cd scripts
 bash pg-update.sh
 ```
 
-*Important! The ```pg-update.sh``` script reads database connection details from the ```.env``` file in the project root directory. You should therefore create the root ```.env``` file before running the ```pg-update.sh``` script (see [Start server](https://github.com/bccsa/video-webapp#start-server)).*
-
 #### 4.5. Start Directus
 Ensure you are in the ```cms``` directory, and run
 ```shell
@@ -130,11 +128,6 @@ These should be manually added in the Directus web-app. Also add some collection
 ---
 
 ### 5. Start server
-Create a `.env` file in the root of the project. Start by copying the example file, then adjust variables as needed, in particular the database credentials:
-```shell
-cp .env.example .env
-```
-
 Install dependencies:
 ```sh
 cd server
