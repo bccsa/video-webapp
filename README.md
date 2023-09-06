@@ -95,21 +95,21 @@ pip3 install Pyrseas psycopg2 psycopg_c psycopg_binary
 ```
 
 #### 4.3. Bootstrap the Directus database
-Navigate to the ```cms``` directory and run
+Navigate to the `cms` directory and run
 ```shell
 npx directus bootstrap
 ```
 
 #### 4.4. Update the database schema
-Ensure you are in the ```cms``` directory, and run
+Ensure you are in the `cms` directory, and run
 ```shell
 npm schema:update
 ```
 
 #### 4.5. Start Directus
-Ensure you are in the ```cms``` directory, and run
+Ensure you are in the `cms` directory, and run
 ```shell
-npx directus start
+npm start
 ```
 
 The default url is http://localhost:8055
