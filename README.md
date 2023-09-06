@@ -81,19 +81,17 @@ The ```KEY``` and ```SECRET``` can be generated with the following OpenSSL comma
 openssl rand -base64 24
 ```
 
-Pyrseas needs to be installed for database setup and migration:
-
-(See https://pyrseas.readthedocs.io/en/latest/install.html)
-
-```shell
-pip3 install Pyrseas psycopg2 psycopg_c psycopg_binary
-```
-
 #### 4.2. Install dependencies
 From the `cms` folder:
 
 ```sh
 npm install
+```
+
+[Pyrseas](https://pyrseas.readthedocs.io/en/latest/install.html) needs to be installed for database setup and migration:
+
+```shell
+pip3 install Pyrseas psycopg2 psycopg_c psycopg_binary
 ```
 
 #### 4.3. Bootstrap the Directus database
