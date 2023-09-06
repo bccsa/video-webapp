@@ -6,11 +6,21 @@ Video web-app for live and VOD content
 ## Development environment
 
 ### Prerequisites
-* NodeJS V18 or newer
-* NPM V8 or newer
-* Postgresql V12
-* Python V3 (used to create database update scripts)
-* expect (Debian/Ubuntu: apt-get update && apt-get install -y expect; MacOS: sudo port install expect;)
+* [NodeJS](https://nodejs.org/en) v18 or newer
+* NPM v8 or newer (comes with NodeJS)
+* [PostgreSQL](https://www.postgresql.org/) **v12**
+
+To install on a Mac with [Homebrew](https://brew.sh/):
+  - `brew install postgresql@12`
+  - `brew link postgresql@12` (this will make the Postgres CLI tools available)
+  - `brew services start postgresql@12`
+  - By default, a `template1` database is created, with an empty username and password. Connect to the database with the CLI or a tool such as [TablePlus](https://tableplus.com/), then create a user and database for the app:
+    - `CREATE DATABASE videoapp`
+    - `CREATE USER videoapp WITH PASSWORD 'password';`
+    - `GRANT ALL PRIVILEGES ON DATABASE videoapp TO videoapp;`
+
+* Python v3 (used to create database update scripts)
+* expect (Debian/Ubuntu: `apt-get update && apt-get install -y expect` MacOS: `sudo port install expect` with MacPorts or `brew install expect` with Homebrew)
 
 *Important: The database password should not contant ```"```, ```{``` or ```}``` characters, as this breaks Postgress database schema migration in [pg-yamltodb.sh](./cms/scripts/pg-yamltodb.sh).*
 
@@ -19,11 +29,7 @@ Pyrseas needs to be installed for database setup and migration:
 (See https://pyrseas.readthedocs.io/en/latest/install.html)
 
 ```shell
-pip3 install Pyrseas
-pip3 install psycopg2
-pip3 install psycopg_c
-pip3 install psycopg_binary
-pip3 install libpq
+pip3 install Pyrseas psycopg2 psycopg_c psycopg_binary
 ```
 
 ### Clone and Init submodules
@@ -92,7 +98,7 @@ openssl rand -base64 24
 **2. Bootstrap the Directus database**
 Navigate to the ```cms``` directory and run
 ```shell
-npx Directus bootstrap
+npx directus bootstrap
 ```
 
 **3. Update the database schema**
@@ -108,7 +114,7 @@ bash pg-update.sh
 **4. Start Directus
 Ensure you are in the ```cms``` directory, and run
 ```shell
-npx Directus start
+npx directus start
 ```
 
 The default url is http://localhost:8055
