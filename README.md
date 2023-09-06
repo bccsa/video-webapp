@@ -74,7 +74,7 @@ cd cms
 cp .env.example .env
 ```
 
-*Important: The database password should not contant ```"```, ```{``` or ```}``` characters, as this breaks Postgress database schema migration in [pg-yamltodb.sh](./cms/scripts/pg-yamltodb.sh).*
+*Important: The database password should not contain the `"`, `{` or `}` characters, as this breaks Postgress database schema migration in [pg-yamltodb.sh](./cms/scripts/pg-yamltodb.sh).*
 
 The ```KEY``` and ```SECRET``` can be generated with the following OpenSSL command:
 ```shell
