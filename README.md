@@ -30,38 +30,42 @@ To install on a Mac with [Homebrew](https://brew.sh/):
 ### Install npm packages
 ```shell
 npm install
+
 cd client
-npm install
-cd ../client-tailwind
-npm install
-cd ../cms
-npm install
-cd ../../server
 npm install
 ```
 
-### Tailwind
+### 1. Main environment
+Create a `.env` file in the root of the project. Start by copying the example file, then adjust variables as needed, in particular the database credentials:
+```shell
+cp .env.example .env
+```
+
+
+### 2. Tailwind
+Install dependencies:
+```sh
+cd client-tailwind
+npm install
+```
+
 Start the tailwind build script to monitor for code changes and automatically build client/tailwind.css:
 
 Mac & Linux:
 ```shell
-cd client-tailwind
 ./build.sh
 ```
 or
 
 Windows:
 ```powershell
-cd client-tailwind
 ./build.cmd
 ```
 
 ---
 
-### Install Directus in your development environment
-https://docs.Directus.io/self-hosted/cli.html#bootstrap-a-project
-
-**1. Create an .env file in the `cms` directory**
+### 3. Install Directus in your development environment
+#### 3.1. Create an .env file in the `cms` directory
 *Note that this is a different file than the ```.env``` file created in the project root directory. You should however use the same database connection details in this file.*
 
 Start by copying the example file, then adjust variables as needed, in particular the database credentials:
@@ -85,14 +89,20 @@ Pyrseas needs to be installed for database setup and migration:
 pip3 install Pyrseas psycopg2 psycopg_c psycopg_binary
 ```
 
+#### 3.2. Install dependencies
+From the `cms` folder:
 
-**2. Bootstrap the Directus database**
+```sh
+npm install
+```
+
+#### 3.3. Bootstrap the Directus database
 Navigate to the ```cms``` directory and run
 ```shell
 npx directus bootstrap
 ```
 
-**3. Update the database schema**
+#### 3.4. Update the database schema
 Ensure you are in the ```cms``` directory, and run
 ```shell
 npx directus schema apply --yes ./snapshot/directus-db.yaml
@@ -102,7 +112,7 @@ bash pg-update.sh
 
 *Important! The ```pg-update.sh``` script reads database connection details from the ```.env``` file in the project root directory. You should therefore create the root ```.env``` file before running the ```pg-update.sh``` script (see [Start server](https://github.com/bccsa/video-webapp#start-server)).*
 
-**4. Start Directus**
+#### 3.5. Start Directus
 Ensure you are in the ```cms``` directory, and run
 ```shell
 npx directus start
@@ -110,7 +120,7 @@ npx directus start
 
 The default url is http://localhost:8055
 
-**5. Create sections and add data**
+#### 3.6. Create sections and add data
 The video-webapp needs two default sections to be added (case sensitive):
 * Live
 * VOD
@@ -119,10 +129,16 @@ These should be manually added in the Directus web-app. Also add some collection
 
 ---
 
-### Start server
+### 4. Start server
 Create a `.env` file in the root of the project. Start by copying the example file, then adjust variables as needed, in particular the database credentials:
 ```shell
 cp .env.example .env
+```
+
+Install dependencies:
+```sh
+cd server
+npm install
 ```
 
 Start the server in debug mode from the Visual Studio Code debug menu (or by pressing `F5`), or run manually:
