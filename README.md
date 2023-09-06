@@ -15,14 +15,14 @@ git submodule update --init --recursive
 * NPM v8 or newer (comes with NodeJS)
 * [PostgreSQL](https://www.postgresql.org/) **v12**
 
-To install on a Mac with [Homebrew](https://brew.sh/):
-  - `brew install postgresql@12`
-  - `brew link postgresql@12` (this will make the Postgres CLI tools available)
-  - `brew services start postgresql@12`
-  - By default, a `template1` database is created, with an empty username and password. Connect to the database with the CLI or a tool such as [TablePlus](https://tableplus.com/), then create a user and database for the app:
-    - `CREATE DATABASE videoapp`
-    - `CREATE USER videoapp WITH PASSWORD 'password';`
-    - `GRANT ALL PRIVILEGES ON DATABASE videoapp TO videoapp;`
+  - To install on a Mac with [Homebrew](https://brew.sh/):
+    - `brew install postgresql@12`
+    - `brew link postgresql@12` (this will make the Postgres CLI tools available)
+    - `brew services start postgresql@12`
+    - By default, a `template1` database is created, with an empty username and password. Connect to the database with the CLI or a tool such as [TablePlus](https://tableplus.com/), then create a user and database for the app:
+      - `CREATE DATABASE videoapp`
+      - `CREATE USER videoapp WITH PASSWORD 'password';`
+      - `GRANT ALL PRIVILEGES ON DATABASE videoapp TO videoapp;`
 
 * Python v3 (used to create database update scripts)
 * expect (Debian/Ubuntu: `apt-get update && apt-get install -y expect` MacOS: `sudo port install expect` with MacPorts or `brew install expect` with Homebrew)
