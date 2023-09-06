@@ -36,8 +36,6 @@ cd ../client-tailwind
 npm install
 cd ../cms
 npm install
-cd scripts
-npm install
 cd ../../server
 npm install
 ```
