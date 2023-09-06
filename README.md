@@ -103,9 +103,7 @@ npx directus bootstrap
 #### 4.4. Update the database schema
 Ensure you are in the ```cms``` directory, and run
 ```shell
-npx directus schema apply --yes ./snapshot/directus-db.yaml
-cd scripts
-bash pg-update.sh
+npm schema:update
 ```
 
 #### 4.5. Start Directus
@@ -143,22 +141,11 @@ cd server
 ## Making changes to the database structure/schema
 Whether making changes through Directus or directly to the database (e.g. stored functions, indexing, etc.), you should first ensure your database schema is at the latest revision.
 
-We are using the built-in Directus schema migration tool to migrate Directus-controlled database configuration. But as this tool does not include custom database configuration (stored functions, indexes, etc.) we are using Pyrseas (through the ```pg-update.sh``` script) to migrate the custom changes as well.
+We are using the built-in Directus schema migration tool to migrate Directus-controlled database configuration. But as this tool does not include custom database configuration (stored functions, indexes, etc.) we are using Pyrseas (through the `pg-update.sh` script) to migrate the custom changes as well.
 
-Ensure you are in the ```cms``` directory, and run:
+Ensure you are in the `cms` directory, and run:
 ```shell
-npx directus schema apply --yes ./snapshot/directus-db.yaml
-cd scripts
-bash pg-update.sh
-```
-
-When you are ready to commit your database changes, you need to create snapshots of the database schema and Directus configuration.
-
-Ensure that you are in the ```cms``` directory, and run:
-```shell
-npx directus schema snapshot --yes ./snapshot/directus-db.yaml
-cd scripts
-bash pg-yamltodb.sh
+npm run schema:update
 ```
 
 ---

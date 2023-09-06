@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prod": "npx directus start"
+    "prod": "npx directus start",
+    "schema:update": "npx directus schema apply --yes ./snapshot/directus-db.yaml && ./scripts/pg-update.sh"
   },
   "keywords": [],
   "author": "",
