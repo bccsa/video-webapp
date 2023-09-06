@@ -4,6 +4,11 @@ Video web-app for live and VOD content
 ---
 
 ## Development environment
+### Clone and init submodules
+After cloning the project to your machine, initialize the git sub-modules:
+```shell
+git submodule update --init --recursive
+```
 
 ### Prerequisites
 * [NodeJS](https://nodejs.org/en) v18 or newer
@@ -21,22 +26,6 @@ To install on a Mac with [Homebrew](https://brew.sh/):
 
 * Python v3 (used to create database update scripts)
 * expect (Debian/Ubuntu: `apt-get update && apt-get install -y expect` MacOS: `sudo port install expect` with MacPorts or `brew install expect` with Homebrew)
-
-*Important: The database password should not contant ```"```, ```{``` or ```}``` characters, as this breaks Postgress database schema migration in [pg-yamltodb.sh](./cms/scripts/pg-yamltodb.sh).*
-
-Pyrseas needs to be installed for database setup and migration:
-
-(See https://pyrseas.readthedocs.io/en/latest/install.html)
-
-```shell
-pip3 install Pyrseas psycopg2 psycopg_c psycopg_binary
-```
-
-### Clone and Init submodules
-After cloning the project to your development computer, initialize the git sub-modules:
-```shell
-git submodule update --init --recursive
-```
 
 ### Install npm packages
 ```shell
@@ -74,26 +63,30 @@ cd client-tailwind
 ### Install Directus in your development environment
 https://docs.Directus.io/self-hosted/cli.html#bootstrap-a-project
 
-**1. Create an .env file in the ```cms``` directory with the required database details**
+**1. Create an .env file in the `cms` directory**
 *Note that this is a different file than the ```.env``` file created in the project root directory. You should however use the same database connection details in this file.*
 
+Start by copying the example file, then adjust variables as needed, in particular the database credentials:
 ```shell
-DB_CLIENT="postgres"
-DB_USER="postgres"
-DB_PASSWORD="postgrespw"
-DB_HOST="localhost"
-DB_DATABASE="YourDBname"
-DB_PORT="5432"
-KEY="YourKey"
-SECRET="YourSecret"
-ADMIN_EMAIL="your@email.choice"
-ADMIN_PASSWORD="YourPassword!"
+cd cms
+cp .env.example .env
 ```
+
+*Important: The database password should not contant ```"```, ```{``` or ```}``` characters, as this breaks Postgress database schema migration in [pg-yamltodb.sh](./cms/scripts/pg-yamltodb.sh).*
 
 The ```KEY``` and ```SECRET``` can be generated with the following OpenSSL command:
 ```shell
 openssl rand -base64 24
 ```
+
+Pyrseas needs to be installed for database setup and migration:
+
+(See https://pyrseas.readthedocs.io/en/latest/install.html)
+
+```shell
+pip3 install Pyrseas psycopg2 psycopg_c psycopg_binary
+```
+
 
 **2. Bootstrap the Directus database**
 Navigate to the ```cms``` directory and run
@@ -111,7 +104,7 @@ bash pg-update.sh
 
 *Important! The ```pg-update.sh``` script reads database connection details from the ```.env``` file in the project root directory. You should therefore create the root ```.env``` file before running the ```pg-update.sh``` script (see [Start server](https://github.com/bccsa/video-webapp#start-server)).*
 
-**4. Start Directus
+**4. Start Directus**
 Ensure you are in the ```cms``` directory, and run
 ```shell
 npx directus start
@@ -129,42 +122,16 @@ These should be manually added in the Directus web-app. Also add some collection
 ---
 
 ### Start server
-Create a .env environmental variables file in the project root:
+Create a `.env` file in the root of the project. Start by copying the example file, then adjust variables as needed, in particular the database credentials:
 ```shell
-# Postgres database connection
-# ----------------------------
-DB_USER="postgres"
-DB_PASSWORD="postgrespw"
-DB_HOST="localhost"
-DB_DATABASE="YourDBname"
-DB_PORT="5432"
-
-# Server (api) settings
-# ---------------------
-PORT="8080"
-
-# App settings
-# ------------
-APP_TITLE="Video WebApp"
-SOCKET_URL="http://localhost:8080"
-CACHE_MAXAGE=0
-PRIVACY_POLICY="Privacy policy text.
-Markdown format is supported."
-ANALYTICS_URL="Url to analytics server"
-
-# Auth0 settings
-# --------------
-AUTH0_DOMAIN="your.auth0.domain"
-AUTH0_CLIENT_ID="your_auth0_client_id"
-AUTH0_AUDIENCE="https://your.api.identifier"
-AUTH0_ALGORITHM="RS256"
-# Auth0 application secret or public certificate (insert cert for RS256 algorithm)
-AUTH0_SECRET="Auth0 secret or cert"
-# Bypass Auth0 authentication for testing purposes
-AUTH0_BYPASS=false
+cp .env.example .env
 ```
 
-Start the server in debug mode from the Visual Studio Code debug menu.
+Start the server in debug mode from the Visual Studio Code debug menu (or by pressing `F5`), or run manually:
+```sh
+cd server
+./index.js
+```
 
 --- 
 
