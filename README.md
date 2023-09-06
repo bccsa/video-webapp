@@ -130,10 +130,9 @@ cd server
 npm install
 ```
 
-Start the server in debug mode from the Visual Studio Code debug menu (or by pressing `F5`), or run manually:
+Start the server in debug mode from the Visual Studio Code debug menu (or by pressing `F5`), or run manually from the `server` folder:
 ```sh
-cd server
-./index.js
+npm start
 ```
 
 --- 
