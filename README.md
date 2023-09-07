@@ -119,7 +119,7 @@ The video-webapp needs two default sections to be added (case sensitive):
 
 These should be manually added in the Directus interface. Also add some collections and episodes in order to show content in your video-webapp.
 
-### 5. Start server
+### 5. Server
 Install dependencies:
 ```sh
 cd server
