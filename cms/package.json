@@ -1,7 +1,6 @@
 {
   "name": "cms",
-  "version": "1.0.0",
-  "description": "",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "start": "npx directus start",
@@ -11,7 +10,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "directus": "^9.23.4",
     "pg": "^8.10.0"
