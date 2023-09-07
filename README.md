@@ -62,8 +62,6 @@ Start the tailwind build script to monitor for code changes and automatically bu
 npm run watch
 ```
 
----
-
 ### 4. Directus
 #### 4.1. Create an .env file in the `cms` directory
 *Note that this is a different file than the ```.env``` file created in the project root directory. You should however use the same database connection details in this file.*
@@ -119,9 +117,7 @@ The video-webapp needs two default sections to be added (case sensitive):
 * Live
 * VOD
 
-These should be manually added in the Directus web-app. Also add some collections and episodes in order to show content in your video-webapp.
-
----
+These should be manually added in the Directus interface. Also add some collections and episodes in order to show content in your video-webapp.
 
 ### 5. Start server
 Install dependencies:
@@ -149,8 +145,8 @@ npm run schema:update
 
 ---
 
-### Auth0 configuration
-Auth0 can be bypassed in your development environment by setting the ```AUTH0_BYPASS``` parameter in the ```.env``` file in the project route to ```true```.
+## Auth0 configuration
+Auth0 can be bypassed in your development environment by setting the `AUTH0_BYPASS` parameter in the `.env` file in the project route to `true`.
 
 If you need to work on Auth0 related features, create a new application in Auth0's control panel with the following settings (only non-default settings listed):
 * Application type: Single Page Application
@@ -163,7 +159,7 @@ Create an API for your application in the Auth0 control panel. The API identifie
 
 ---
 
-### Capacitor notes
+## Capacitor notes
 Disable build error for custom (vanilla JS) project: Added the following to the ionic capacitor project's package.json (root folder):
 ```json
 "scripts": {
