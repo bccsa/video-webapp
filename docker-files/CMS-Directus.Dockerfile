@@ -16,19 +16,16 @@ COPY cms/package*.json /usr/src/video-webapp/
 RUN npm --prefix /usr/src/video-webapp ci --omit=dev
 
 # Copy DB upgrade scripts
-COPY cms/scripts /usr/src/video-webapp/update-db/scripts
+
+# FIXME probably broken now
+COPY cms/scripts /usr/src/video-webapp/scripts
 
 # Copy directus and postgress DB diff yaml files
-COPY cms/snapshot/directus-db.yaml /usr/src/video-webapp/update-db/snapshot/directus-db.yaml
-COPY cms/snapshot/CMS-DB.yaml /usr/src/video-webapp/update-db/snapshot/CMS-DB.yaml
+COPY cms/snapshot/directus-db.yaml /usr/src/video-webapp/snapshot/directus-db.yaml
+COPY cms/snapshot/CMS-DB.yaml /usr/src/video-webapp/snapshot/CMS-DB.yaml
 
 # Initialise and migrate the Directus DB, migrate non-directus DB schema changs, and start the server
 CMD ["/bin/bash", "-c", "cd /usr/src/video-webapp; \
 npx directus bootstrap; \
-npx directus schema apply --yes ./update-db/snapshot/directus-db.yaml; \
-cd update-db/scripts; \
-bash pg-update.sh; \
-cd ../..; \
+npm run schema:update; \
 npx directus start"]
-
-# Test comment 1

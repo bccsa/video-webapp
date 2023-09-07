@@ -1,9 +1,11 @@
 #! /bin/bash
+# Creates and applies an SQL diff file based off a changed YAML snapshot
+
 # read env file 
-set -a; source ../../.env; set +a;
+set -a; source ./.env; set +a;
 
 # Create snapshot from DB
-bash ./pg-yamltodb.sh
+bash ./scripts/pg-yamltodb.sh
 
 # apply diff to server
-psql "host=$DB_HOST port=$DB_PORT user=$DB_USER password=$DB_PASSWORD dbname=$DB_DATABASE" < "../snapshot/CMS-DIFF.sql"
+psql "host=$DB_HOST port=$DB_PORT user=$DB_USER password=$DB_PASSWORD dbname=$DB_DATABASE" < "./snapshot/CMS-DIFF.sql"

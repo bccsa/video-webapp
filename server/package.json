@@ -1,4 +1,11 @@
 {
+  "name": "server",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "license": "MIT",
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
@@ -7,22 +14,5 @@
     "pg": "^8.10.0",
     "showdown": "^2.1.0",
     "socket.io": "^4.6.1"
-  },
-  "name": "server",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "node index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/bccsa/video-webapp.git"
-  },
-  "author": "",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/bccsa/video-webapp/issues"
-  },
-  "homepage": "https://github.com/bccsa/video-webapp#readme",
-  "description": ""
+  }
 }
