@@ -29,10 +29,10 @@ git submodule update --init --recursive
 
 ### 1. Install npm packages
 ```shell
-npm install
+npm ci
 
 cd client
-npm install
+npm ci
 ```
 
 ### 2. Main environment
@@ -46,7 +46,7 @@ cp .env.example .env
 Install dependencies:
 ```sh
 cd client-tailwind
-npm install
+npm ci
 ```
 
 Start the tailwind build script to monitor for code changes and automatically build client/tailwind.css:
@@ -85,7 +85,7 @@ openssl rand -base64 24
 From the `cms` folder:
 
 ```sh
-npm install
+npm ci
 ```
 
 [Pyrseas](https://pyrseas.readthedocs.io/en/latest/install.html) needs to be installed for database setup and migration:
@@ -127,7 +127,7 @@ These should be manually added in the Directus web-app. Also add some collection
 Install dependencies:
 ```sh
 cd server
-npm install
+npm ci
 ```
 
 Start the server in debug mode from the Visual Studio Code debug menu (or by pressing `F5`), or run manually from the `server` folder:
