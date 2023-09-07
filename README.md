@@ -1,11 +1,18 @@
 # video-webapp
 Video web-app for live and VOD content
 
----
+## Repository structure
+- `android` - Folder used by [Capacitor](https://capacitorjs.com/) to build an Android app
+- `client-tailwind` - Configuration and base CSS file for Tailwind, used by the client
+- `client` - The frontend, using [modular-ui](https://github.com/bccsa/modular-ui)
+- `cms` - A [Directus](https://directus.io) backend for managing the content of the webapp
+- `docker-files` - Several Docker files to deploy the backend
+- `ios` - Folder used by [Capacitor](https://capacitorjs.com/) to build an iOS app
+- `server` - The server that runs the client
 
-## Development environment
+## Developing locally
 ### Clone and init submodules
-After cloning the project to your machine, initialize the git sub-modules:
+After cloning the project to your machine, initialize the git submodules to fetch modular-ui:
 ```shell
 git submodule update --init --recursive
 ```
