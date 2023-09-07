@@ -49,7 +49,7 @@ cp .env.example .env
 ```
 
 
-### 3. Tailwind
+### 3. Client
 Install dependencies:
 ```sh
 cd client-tailwind
