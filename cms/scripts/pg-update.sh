@@ -1,4 +1,6 @@
 #! /bin/bash
+# Creates and applies an SQL diff file based off a changed YAML snapshot
+
 # read env file 
 set -a; source ./.env; set +a;
 

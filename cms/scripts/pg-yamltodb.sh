@@ -1,5 +1,6 @@
 # Variables 
 #!/usr/bin/expect
+# Takes a potentially changed database YAML snapshot and creates an SQL query for any changes
 INPUTFILE="./snapshot/CMS-DB.yaml"
 OUTPUTFILE="./snapshot/CMS-DIFF.sql"
 

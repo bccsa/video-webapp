@@ -1,7 +1,9 @@
 #! /bin/bash
+# Updates the YAML snapshot of the database based on a local database
+
 # read env file 
-set -a; source ../.env; set +a;
-OUTPUTFILE="../snapshot/CMS-DB.yaml"
+set -a; source ./.env; set +a;
+OUTPUTFILE="./snapshot/CMS-DB.yaml"
 
 # Create a snapshot of your dev DB
 # https://pyrseas.readthedocs.io/en/latest/dbtoyaml.html

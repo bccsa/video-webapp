@@ -64,7 +64,7 @@ Windows:
 
 ---
 
-### 4. Install Directus in your development environment
+### 4. Directus
 #### 4.1. Create an .env file in the `cms` directory
 *Note that this is a different file than the ```.env``` file created in the project root directory. You should however use the same database connection details in this file.*
 
