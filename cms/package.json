@@ -4,7 +4,6 @@
   "main": "index.js",
   "scripts": {
     "start": "npx directus start",
-    "prod": "npx directus start",
     "schema:update": "npx directus schema apply --yes ./snapshot/directus-db.yaml && ./scripts/pg-update.sh",
     "schema:generate-snapshot": "./scripts/pg-dbtoyaml.sh"
   },

@@ -53,12 +53,6 @@ cd client
 npm ci
 ```
 
-Start the tailwind build script to monitor for code changes and automatically build the CSS:
-
-```sh
-npm run watch
-```
-
 ### 4. Directus
 #### 4.1. Create an .env file in the `cms` directory
 *Note that this is a different file than the ```.env``` file created in the project root directory. You should however use the same database connection details in this file.*
@@ -123,10 +117,14 @@ cd server
 npm ci
 ```
 
-Start the server in debug mode from the Visual Studio Code debug menu (or by pressing `F5`), or run manually from the `server` folder:
+### 6. Start everything
+To start both the CMS and server locally, and watch Tailwind files for changes in the frontend, run the following command from the main directory:
+
 ```sh
 npm start
 ```
+
+In Visual Studio Code, you can also use the debug menu to start everything, or press `F5`.
 
 --- 
 

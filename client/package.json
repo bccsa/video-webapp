@@ -3,7 +3,7 @@
   "private": true,
   "main": "index.html",
   "scripts": {
-    "watch": "npx tailwindcss -i ./input.css -o ./tailwind.css --watch",
+    "start": "npx tailwindcss -i ./input.css -o ./tailwind.css --watch",
     "build": "npx tailwindcss -i ./input.css -o ./tailwind.css --minify"
   },
   "dependencies": {

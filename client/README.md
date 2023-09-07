@@ -7,7 +7,7 @@ Icons are Material Symbols via [Iconify](https://docs.iconify.design/usage/css/t
 Refer to the [parent readme](../README.md#3-client) installation instructions.
 
 ## Running locally
-Run `npm run watch` to start a watcher on the Tailwind files that will automatically update `tailwind.css` for you.
+Run `npm start` to start a watcher on the Tailwind files that will automatically update `tailwind.css` for you.
 
 ## Building for production
 Run `npm run build` to build and minify the Tailwind files for production.
