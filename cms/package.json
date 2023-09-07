@@ -1,15 +1,16 @@
 {
   "name": "cms",
-  "version": "1.0.0",
-  "description": "",
+  "private": true,
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prod": "npx directus start"
+    "start": "npx directus start",
+    "prod": "npx directus start",
+    "schema:update": "npx directus schema apply --yes ./snapshot/directus-db.yaml && ./scripts/pg-update.sh",
+    "schema:generate-snapshot": "./scripts/pg-dbtoyaml.sh"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "directus": "^9.23.4",
     "pg": "^8.10.0"

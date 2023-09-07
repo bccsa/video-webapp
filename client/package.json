@@ -1,7 +1,6 @@
 {
   "name": "client",
-  "version": "0.0.1",
-  "description": "Streaming web-app",
+  "private": true,
   "main": "index.html",
   "dependencies": {
     "aes-decrypter": "^4.0.1",
