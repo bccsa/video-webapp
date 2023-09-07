@@ -58,15 +58,8 @@ npm ci
 
 Start the tailwind build script to monitor for code changes and automatically build client/tailwind.css:
 
-Mac & Linux:
-```shell
-./build.sh
-```
-or
-
-Windows:
-```powershell
-./build.cmd
+```sh
+npm run watch
 ```
 
 ---
