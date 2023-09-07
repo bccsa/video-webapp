@@ -4,9 +4,16 @@ This is a [Directus](https://directus.io) installation where the content of the 
 ## Local setup
 Refer to the [parent readme](../README.md#4-directus) installation instructions.
 
-### Repository structure
+### Folder structure
 - `scripts` - Bash and Python scripts to manage the database
 - `snapshot` - Database snapshots, to be used both locally and on the server to keep the database in sync
+
+## Running locally
+Run the follow command to start the CMS locally (note that this will only start the CMS):
+
+```sh
+npm start
+```
 
 ## Running on a server
 A [Docker file](../docker-files/CMS-Directus.Dockerfile) is provided to run Directus on a server.

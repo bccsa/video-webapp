@@ -25,11 +25,14 @@ jobs:
       uses: actions/checkout@v3
 
     # Build docker container image 
-    - run: docker build . -f docker-files/CMS-Directus.Dockerfile -t "${{ secrets.CMS_DOCKER_IMAGE }}"
+    - name: Build Docker image
+      run: docker build . -f docker-files/CMS-Directus.Dockerfile -t "${{ secrets.CMS_DOCKER_IMAGE }}"
     # Stop and remove old docker container (https://stackoverflow.com/questions/34228864/stop-and-delete-docker-container-if-its-running)
-    - run: docker stop "${{ secrets.CMS_DOCKER_CONTAINER }}" || true && docker rm "${{ secrets.CMS_DOCKER_CONTAINER }}" || true
+    - name: Stop and remove old Docker container
+      run: docker stop "${{ secrets.CMS_DOCKER_CONTAINER }}" || true && docker rm "${{ secrets.CMS_DOCKER_CONTAINER }}" || true
     # Start new container
-    - run: > 
+    - name: Run Docker container
+      run: > 
         docker run -d -p "${{ secrets.CMS_PORT }}":"${{ secrets.CMS_PORT }}"
         --env="DB_CLIENT=${{ secrets.CMS_DB_CLIENT }}"
         --env="DB_HOST=${{ secrets.DB_HOST }}"

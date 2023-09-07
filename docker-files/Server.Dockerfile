@@ -18,6 +18,9 @@ COPY .git /usr/src/video-webapp/.git
 RUN npm --prefix /usr/src/video-webapp/client ci --omit=dev
 RUN npm --prefix /usr/src/video-webapp/server ci --omit=dev
 
+# Compile Tailwind
+RUN npm --prefix /usr/src/video-webapp/client build
+
 # Init sub modules 
 RUN git init
 RUN git submodule update --init --recursive
