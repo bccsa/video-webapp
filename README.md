@@ -37,9 +37,6 @@ git submodule update --init --recursive
 ### 1. Install npm packages
 ```shell
 npm ci
-
-cd client
-npm ci
 ```
 
 ### 2. Main environment
@@ -52,11 +49,11 @@ cp .env.example .env
 ### 3. Client
 Install dependencies:
 ```sh
-cd client-tailwind
+cd client
 npm ci
 ```
 
-Start the tailwind build script to monitor for code changes and automatically build client/tailwind.css:
+Start the tailwind build script to monitor for code changes and automatically build the CSS:
 
 ```sh
 npm run watch
