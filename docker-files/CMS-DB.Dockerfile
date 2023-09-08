@@ -14,5 +14,5 @@ RUN apt-get update && apt-get install -y postgresql-client expect
 RUN pip install Pyrseas psycopg2 psycopg_c psycopg_binary
 
 # run DB update script when container starts up
-WORKDIR /usr/src/video-webapp/update-db/scripts
-CMD ["bash", "pg-update.sh"]
+WORKDIR /usr/src/video-webapp/update-db
+CMD ["bash", "scripts/pg-update.sh"]
