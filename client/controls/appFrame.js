@@ -16,7 +16,7 @@ class appFrame extends ui {
         return `
         <div class="flex flex-col h-screen bg-slate-800 overflow-hidden scrollbar-hide select-none">
             <!-- title -->
-            <div class="fixed top-0 left-0 right-0 pl-4 pr-4 h-12  bg-slate-900 flex ">
+            <div class="fixed top-0 left-0 right-0 px-4 h-12  bg-slate-900 flex ">
                 <h1 class="text-slate-300 font-sans text-lg flex items-center">
                     <span class="font-semibold">@{title}</span>
                     <span id="@{_titleDivider}" class="ml-2 mr-2 font-light" hidden>|</span>
@@ -46,9 +46,15 @@ class appFrame extends ui {
                         </video>
                     </div>
                     <!-- video data -->
-                    <div class="pl-4 pr-4 pb-2 pt-2">
-                        <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
-                        <p class="font-sans text-slate-400 text-xs text-justify">@{hlsDescription}</p>
+                    <div class="flex items-start justify-between gap-4 px-4 pb-2 pt-2">
+                        <div>
+                            <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
+                            <p class="font-sans text-slate-400 text-xs text-justify">@{hlsDescription}</p>
+                        </div>
+                        <button id="@{_closePlayerButton}" class="flex items-center gap-1 cursor-pointer text-slate-400 text-sm hover:text-slate-300">
+                            <span class="icon-[material-symbols--close-rounded] h-5 w-5"></span>
+                            Close player
+                        </button>
                     </div>
                 </div>
                 
@@ -57,7 +63,7 @@ class appFrame extends ui {
             </div>
 
             <!-- menu -->
-            <div class="fixed bottom-0 left-0 right-0 h-16 bg-slate-900 pl-6 pr-6 flex justify-center">
+            <div class="fixed bottom-0 left-0 right-0 h-16 bg-slate-900 px-6 flex justify-center">
                 <div class="flex justify-between items-center h-full w-96">
                     <div id=@{_btnHome} class="icon-[material-symbols--home-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></div>
                     <div id=@{_btnLive} class="icon-[material-symbols--live-tv-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></div>
@@ -90,6 +96,11 @@ class appFrame extends ui {
         
         this._btnUser.addEventListener('click', e => {
             this.ShowUser();
+        });
+
+        this._closePlayerButton.addEventListener('click', e => {
+            this._player.pause();
+            this.HidePlayer();
         });
 
         // Select initial content based on stored / current path
