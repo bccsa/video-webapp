@@ -10,6 +10,8 @@ class appFrame extends ui {
         this.hlsUrl = "";
         this._player = undefined;   // Used for videoJS player object reference
         this.isAuthenticated = false;
+        this._parser = new m3u8Parser.Parser();
+        this.language = "eng";
     }
 
     get html() {
@@ -25,35 +27,46 @@ class appFrame extends ui {
             </div>
 
             <!-- contents -->
-            <div class="fixed flex top-12 left-0 right-0 bottom-16 landscape:flex-row portrait:flex-col">
-
-                <!-- video div -->
-                <div id="@{_videoDiv}" style="display: none;" class=" landscape:w-6/12 portrait:w-full aspect-[3/2] bg-slate-700 landscape:border-r-2 landscape:border-r-slate-900 portrait:border-b-2 portrait:border-b-slate-900">
-                    <!-- video player -->
-                    <div class="aspect-video w-full">
-                        <video
-                            id="@{_playerElement}"
-                            class="video-js h-full w-full"
-                            controls
-                            preload="auto"
-                            data-setup="{}"
-                        >
-                            <p class="vjs-no-js">
-                                To view this video please enable JavaScript, and consider upgrading to a
-                                web browser that
-                                <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                            </p>
-                        </video>
-                    </div>
-                    <!-- video data -->
-                    <div class="pl-4 pr-4 pb-2 pt-2">
-                        <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
+            <div class="fixed flex flex-col top-12 left-0 right-0 bottom-16">
+                <!-- audio player -->
+                <div id="@{_audioBar}" class="w-full bg-slate-700 p-2 border-b-2 border-b-slate-900 flex flex-row items-center">
+                    <img src="@{imgUrl}" class="aspect-video rounded bg-cover h-10"></img>
+                    <div class="ml-2 flex-1">
+                        <p class="text-slate-100 font-sans text-sm">@{hlsTitle}</p>
                         <p class="font-sans text-slate-400 text-xs text-justify">@{hlsDescription}</p>
                     </div>
+                    <div id=@{_btnAudioPlay} class="icon-[material-symbols--play-arrow-rounded] text-slate-400 h-10 w-10"></div>
+                    <div id=@{_btnAudioPause} style="display:none;" class="icon-[material-symbols--pause-rounded] text-slate-400 h-10 w-10"></div>
                 </div>
-                
-                <!-- child controls -->
-                <div id="@{_controlsDiv}" class="overflow-y-scroll w-full flex-1 block p-4"></div>
+                <div class="flex flex-grow landscape:flex-row portrait:flex-col">
+                    <!-- video div -->
+                    <div id="@{_videoDiv}" style="display: none;" class=" landscape:w-6/12 portrait:w-full aspect-[3/2] bg-slate-700 landscape:border-r-2 landscape:border-r-slate-900 portrait:border-b-2 portrait:border-b-slate-900">
+                        <!-- video player -->
+                        <div class="aspect-video w-full">
+                            <video
+                                id="@{_playerElement}"
+                                class="video-js h-full w-full"
+                                controls
+                                preload="auto"
+                                data-setup="{}"
+                            >
+                                <p class="vjs-no-js">
+                                    To view this video please enable JavaScript, and consider upgrading to a
+                                    web browser that
+                                    <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                                </p>
+                            </video>
+                        </div>
+                        <!-- video data -->
+                        <div class="pl-4 pr-4 pb-2 pt-2">
+                            <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
+                            <p class="font-sans text-slate-400 text-xs text-justify">@{hlsDescription}</p>
+                        </div>
+                    </div>
+                    
+                    <!-- child controls -->
+                    <div id="@{_controlsDiv}" class="overflow-y-scroll w-full flex-1 block p-4"></div>
+                </div>
             </div>
 
             <!-- menu -->
@@ -87,7 +100,7 @@ class appFrame extends ui {
         });
 
         this._initPlayer();
-        
+
         this._btnUser.addEventListener('click', e => {
             this.ShowUser();
         });
@@ -104,6 +117,19 @@ class appFrame extends ui {
             if (auth) {
                 localStorage.removeItem("pathname");
             }
+        });
+
+        this._btnAudioPlay.addEventListener('click', e => {
+            this.getAudioStream().then(data => {
+                console.log(data)
+            }).catch(err => console.error(err));
+            this._btnAudioPlay.style.display = 'none';
+            this._btnAudioPause.style.display = '';
+        });
+
+        this._btnAudioPause.addEventListener('click', e => {
+            this._btnAudioPause.style.display = 'none';
+            this._btnAudioPlay.style.display = '';
         });
     }
 
@@ -217,7 +243,7 @@ class appFrame extends ui {
             //         navigationUi: 'hide'
             //     }
             // }
-            
+
             // "webkit-playinline": true // does not seem to work to make it play in safari-ios
         }
 
@@ -230,19 +256,22 @@ class appFrame extends ui {
         this._player.playsinline(true); // allow player to play in-place on page.
 
         // if (!videojs.browser.IS_SAFARI) {
-            this._player.landscapeFullscreen({  // player full-screen settings (see https://www.npmjs.com/package/videojs-landscape-fullscreen)
-                fullscreen: {
-                    enterOnRotate: true,
-                    exitOnRotate: true,
-                    alwaysInLandscapeMode: true,
-                    iOS: videojs.browser.IS_SAFARI,
-                }
-            });
+        this._player.landscapeFullscreen({  // player full-screen settings (see https://www.npmjs.com/package/videojs-landscape-fullscreen)
+            fullscreen: {
+                enterOnRotate: true,
+                exitOnRotate: true,
+                alwaysInLandscapeMode: true,
+                iOS: videojs.browser.IS_SAFARI,
+            }
+        });
         // }
         
+        
+
+
 
         if (this.hlsUrl) {
-            this._player.src({ type: 'application/x-mpegURL', src: this.hlsUrl});
+            this._player.src({ type: 'application/x-mpegURL', src: this.hlsUrl });
         }
         if (this.imgUrl) {
             this._player.poster(this.imgUrl);
@@ -250,12 +279,76 @@ class appFrame extends ui {
 
         // Update player source on hlsUrl change
         this.on('hlsUrl', url => {
-            this._player.src({ type: 'application/x-mpegURL', src: url});
+            this._player.src({ type: 'application/x-mpegURL', src: url });
         });
 
         // Update player posert on imgUrl change
         this.on('imgUrl', url => {
             this._player.poster(url);
+        });
+    }
+
+    /**
+     * Get audio stream from current video URL
+     * @returns Promise
+     */
+    getAudioStream() {
+        return new Promise((resolve, reject) => {
+            // Get m3u8 manifest
+            fetch(this.hlsUrl).then(res => {
+                return res.text();
+            }).then(body => {
+                // Parse manifest
+                this._parser.push(body);
+                this._parser.end();
+                let manifest = this._parser.manifest;
+
+                // Get currently selected player language
+                let selectedTrack = this._player.audioTracks().tracks_.find(t => t.enabled)
+                let selectedLang = this.language;
+                if (selectedTrack) selectedLang = selectedTrack.language;
+
+                // Get the audio track for the selected player langauge
+                if (manifest && manifest.mediaGroups && manifest.mediaGroups.AUDIO) {
+                    // Get audio group
+                    let aGroup;
+
+                    // First try to get the mono audio group (custom implementation - consider passing group name as env variable).
+                    if (manifest.mediaGroups.AUDIO.audio_mono) {
+                        aGroup = manifest.mediaGroups.AUDIO.audio_mono
+
+                        // If custom mono audio group does not exist, find the first available audio group.
+                    } else {
+                        let audioGroups = Object.values(manifest.mediaGroups.AUDIO);
+                        if (audioGroups.length > 0) {
+                            aGroup = audioGroups[0];
+                        }
+                    }
+
+                    // Find the matching audio track from the audio group
+                    if (aGroup) {
+                        let track = Object.values(aGroup).find(t => t.language == selectedLang);
+                        if (track) {
+                            // Get path by removing the manifest m3u8 file from the hls url path
+                            let arr = this.hlsUrl.split('/');
+                            arr.length--;
+                            let path = arr.join('/');
+
+                            // Return the full uri to the audio track
+                            resolve(path + '/' + track.uri);
+                        } else {
+                            reject('Unable to find audio track');
+                        }
+                    } else {
+                        reject('Unable to find audio track');
+                    }
+                } else {
+                    reject('Unable to find audio track')
+                }
+
+            }).catch(err => {
+                console.error(err.message);
+            });
         });
     }
 }
