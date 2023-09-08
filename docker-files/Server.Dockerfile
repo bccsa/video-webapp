@@ -19,7 +19,7 @@ RUN npm --prefix /usr/src/video-webapp/client ci --omit=dev
 RUN npm --prefix /usr/src/video-webapp/server ci --omit=dev
 
 # Compile Tailwind
-RUN npm --prefix /usr/src/video-webapp/client build
+RUN npm --prefix /usr/src/video-webapp/client run build
 
 # Init sub modules 
 RUN git init
