@@ -15,7 +15,7 @@
     "individual": "^2.0.0",
     "is-function": "^1.0.2",
     "keycode": "^2.2.0",
-    "m3u8-parser": "^6.0.0",
+    "m3u8-parser": "^6.2.0",
     "min-document": "^2.19.0",
     "mpd-parser": "^1.1.0",
     "mux.js": "^6.3.0",
