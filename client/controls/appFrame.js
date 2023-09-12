@@ -46,7 +46,7 @@ class appFrame extends ui {
                 </div>
                 <div class="flex flex-grow landscape:flex-row portrait:flex-col">
                     <!-- video div -->
-                    <div id="@{_videoDiv}" style="display: none;" class=" landscape:w-6/12 portrait:w-full aspect-[3/2] bg-slate-700 landscape:border-r-2 landscape:border-r-slate-900 portrait:border-b-2 portrait:border-b-slate-900">
+                    <div id="@{_videoPlayer}" class="hidden landscape:w-6/12 portrait:w-full aspect-[3/2] bg-slate-700 landscape:border-r-2 landscape:border-r-slate-900 portrait:border-b-2 portrait:border-b-slate-900">
                         <!-- video player -->
                         <div class="aspect-video w-full">
                             <video
@@ -244,33 +244,37 @@ class appFrame extends ui {
         }
     }
 
-    resetMiniPlayer() {
-        this._miniPlayer.classList.remove('hidden');
+    reloadPlayerUrl(url) {
+        const currentTime = this._player.currentTime();
+        const wasPaused = this._player.paused();
 
-        this._btnAudioPlay.classList.remove('hidden');
-        this._btnAudioPause.classList.add('hidden');
+        this._player.src({ type: 'application/x-mpegURL', src: url });
+        this._player.currentTime(currentTime);
+
+        if (wasPaused) {
+            this._btnAudioPlay.classList.remove('hidden');
+            this._btnAudioPause.classList.add('hidden');
+        } else {
+            this._btnAudioPlay.classList.add('hidden');
+            this._btnAudioPause.classList.remove('hidden');
+            this._player.play();
+        }
     }
 
     showAudioPlayer() {
         this.getAudioStream().then(url => {
-            const currentTime = this._player.currentTime();
-            this._player.src({ type: 'application/x-mpegURL', src: url });
-            this._player.currentTime(currentTime);
+            this.reloadPlayerUrl(url);
             
-            this.resetMiniPlayer();
-            
-            this._videoDiv.style.display = "none";
+            this._miniPlayer.classList.remove('hidden');
+            this._videoPlayer.classList.add('hidden');
         }).catch(err => console.error(err));
     }
 
     showVideoPlayer() {
-        const currentTime = this._player.currentTime();
-        this._player.src({ type: 'application/x-mpegURL', src: this.hlsUrl });
-        this._player.currentTime(currentTime);
+        this.reloadPlayerUrl(this.hlsUrl);
 
         this._miniPlayer.classList.add('hidden');
-
-        this._videoDiv.style.display = "block";
+        this._videoPlayer.classList.remove('hidden');
     }
 
     ShowPlayer() {
@@ -284,7 +288,7 @@ class appFrame extends ui {
 
     HidePlayer() {
         this._miniPlayer.classList.add('hidden');
-        this._videoDiv.style.display = "none";
+        this._videoPlayer.classList.add('hidden');
     }
 
     _initPlayer() {
