@@ -9,6 +9,7 @@ class appFrame extends ui {
         this.imgUrl = "";
         this.hlsUrl = "";
         this._player = undefined;   // Used for videoJS player object reference
+        this.playerMode = "video"; // options: 'video', 'audio'
         this.isAuthenticated = false;
         this._parser = new m3u8Parser.Parser();
         this.language = "eng";
@@ -18,7 +19,7 @@ class appFrame extends ui {
         return `
         <div class="flex flex-col h-screen bg-slate-800 overflow-hidden scrollbar-hide select-none">
             <!-- title -->
-            <div class="fixed top-0 left-0 right-0 pl-4 pr-4 h-12  bg-slate-900 flex ">
+            <div class="fixed top-0 left-0 right-0 px-4 h-12  bg-slate-900 flex ">
                 <h1 class="text-slate-300 font-sans text-lg flex items-center">
                     <span class="font-semibold">@{title}</span>
                     <span id="@{_titleDivider}" class="ml-2 mr-2 font-light" hidden>|</span>
@@ -29,14 +30,19 @@ class appFrame extends ui {
             <!-- contents -->
             <div class="fixed flex flex-col top-12 left-0 right-0 bottom-16">
                 <!-- audio player -->
-                <div id="@{_audioBar}" class="w-full bg-slate-700 p-2 border-b-2 border-b-slate-900 flex flex-row items-center">
+                <div id="@{_miniPlayer}" class="w-full bg-slate-700 p-2 border-b-2 border-b-slate-900 flex flex-row items-center hidden">
                     <img src="@{imgUrl}" class="aspect-video rounded bg-cover h-10"></img>
                     <div class="ml-2 flex-1">
                         <p class="text-slate-100 font-sans text-sm">@{hlsTitle}</p>
                         <p class="font-sans text-slate-400 text-xs text-justify">@{hlsDescription}</p>
                     </div>
-                    <div id=@{_btnAudioPlay} class="icon-[material-symbols--play-arrow-rounded] text-slate-400 h-10 w-10"></div>
-                    <div id=@{_btnAudioPause} style="display:none;" class="icon-[material-symbols--pause-rounded] text-slate-400 h-10 w-10"></div>
+
+                    <div class="flex items-center gap-2">
+                        <div id=@{_btnEnableVideoPlayer} title="Switch to video" class="icon-[material-symbols--tv-outline-rounded] text-slate-400 cursor-pointer h-7 w-7 hover:text-slate-200" title ></div>
+
+                        <div id=@{_btnAudioPlay} title="Play audio" class="icon-[material-symbols--play-arrow-rounded] text-slate-400 cursor-pointer h-10 w-10 hover:text-slate-200"></div>
+                        <div id=@{_btnAudioPause} title="Pause audio" class="hidden icon-[material-symbols--pause-rounded] text-slate-400 cursor-pointer h-10 w-10 hover:text-slate-200"></div>
+                    </div>
                 </div>
                 <div class="flex flex-grow landscape:flex-row portrait:flex-col">
                     <!-- video div -->
@@ -58,9 +64,15 @@ class appFrame extends ui {
                             </video>
                         </div>
                         <!-- video data -->
-                        <div class="pl-4 pr-4 pb-2 pt-2">
-                            <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
-                            <p class="font-sans text-slate-400 text-xs text-justify">@{hlsDescription}</p>
+                        <div class="flex justify-between items-start py-2 px-4">
+                            <div>
+                                <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
+                                <p class="font-sans text-slate-400 text-xs text-justify">@{hlsDescription}</p>
+                            </div>
+                            <div id="@{_btnEnableAudioPlayer}" class="flex items-center cursor-pointer text-slate-400 hover:text-slate-200 gap-1 text-sm">
+                                <div title="Play audio" class="icon-[material-symbols--music-note-rounded] cursor-pointer h-5 w-5"></div>
+                                Play audio only
+                            </div>
                         </div>
                     </div>
                     
@@ -70,7 +82,7 @@ class appFrame extends ui {
             </div>
 
             <!-- menu -->
-            <div class="fixed bottom-0 left-0 right-0 h-16 bg-slate-900 pl-6 pr-6 flex justify-center">
+            <div class="fixed bottom-0 left-0 right-0 h-16 bg-slate-900 px-6 flex justify-center">
                 <div class="flex justify-between items-center h-full w-96">
                     <div id=@{_btnHome} class="icon-[material-symbols--home-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></div>
                     <div id=@{_btnLive} class="icon-[material-symbols--live-tv-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></div>
@@ -119,17 +131,35 @@ class appFrame extends ui {
             }
         });
 
-        this._btnAudioPlay.addEventListener('click', e => {
-            this.getAudioStream().then(data => {
-                console.log(data)
-            }).catch(err => console.error(err));
-            this._btnAudioPlay.style.display = 'none';
-            this._btnAudioPause.style.display = '';
+        this._btnAudioPlay.addEventListener('click', () => {
+            this._player.play();
+
+            this._btnAudioPlay.classList.add('hidden');
+            this._btnAudioPause.classList.remove('hidden');
         });
 
-        this._btnAudioPause.addEventListener('click', e => {
-            this._btnAudioPause.style.display = 'none';
-            this._btnAudioPlay.style.display = '';
+        this._btnAudioPause.addEventListener('click', () => {
+            this._player.pause();
+
+            this._btnAudioPlay.classList.remove('hidden');
+            this._btnAudioPause.classList.add('hidden');
+        });
+
+        this._btnEnableVideoPlayer.addEventListener('click', () => {
+            this.playerMode = 'video';
+        });
+        
+        this._btnEnableAudioPlayer.addEventListener('click', () => {
+            this.playerMode = 'audio';
+        });
+
+        this.on('playerMode', newPlayerMode => {
+            if (newPlayerMode == 'audio') {
+                this.showAudioPlayer();
+                return;
+            }
+
+            this.showVideoPlayer();
         });
     }
 
@@ -214,11 +244,46 @@ class appFrame extends ui {
         }
     }
 
-    ShowPlayer() {
+    resetMiniPlayer() {
+        this._miniPlayer.classList.remove('hidden');
+
+        this._btnAudioPlay.classList.remove('hidden');
+        this._btnAudioPause.classList.add('hidden');
+    }
+
+    showAudioPlayer() {
+        this.getAudioStream().then(url => {
+            const currentTime = this._player.currentTime();
+            this._player.src({ type: 'application/x-mpegURL', src: url });
+            this._player.currentTime(currentTime);
+            
+            this.resetMiniPlayer();
+            
+            this._videoDiv.style.display = "none";
+        }).catch(err => console.error(err));
+    }
+
+    showVideoPlayer() {
+        const currentTime = this._player.currentTime();
+        this._player.src({ type: 'application/x-mpegURL', src: this.hlsUrl });
+        this._player.currentTime(currentTime);
+
+        this._miniPlayer.classList.add('hidden');
+
         this._videoDiv.style.display = "block";
     }
 
+    ShowPlayer() {
+        if (this.playerMode == 'audio') {
+            this.showAudioPlayer();
+            return;
+        }
+
+        this.showVideoPlayer();
+    }
+
     HidePlayer() {
+        this._miniPlayer.classList.add('hidden');
         this._videoDiv.style.display = "none";
     }
 
@@ -255,7 +320,6 @@ class appFrame extends ui {
 
         this._player.playsinline(true); // allow player to play in-place on page.
 
-        // if (!videojs.browser.IS_SAFARI) {
         this._player.landscapeFullscreen({  // player full-screen settings (see https://www.npmjs.com/package/videojs-landscape-fullscreen)
             fullscreen: {
                 enterOnRotate: true,
@@ -264,11 +328,6 @@ class appFrame extends ui {
                 iOS: videojs.browser.IS_SAFARI,
             }
         });
-        // }
-        
-        
-
-
 
         if (this.hlsUrl) {
             this._player.src({ type: 'application/x-mpegURL', src: this.hlsUrl });
@@ -282,7 +341,7 @@ class appFrame extends ui {
             this._player.src({ type: 'application/x-mpegURL', src: url });
         });
 
-        // Update player posert on imgUrl change
+        // Update player poster on imgUrl change
         this.on('imgUrl', url => {
             this._player.poster(url);
         });
