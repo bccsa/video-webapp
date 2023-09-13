@@ -10,6 +10,7 @@ class appFrame extends ui {
         this.hlsUrl = "";
         this._player = undefined;   // Used for videoJS player object reference
         this.playerMode = "video"; // options: 'video', 'audio'
+        this.playerOpen = false;
         this.isAuthenticated = false;
         this._parser = new m3u8Parser.Parser();
         this.language = "eng";
@@ -19,12 +20,26 @@ class appFrame extends ui {
         return `
         <div class="flex flex-col h-screen bg-slate-800 overflow-hidden scrollbar-hide select-none">
             <!-- title -->
-            <div class="fixed top-0 left-0 right-0 px-4 h-12  bg-slate-900 flex ">
+            <div class="fixed flex items-center justify-between top-0 left-0 right-0 px-4 h-12 bg-slate-900">
                 <h1 class="text-slate-300 font-sans text-lg flex items-center">
-                    <span class="font-semibold">@{title}</span>
+                    <span class="font-semibold hidden sm:inline">@{title}</span>
+                    <span class="icon-[material-symbols--smart-display-outline-rounded] cursor-pointer h-5 w-5 sm:hidden"></span>
+
                     <span id="@{_titleDivider}" class="ml-2 mr-2 font-light" hidden>|</span>
+
                     <span class="font-light float-right">@{sectionName}</span>
                 </h1>
+
+                <div class="flex gap-x-1">
+                    <div id="@{_btnEnableVideoPlayer}" class="flex items-center cursor-pointer rounded gap-1 px-2 py-1 text-sm text-slate-200 bg-slate-500 shadow">
+                        <div title="Play audio" class="icon-[material-symbols--smart-display-rounded] cursor-pointer h-5 w-5"></div>
+                        Video
+                    </div>
+                    <div id="@{_btnEnableAudioPlayer}" class="flex items-center cursor-pointer rounded gap-1 px-2 py-1 text-sm text-slate-300 hover:text-slate-200">
+                        <div class="icon-[material-symbols--brand-awareness-rounded] cursor-pointer h-5 w-5"></div>
+                        Audio
+                    </div>
+                </div>
             </div>
 
             <!-- contents -->
@@ -38,8 +53,6 @@ class appFrame extends ui {
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <div id=@{_btnEnableVideoPlayer} title="Switch to video" class="icon-[material-symbols--tv-outline-rounded] text-slate-400 cursor-pointer h-7 w-7 hover:text-slate-200" title ></div>
-
                         <div id=@{_btnAudioPlay} title="Play audio" class="icon-[material-symbols--play-arrow-rounded] text-slate-400 cursor-pointer h-10 w-10 hover:text-slate-200"></div>
                         <div id=@{_btnAudioPause} title="Pause audio" class="hidden icon-[material-symbols--pause-rounded] text-slate-400 cursor-pointer h-10 w-10 hover:text-slate-200"></div>
                     </div>
@@ -64,15 +77,9 @@ class appFrame extends ui {
                             </video>
                         </div>
                         <!-- video data -->
-                        <div class="flex justify-between items-start py-2 px-4">
-                            <div>
-                                <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
-                                <p class="font-sans text-slate-400 text-xs text-justify">@{hlsDescription}</p>
-                            </div>
-                            <div id="@{_btnEnableAudioPlayer}" class="flex items-center cursor-pointer text-slate-400 hover:text-slate-200 gap-1 text-sm">
-                                <div title="Play audio" class="icon-[material-symbols--music-note-rounded] cursor-pointer h-5 w-5"></div>
-                                Play audio only
-                            </div>
+                        <div class="py-2 px-4">
+                            <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
+                            <p class="font-sans text-slate-400 text-xs">@{hlsDescription}</p>
                         </div>
                     </div>
                     
@@ -155,11 +162,19 @@ class appFrame extends ui {
 
         this.on('playerMode', newPlayerMode => {
             if (newPlayerMode == 'audio') {
-                this.showAudioPlayer();
+                this.setPlayerModeButtonToAudio();
+
+                if (this.playerOpen) {
+                    this.startAudioPlayer();
+                }
                 return;
             }
 
-            this.showVideoPlayer();
+            this.setPlayerModeButtonToVideo();
+
+            if (this.playerOpen) {
+                this.startVideoPlayer();
+            }
         });
     }
 
@@ -244,6 +259,27 @@ class appFrame extends ui {
         }
     }
 
+    loadEpisode(episode) {
+        if (this.playerOpen) {
+            this._player.pause();
+            this._player.currentTime(0);
+        } else {
+            this.playerOpen = true;
+        }
+
+        this.imgUrl = episode.imgUrl;
+        this.hlsUrl = episode.hlsUrl;
+        this.hlsTitle = episode.displayName;
+        this.hlsDescription = episode.description;
+
+        if (this.playerMode == 'audio') {
+            this.startAudioPlayer();
+            return;
+        }
+
+        this.startVideoPlayer();
+    }
+
     reloadPlayerUrl(url) {
         const currentTime = this._player.currentTime();
         const wasPaused = this._player.paused();
@@ -261,7 +297,7 @@ class appFrame extends ui {
         }
     }
 
-    showAudioPlayer() {
+    startAudioPlayer() {
         this.getAudioStream().then(url => {
             this.reloadPlayerUrl(url);
             
@@ -270,25 +306,27 @@ class appFrame extends ui {
         }).catch(err => console.error(err));
     }
 
-    showVideoPlayer() {
+    startVideoPlayer() {
         this.reloadPlayerUrl(this.hlsUrl);
 
         this._miniPlayer.classList.add('hidden');
         this._videoPlayer.classList.remove('hidden');
     }
 
-    ShowPlayer() {
-        if (this.playerMode == 'audio') {
-            this.showAudioPlayer();
-            return;
-        }
-
-        this.showVideoPlayer();
+    setPlayerModeButtonToAudio() {
+        this._btnEnableAudioPlayer.classList.add("text-slate-200", "bg-slate-500", "shadow");
+        this._btnEnableAudioPlayer.classList.remove("text-slate-300", "hover:text-slate-200");
+        
+        this._btnEnableVideoPlayer.classList.remove("text-slate-200", "bg-slate-500", "shadow");
+        this._btnEnableVideoPlayer.classList.add("text-slate-300", "hover:text-slate-200");
     }
 
-    HidePlayer() {
-        this._miniPlayer.classList.add('hidden');
-        this._videoPlayer.classList.add('hidden');
+    setPlayerModeButtonToVideo() {
+        this._btnEnableAudioPlayer.classList.remove("text-slate-200", "bg-slate-500", "shadow");
+        this._btnEnableAudioPlayer.classList.add("text-slate-300", "hover:text-slate-200");
+        
+        this._btnEnableVideoPlayer.classList.add("text-slate-200", "bg-slate-500", "shadow");
+        this._btnEnableVideoPlayer.classList.remove("text-slate-300", "hover:text-slate-200");
     }
 
     _initPlayer() {
