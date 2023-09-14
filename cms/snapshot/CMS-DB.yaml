@@ -1210,6 +1210,10 @@ schema public:
         type: character varying(255)
     - imgUrl:
         type: character varying(255)
+    - eventDate:
+        type: timestamp without time zone
+    - expiryDate:
+        type: timestamp without time zone
     primary_key:
       episode_pkey:
         columns:
