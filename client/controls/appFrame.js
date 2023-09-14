@@ -49,7 +49,7 @@ class appFrame extends ui {
                     <img src="@{imgUrl}" class="aspect-video rounded bg-cover h-10"></img>
                     <div class="ml-2 flex-1">
                         <p class="text-slate-100 font-sans text-sm">@{hlsTitle}</p>
-                        <p class="font-sans text-slate-400 text-xs text-justify">@{hlsDescription}</p>
+                        <p class="font-sans text-slate-400 text-xs">@{hlsDescription}</p>
                     </div>
 
                     <div class="flex items-center gap-2">
@@ -57,7 +57,7 @@ class appFrame extends ui {
                         <div id=@{_btnAudioPause} title="Pause audio" class="hidden icon-[material-symbols--pause-rounded] text-slate-400 cursor-pointer h-10 w-10 hover:text-slate-200"></div>
                     </div>
                 </div>
-                <div class="flex flex-grow landscape:flex-row portrait:flex-col">
+                <div class="flex flex-grow landscape:flex-row portrait:flex-col overflow-y-scroll scrollbar-hide">
                     <!-- video div -->
                     <div id="@{_videoPlayer}" class="hidden landscape:w-6/12 portrait:w-full aspect-[3/2] bg-slate-700 landscape:border-r-2 landscape:border-r-slate-900 portrait:border-b-2 portrait:border-b-slate-900">
                         <!-- video player -->
