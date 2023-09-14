@@ -110,6 +110,12 @@ class appFrame extends ui {
             }
         });
 
+        this.on('hlsDescription', description => {
+            if (description == 'null' || description == '') {
+                this.hlsDescription = null;
+            }
+        });
+
         // Buttons event handlers
         this._btnHome.addEventListener('click', e => {
             this.ShowHome();
