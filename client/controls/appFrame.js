@@ -51,7 +51,11 @@ class appFrame extends ui {
                     <img src="@{imgUrl}" class="aspect-video rounded bg-cover h-10"></img>
                     <div class="ml-2 flex-1">
                         <p class="text-slate-100 font-sans text-sm">@{hlsTitle}</p>
-                        <p class="font-sans text-slate-400 text-xs">@{hlsDescription}</p>
+                        <p class="font-sans text-slate-400 text-xs">
+                            <span>@{hlsEventDate}</span>
+                            <span id="@{_descriptionDivider}" hidden>·</span>
+                            <span>@{hlsDescription}</span>
+                        </p>
                     </div>
 
                     <div class="flex items-center gap-2">
