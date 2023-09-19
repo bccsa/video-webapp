@@ -12,6 +12,7 @@ class appFrame extends ui {
         this._player = undefined;   // Used for videoJS player object reference
         this.playerMode = "video"; // options: 'video', 'audio'
         this.playerOpen = false;
+        this.audioLoading = false;
         this.isAuthenticated = false;
         this._parser = new m3u8Parser.Parser();
         this._dateFormatter = new Intl.DateTimeFormat('en-KE', { dateStyle: 'long', timeStyle: 'short' }),
@@ -60,8 +61,13 @@ class appFrame extends ui {
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <button id=@{_btnAudioPlay} title="Play audio" class="icon-[material-symbols--play-arrow-rounded] text-slate-400 cursor-pointer h-10 w-10 hover:text-slate-200"></button>
-                        <button id=@{_btnAudioPause} title="Pause audio" class="hidden icon-[material-symbols--pause-rounded] text-slate-400 cursor-pointer h-10 w-10 hover:text-slate-200"></button>
+                        <button id="@{_btnAudioPlay}" title="Play audio" class="icon-[material-symbols--play-arrow-rounded] text-slate-400 cursor-pointer h-10 w-10 hover:text-slate-200"></button>
+                        <button id="@{_btnAudioPause}" title="Pause audio" class="hidden icon-[material-symbols--pause-rounded] text-slate-400 cursor-pointer h-10 w-10 hover:text-slate-200"></button>
+                        
+                        <svg id="@{_audioLoadingIndicator}" class="animate-spin text-white h-10 w-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
                     </div>
                 </div>
                 <div class="flex flex-grow landscape:flex-row portrait:flex-col overflow-y-scroll scrollbar-hide">
@@ -191,6 +197,16 @@ class appFrame extends ui {
 
             if (this.playerOpen) {
                 this.startVideoPlayer();
+            }
+        });
+
+        this.on('audioLoading', loading => {
+            if (loading) {
+                this._audioLoadingIndicator.classList.remove('hidden');
+                this._btnAudioPlay.classList.add('hidden');
+                this._btnAudioPause.classList.add('hidden');
+            } else {
+                this._audioLoadingIndicator.classList.add('hidden');
             }
         });
     }
@@ -327,11 +343,13 @@ class appFrame extends ui {
     }
 
     startAudioPlayer() {
+        this.audioLoading = true;
+        this._miniPlayer.classList.remove('hidden');
+        this._videoPlayer.classList.add('hidden');
+
         this.getAudioStream().then(url => {
             this.reloadPlayerUrl(url);
-            
-            this._miniPlayer.classList.remove('hidden');
-            this._videoPlayer.classList.add('hidden');
+            this.audioLoading = false;
         }).catch(err => console.error(err));
     }
 
