@@ -33,14 +33,15 @@ class appFrame extends ui {
                 </h1>
 
                 <div class="flex gap-x-1">
-                    <div id="@{_btnEnableVideoPlayer}" class="flex items-center cursor-pointer rounded gap-1 px-2 py-1 text-sm text-slate-200 bg-slate-500 shadow">
+                    
+                    <button id="@{_btnEnableVideoPlayer}" class="flex items-center cursor-pointer rounded gap-1 px-2 py-1 text-sm text-slate-200 bg-slate-500 shadow">
                         <div title="Play audio" class="icon-[material-symbols--smart-display-rounded] cursor-pointer h-5 w-5"></div>
                         Video
-                    </div>
-                    <div id="@{_btnEnableAudioPlayer}" class="flex items-center cursor-pointer rounded gap-1 px-2 py-1 text-sm text-slate-300 hover:text-slate-200">
+                    </button>
+                    <button id="@{_btnEnableAudioPlayer}" class="flex items-center cursor-pointer rounded gap-1 px-2 py-1 text-sm text-slate-300 hover:text-slate-200">
                         <div class="icon-[material-symbols--brand-awareness-rounded] cursor-pointer h-5 w-5"></div>
                         Audio
-                    </div>
+                    </button>
                 </div>
             </div>
 
@@ -59,8 +60,8 @@ class appFrame extends ui {
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <div id=@{_btnAudioPlay} title="Play audio" class="icon-[material-symbols--play-arrow-rounded] text-slate-400 cursor-pointer h-10 w-10 hover:text-slate-200"></div>
-                        <div id=@{_btnAudioPause} title="Pause audio" class="hidden icon-[material-symbols--pause-rounded] text-slate-400 cursor-pointer h-10 w-10 hover:text-slate-200"></div>
+                        <button id=@{_btnAudioPlay} title="Play audio" class="icon-[material-symbols--play-arrow-rounded] text-slate-400 cursor-pointer h-10 w-10 hover:text-slate-200"></button>
+                        <button id=@{_btnAudioPause} title="Pause audio" class="hidden icon-[material-symbols--pause-rounded] text-slate-400 cursor-pointer h-10 w-10 hover:text-slate-200"></button>
                     </div>
                 </div>
                 <div class="flex flex-grow landscape:flex-row portrait:flex-col overflow-y-scroll scrollbar-hide">
@@ -101,9 +102,9 @@ class appFrame extends ui {
             <!-- menu -->
             <div class="fixed bottom-0 left-0 right-0 h-16 bg-slate-900 px-6 flex justify-center">
                 <div class="flex justify-between items-center h-full w-96">
-                    <div id=@{_btnHome} class="icon-[material-symbols--home-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></div>
-                    <div id=@{_btnLive} class="icon-[material-symbols--live-tv-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></div>
-                    <div id=@{_btnUser} class="icon-[material-symbols--person-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></div>
+                    <button id=@{_btnHome} class="icon-[material-symbols--home-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></button>
+                    <button id=@{_btnLive} class="icon-[material-symbols--live-tv-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></button>
+                    <button id=@{_btnUser} class="icon-[material-symbols--person-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></button>
                 </div>
             </div>
         </div>
