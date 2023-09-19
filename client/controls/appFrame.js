@@ -8,11 +8,13 @@ class appFrame extends ui {
         this.hlsDescription = "";
         this.imgUrl = "";
         this.hlsUrl = "";
+        this.hlsEventDate = "";
         this._player = undefined;   // Used for videoJS player object reference
         this.playerMode = "video"; // options: 'video', 'audio'
         this.playerOpen = false;
         this.isAuthenticated = false;
         this._parser = new m3u8Parser.Parser();
+        this._dateFormatter = new Intl.DateTimeFormat('en-KE', { dateStyle: 'long', timeStyle: 'short' }),
         this.language = "eng";
     }
 
@@ -49,7 +51,11 @@ class appFrame extends ui {
                     <img src="@{imgUrl}" class="aspect-video rounded bg-cover h-10"></img>
                     <div class="ml-2 flex-1">
                         <p class="text-slate-100 font-sans text-sm">@{hlsTitle}</p>
-                        <p class="font-sans text-slate-400 text-xs">@{hlsDescription}</p>
+                        <p class="font-sans text-slate-400 text-xs">
+                            <span>@{hlsEventDate}</span>
+                            <span id="@{_descriptionDivider}" hidden>·</span>
+                            <span>@{hlsDescription}</span>
+                        </p>
                     </div>
 
                     <div class="flex items-center gap-2">
@@ -79,7 +85,11 @@ class appFrame extends ui {
                         <!-- video data -->
                         <div class="py-2 px-4">
                             <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
-                            <p class="font-sans text-slate-400 text-xs">@{hlsDescription}</p>
+                            <p class="font-sans text-slate-400 text-xs">
+                                <span>@{hlsEventDate}</span>
+                                <span id="@{_descriptionDivider}" hidden>·</span>
+                                <span>@{hlsDescription}</span>
+                            </p>
                         </div>
                     </div>
                     
@@ -277,6 +287,18 @@ class appFrame extends ui {
         this.hlsUrl = episode.hlsUrl;
         this.hlsTitle = episode.displayName;
         this.hlsDescription = episode.description;
+
+        if (episode.eventDate !== 'null') {
+            this.hlsEventDate = this._dateFormatter.format(new Date(episode.eventDate));
+        } else {
+            this.hlsEventDate = "";
+        }
+
+        if (!this.hlsEventDate || !this.hlsDescription) {
+            this._descriptionDivider.hidden = true;
+        } else {
+            this._descriptionDivider.hidden = false;
+        }
 
         if (this.playerMode == 'audio') {
             this.startAudioPlayer();

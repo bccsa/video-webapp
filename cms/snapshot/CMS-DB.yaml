@@ -1210,6 +1210,10 @@ schema public:
         type: character varying(255)
     - imgUrl:
         type: character varying(255)
+    - eventDate:
+        type: timestamp without time zone
+    - expiryDate:
+        type: timestamp without time zone
     primary_key:
       episode_pkey:
         columns:
@@ -1286,6 +1290,10 @@ schema public:
         type: character varying(255)
     - analytics_type:
         type: character varying(255)
+    - eventDate:
+        type: timestamp without time zone
+    - expiryDate:
+        type: timestamp without time zone
     definition: |2-
        SELECT episode.id,
           collection.id AS collection_id,
@@ -1293,7 +1301,9 @@ schema public:
           episode."displayName",
           (COALESCE(section.url_prefix, ''::character varying)::text || COALESCE(episode."hlsUrl", ''::character varying)::text) || COALESCE(section.url_postfix, ''::character varying)::text AS "hlsUrl",
           episode."imgUrl",
-          section.analytics_type
+          section.analytics_type,
+          episode."eventDate",
+          episode."expiryDate"
          FROM public.episode_collection
            JOIN public.episode ON episode_collection.episode_id = episode.id
            JOIN public.collection ON episode_collection.collection_id = collection.id

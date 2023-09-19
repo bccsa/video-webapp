@@ -92,7 +92,7 @@ npx directus bootstrap
 #### 4.4. Update the database schema
 Ensure you are in the `cms` directory, and run
 ```shell
-npm schema:update
+npm run schema:update
 ```
 
 #### 4.5. Start Directus

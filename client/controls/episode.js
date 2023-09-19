@@ -3,7 +3,7 @@ class episode extends ui {
         super();
 
         this.displayName = "";
-        this.publishDate = "";
+        this.eventDate = "";
         this.description = "";
         this.hlsUrl = "";
         this.imgUrl = "";
