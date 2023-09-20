@@ -95,15 +95,9 @@ Ensure you are in the `cms` directory, and run
 npm run schema:update
 ```
 
-#### 4.5. Start Directus
-Ensure you are in the `cms` directory, and run
-```shell
-npm start
-```
-
 The default url is http://localhost:8055
 
-#### 4.6. Create sections and add data
+#### 4.5. Create sections and add data
 The video-webapp needs two default sections to be added (case sensitive):
 * Live
 * VOD
