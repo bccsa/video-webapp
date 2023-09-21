@@ -1308,7 +1308,8 @@ schema public:
            JOIN public.episode ON episode_collection.episode_id = episode.id
            JOIN public.collection ON episode_collection.collection_id = collection.id
            JOIN public.section ON section.id = collection.section_id
-        WHERE episode."expiryDate" >= now() OR episode."expiryDate" IS NULL;
+        WHERE episode."expiryDate" >= now() OR episode."expiryDate" IS NULL
+        ORDER BY episode."eventDate";
     depends_on:
     - table collection
     - table episode
