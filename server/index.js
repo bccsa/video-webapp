@@ -94,44 +94,6 @@ clientIO.on('connection', socket => {
     if (socket.data.authenticated || auth0_bypass) {
         // Send initial data to client
         dbObjects.sections().then(sections => {
-            Object.keys(sections).forEach(sectionKey => {
-                if (sectionKey !== 'VOD') {
-                    return;
-                }
-
-                Object.keys(sections[sectionKey]).forEach(collectionKey => {
-                    // Only consider collection keys, which are indexed by numerical id
-                    if (!Number.isInteger(Number(collectionKey))) {
-                        return;
-                    }
-
-                    // Filter out expired episodes
-                    Object.keys(sections[sectionKey][collectionKey]).forEach(episodeKey => {
-                        // Only consider episode keys, which are indexed by numerical id
-                        if (!Number.isInteger(Number(episodeKey))) {
-                            return;
-                        }
-
-                        const episode = sections[sectionKey][collectionKey][episodeKey];
-
-                        if (!episode.expiryDate) {
-                            return;
-                        }
-
-                        if (new Date(episode.expiryDate).getTime() <= new Date().getTime()) {
-                            delete sections[sectionKey][collectionKey][episodeKey];
-                        }
-                    });
-
-                    // Filter out empty collections (re-evaluate keys to take collections with only expired episode into account)
-                    // 4 keys are always present: displayName, id, section_id, controlType
-                    if (Object.keys(sections[sectionKey][collectionKey]).length == 4) {
-                        delete sections[sectionKey][collectionKey];
-                        return;
-                    }
-                });
-            })
-            
             socket.emit('data', sections);
         });
     }
