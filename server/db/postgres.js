@@ -126,11 +126,11 @@ class postgres {
     }
 
     /**
-     * Return all collections of a given section as a promise
+     * Return all collections of a given section that have an available episode as a promise
      * @param {Number} SectionID 
      */
     collection(SectionID) {
-        return this._query('SELECT * FROM collection WHERE section_id=$1 ORDER BY id DESC', [SectionID], 'id');
+        return this._query('SELECT collection.id, collection."displayName" FROM collection JOIN episode_collection ON episode_collection.collection_id = collection.id JOIN episode ON episode_collection.episode_id = episode.id WHERE collection.section_id = $1 AND (episode."expiryDate" >= now() OR episode."expiryDate" IS NULL) ORDER BY collection.id DESC;', [SectionID], 'id');
     }
 
     /**
