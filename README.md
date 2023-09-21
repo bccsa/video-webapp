@@ -92,18 +92,12 @@ npx directus bootstrap
 #### 4.4. Update the database schema
 Ensure you are in the `cms` directory, and run
 ```shell
-npm schema:update
-```
-
-#### 4.5. Start Directus
-Ensure you are in the `cms` directory, and run
-```shell
-npm start
+npm run schema:update
 ```
 
 The default url is http://localhost:8055
 
-#### 4.6. Create sections and add data
+#### 4.5. Create sections and add data
 The video-webapp needs two default sections to be added (case sensitive):
 * Live
 * VOD

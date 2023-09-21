@@ -93,9 +93,8 @@ clientIO.on('connection', socket => {
 
     if (socket.data.authenticated || auth0_bypass) {
         // Send initial data to client
-        dbObjects.sections().then(data => {
-            // setUserView(socket, data);
-            socket.emit('data', data);
+        dbObjects.sections().then(sections => {
+            socket.emit('data', sections);
         });
     }
 });

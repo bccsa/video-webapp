@@ -8,60 +8,109 @@ class appFrame extends ui {
         this.hlsDescription = "";
         this.imgUrl = "";
         this.hlsUrl = "";
+        this.hlsEventDate = "";
         this._player = undefined;   // Used for videoJS player object reference
+        this.playerMode = "video"; // options: 'video', 'audio'
+        this.playerOpen = false;
+        this.audioLoading = false;
         this.isAuthenticated = false;
+        this._parser = new m3u8Parser.Parser();
+        this._dateFormatter = new Intl.DateTimeFormat('en-KE', { dateStyle: 'long', timeStyle: 'short' }),
+        this.language = "eng";
     }
 
     get html() {
         return `
         <div class="flex flex-col h-screen bg-slate-800 overflow-hidden scrollbar-hide select-none">
             <!-- title -->
-            <div class="fixed top-0 left-0 right-0 pl-4 pr-4 h-12  bg-slate-900 flex ">
+            <div class="fixed flex items-center justify-between top-0 left-0 right-0 px-4 h-12 bg-slate-900">
                 <h1 class="text-slate-300 font-sans text-lg flex items-center">
-                    <span class="font-semibold">@{title}</span>
+                    <span class="font-semibold hidden sm:inline">@{title}</span>
+                    <span class="icon-[material-symbols--smart-display-outline-rounded] cursor-pointer h-5 w-5 sm:hidden"></span>
+
                     <span id="@{_titleDivider}" class="ml-2 mr-2 font-light" hidden>|</span>
+
                     <span class="font-light float-right">@{sectionName}</span>
                 </h1>
+
+                <div class="flex gap-x-1">
+                    
+                    <button id="@{_btnEnableVideoPlayer}" class="flex items-center cursor-pointer rounded gap-1 px-2 py-1 text-sm text-slate-200 bg-slate-500 shadow">
+                        <div title="Play audio" class="icon-[material-symbols--smart-display-rounded] cursor-pointer h-5 w-5"></div>
+                        Video
+                    </button>
+                    <button id="@{_btnEnableAudioPlayer}" class="flex items-center cursor-pointer rounded gap-1 px-2 py-1 text-sm text-slate-300 hover:text-slate-200">
+                        <div class="icon-[material-symbols--brand-awareness-rounded] cursor-pointer h-5 w-5"></div>
+                        Audio
+                    </button>
+                </div>
             </div>
 
             <!-- contents -->
-            <div class="fixed flex top-12 left-0 right-0 bottom-16 landscape:flex-row portrait:flex-col">
-
-                <!-- video div -->
-                <div id="@{_videoDiv}" style="display: none;" class=" landscape:w-6/12 portrait:w-full aspect-[3/2] bg-slate-700 landscape:border-r-2 landscape:border-r-slate-900 portrait:border-b-2 portrait:border-b-slate-900">
-                    <!-- video player -->
-                    <div class="aspect-video w-full">
-                        <video
-                            id="@{_playerElement}"
-                            class="video-js h-full w-full"
-                            controls
-                            preload="auto"
-                            data-setup="{}"
-                        >
-                            <p class="vjs-no-js">
-                                To view this video please enable JavaScript, and consider upgrading to a
-                                web browser that
-                                <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                            </p>
-                        </video>
+            <div class="fixed flex flex-col top-12 left-0 right-0 bottom-16">
+                <!-- audio player -->
+                <div id="@{_miniPlayer}" class="w-full bg-slate-700 p-2 border-b-2 border-b-slate-900 flex flex-row items-center hidden">
+                    <img src="@{imgUrl}" class="aspect-video rounded bg-cover h-10"></img>
+                    <div class="ml-2 flex-1">
+                        <p class="text-slate-100 font-sans text-sm">@{hlsTitle}</p>
+                        <p class="font-sans text-slate-400 text-xs">
+                            <span>@{hlsEventDate}</span>
+                            <span id="@{_descriptionDivider}" hidden>·</span>
+                            <span>@{hlsDescription}</span>
+                        </p>
                     </div>
-                    <!-- video data -->
-                    <div class="pl-4 pr-4 pb-2 pt-2">
-                        <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
-                        <p class="font-sans text-slate-400 text-xs text-justify">@{hlsDescription}</p>
+
+                    <div class="flex items-center gap-2">
+                        <button id="@{_btnAudioPlay}" title="Play audio" class="icon-[material-symbols--play-arrow-rounded] text-slate-400 cursor-pointer h-10 w-10 hover:text-slate-200"></button>
+                        <button id="@{_btnAudioPause}" title="Pause audio" class="hidden icon-[material-symbols--pause-rounded] text-slate-400 cursor-pointer h-10 w-10 hover:text-slate-200"></button>
+                        
+                        <svg id="@{_audioLoadingIndicator}" class="animate-spin text-white h-10 w-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
                     </div>
                 </div>
-                
-                <!-- child controls -->
-                <div id="@{_controlsDiv}" class="overflow-y-scroll w-full flex-1 block p-4"></div>
+                <div class="flex flex-grow landscape:flex-row portrait:flex-col overflow-y-scroll scrollbar-hide">
+                    <!-- video div -->
+                    <div id="@{_videoPlayer}" class="hidden landscape:w-6/12 portrait:w-full aspect-[3/2] bg-slate-700 landscape:border-r-2 landscape:border-r-slate-900 portrait:border-b-2 portrait:border-b-slate-900">
+                        <!-- video player -->
+                        <div class="aspect-video w-full">
+                            <video
+                                id="@{_playerElement}"
+                                class="video-js h-full w-full"
+                                controls
+                                preload="auto"
+                                data-setup="{}"
+                            >
+                                <p class="vjs-no-js">
+                                    To view this video please enable JavaScript, and consider upgrading to a
+                                    web browser that
+                                    <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                                </p>
+                            </video>
+                        </div>
+                        <!-- video data -->
+                        <div class="py-2 px-4">
+                            <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
+                            <p class="font-sans text-slate-400 text-xs">
+                                <span>@{hlsEventDate}</span>
+                                <span id="@{_descriptionDivider}" hidden>·</span>
+                                <span>@{hlsDescription}</span>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- child controls -->
+                    <div id="@{_controlsDiv}" class="overflow-y-scroll w-full flex-1 block p-4"></div>
+                </div>
             </div>
 
             <!-- menu -->
-            <div class="fixed bottom-0 left-0 right-0 h-16 bg-slate-900 pl-6 pr-6 flex justify-center">
+            <div class="fixed bottom-0 left-0 right-0 h-16 bg-slate-900 px-6 flex justify-center">
                 <div class="flex justify-between items-center h-full w-96">
-                    <div id=@{_btnHome} class="icon-[material-symbols--home-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></div>
-                    <div id=@{_btnLive} class="icon-[material-symbols--live-tv-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></div>
-                    <div id=@{_btnUser} class="icon-[material-symbols--person-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></div>
+                    <button id=@{_btnHome} class="icon-[material-symbols--home-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></button>
+                    <button id=@{_btnLive} class="icon-[material-symbols--live-tv-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></button>
+                    <button id=@{_btnUser} class="icon-[material-symbols--person-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></button>
                 </div>
             </div>
         </div>
@@ -78,6 +127,12 @@ class appFrame extends ui {
             }
         });
 
+        this.on('hlsDescription', description => {
+            if (description == 'null' || description == '') {
+                this.hlsDescription = null;
+            }
+        });
+
         // Buttons event handlers
         this._btnHome.addEventListener('click', e => {
             this.ShowHome();
@@ -87,7 +142,7 @@ class appFrame extends ui {
         });
 
         this._initPlayer();
-        
+
         this._btnUser.addEventListener('click', e => {
             this.ShowUser();
         });
@@ -103,6 +158,55 @@ class appFrame extends ui {
             // clear stored path
             if (auth) {
                 localStorage.removeItem("pathname");
+            }
+        });
+
+        this._btnAudioPlay.addEventListener('click', () => {
+            this._player.play();
+
+            this._btnAudioPlay.classList.add('hidden');
+            this._btnAudioPause.classList.remove('hidden');
+        });
+
+        this._btnAudioPause.addEventListener('click', () => {
+            this._player.pause();
+
+            this._btnAudioPlay.classList.remove('hidden');
+            this._btnAudioPause.classList.add('hidden');
+        });
+
+        this._btnEnableVideoPlayer.addEventListener('click', () => {
+            this.playerMode = 'video';
+        });
+        
+        this._btnEnableAudioPlayer.addEventListener('click', () => {
+            this.playerMode = 'audio';
+        });
+
+        this.on('playerMode', newPlayerMode => {
+            if (newPlayerMode == 'audio') {
+                this.setPlayerModeButtonToAudio();
+
+                if (this.playerOpen) {
+                    this.startAudioPlayer();
+                }
+                return;
+            }
+
+            this.setPlayerModeButtonToVideo();
+
+            if (this.playerOpen) {
+                this.startVideoPlayer();
+            }
+        });
+
+        this.on('audioLoading', loading => {
+            if (loading) {
+                this._audioLoadingIndicator.classList.remove('hidden');
+                this._btnAudioPlay.classList.add('hidden');
+                this._btnAudioPause.classList.add('hidden');
+            } else {
+                this._audioLoadingIndicator.classList.add('hidden');
             }
         });
     }
@@ -188,12 +292,88 @@ class appFrame extends ui {
         }
     }
 
-    ShowPlayer() {
-        this._videoDiv.style.display = "block";
+    loadEpisode(episode) {
+        if (this.playerOpen) {
+            this._player.pause();
+            this._player.currentTime(0);
+        } else {
+            this.playerOpen = true;
+        }
+
+        this.imgUrl = episode.imgUrl;
+        this.hlsUrl = episode.hlsUrl;
+        this.hlsTitle = episode.displayName;
+        this.hlsDescription = episode.description;
+
+        if (episode.eventDate !== 'null') {
+            this.hlsEventDate = this._dateFormatter.format(new Date(episode.eventDate));
+        } else {
+            this.hlsEventDate = "";
+        }
+
+        if (!this.hlsEventDate || !this.hlsDescription) {
+            this._descriptionDivider.hidden = true;
+        } else {
+            this._descriptionDivider.hidden = false;
+        }
+
+        if (this.playerMode == 'audio') {
+            this.startAudioPlayer();
+            return;
+        }
+
+        this.startVideoPlayer();
     }
 
-    HidePlayer() {
-        this._videoDiv.style.display = "none";
+    reloadPlayerUrl(url) {
+        const currentTime = this._player.currentTime();
+        const wasPaused = this._player.paused();
+
+        this._player.src({ type: 'application/x-mpegURL', src: url });
+        this._player.currentTime(currentTime);
+
+        if (wasPaused) {
+            this._btnAudioPlay.classList.remove('hidden');
+            this._btnAudioPause.classList.add('hidden');
+        } else {
+            this._btnAudioPlay.classList.add('hidden');
+            this._btnAudioPause.classList.remove('hidden');
+            this._player.play();
+        }
+    }
+
+    startAudioPlayer() {
+        this.audioLoading = true;
+        this._miniPlayer.classList.remove('hidden');
+        this._videoPlayer.classList.add('hidden');
+
+        this.getAudioStream().then(url => {
+            this.reloadPlayerUrl(url);
+            this.audioLoading = false;
+        }).catch(err => console.error(err));
+    }
+
+    startVideoPlayer() {
+        this.reloadPlayerUrl(this.hlsUrl);
+
+        this._miniPlayer.classList.add('hidden');
+        this._videoPlayer.classList.remove('hidden');
+    }
+
+    setPlayerModeButtonToAudio() {
+        this._btnEnableAudioPlayer.classList.add("text-slate-200", "bg-slate-500", "shadow");
+        this._btnEnableAudioPlayer.classList.remove("text-slate-300", "hover:text-slate-200");
+        
+        this._btnEnableVideoPlayer.classList.remove("text-slate-200", "bg-slate-500", "shadow");
+        this._btnEnableVideoPlayer.classList.add("text-slate-300", "hover:text-slate-200");
+    }
+
+    setPlayerModeButtonToVideo() {
+        this._btnEnableAudioPlayer.classList.remove("text-slate-200", "bg-slate-500", "shadow");
+        this._btnEnableAudioPlayer.classList.add("text-slate-300", "hover:text-slate-200");
+        
+        this._btnEnableVideoPlayer.classList.add("text-slate-200", "bg-slate-500", "shadow");
+        this._btnEnableVideoPlayer.classList.remove("text-slate-300", "hover:text-slate-200");
     }
 
     _initPlayer() {
@@ -217,7 +397,7 @@ class appFrame extends ui {
             //         navigationUi: 'hide'
             //     }
             // }
-            
+
             // "webkit-playinline": true // does not seem to work to make it play in safari-ios
         }
 
@@ -229,20 +409,17 @@ class appFrame extends ui {
 
         this._player.playsinline(true); // allow player to play in-place on page.
 
-        // if (!videojs.browser.IS_SAFARI) {
-            this._player.landscapeFullscreen({  // player full-screen settings (see https://www.npmjs.com/package/videojs-landscape-fullscreen)
-                fullscreen: {
-                    enterOnRotate: true,
-                    exitOnRotate: true,
-                    alwaysInLandscapeMode: true,
-                    iOS: videojs.browser.IS_SAFARI,
-                }
-            });
-        // }
-        
+        this._player.landscapeFullscreen({  // player full-screen settings (see https://www.npmjs.com/package/videojs-landscape-fullscreen)
+            fullscreen: {
+                enterOnRotate: true,
+                exitOnRotate: true,
+                alwaysInLandscapeMode: true,
+                iOS: videojs.browser.IS_SAFARI,
+            }
+        });
 
         if (this.hlsUrl) {
-            this._player.src({ type: 'application/x-mpegURL', src: this.hlsUrl});
+            this._player.src({ type: 'application/x-mpegURL', src: this.hlsUrl });
         }
         if (this.imgUrl) {
             this._player.poster(this.imgUrl);
@@ -250,12 +427,76 @@ class appFrame extends ui {
 
         // Update player source on hlsUrl change
         this.on('hlsUrl', url => {
-            this._player.src({ type: 'application/x-mpegURL', src: url});
+            this._player.src({ type: 'application/x-mpegURL', src: url });
         });
 
-        // Update player posert on imgUrl change
+        // Update player poster on imgUrl change
         this.on('imgUrl', url => {
             this._player.poster(url);
+        });
+    }
+
+    /**
+     * Get audio stream from current video URL
+     * @returns Promise
+     */
+    getAudioStream() {
+        return new Promise((resolve, reject) => {
+            // Get m3u8 manifest
+            fetch(this.hlsUrl).then(res => {
+                return res.text();
+            }).then(body => {
+                // Parse manifest
+                this._parser.push(body);
+                this._parser.end();
+                let manifest = this._parser.manifest;
+
+                // Get currently selected player language
+                let selectedTrack = this._player.audioTracks().tracks_.find(t => t.enabled)
+                let selectedLang = this.language;
+                if (selectedTrack) selectedLang = selectedTrack.language;
+
+                // Get the audio track for the selected player langauge
+                if (manifest && manifest.mediaGroups && manifest.mediaGroups.AUDIO) {
+                    // Get audio group
+                    let aGroup;
+
+                    // First try to get the mono audio group (custom implementation - consider passing group name as env variable).
+                    if (manifest.mediaGroups.AUDIO.audio_mono) {
+                        aGroup = manifest.mediaGroups.AUDIO.audio_mono
+
+                        // If custom mono audio group does not exist, find the first available audio group.
+                    } else {
+                        let audioGroups = Object.values(manifest.mediaGroups.AUDIO);
+                        if (audioGroups.length > 0) {
+                            aGroup = audioGroups[0];
+                        }
+                    }
+
+                    // Find the matching audio track from the audio group
+                    if (aGroup) {
+                        let track = Object.values(aGroup).find(t => t.language == selectedLang);
+                        if (track) {
+                            // Get path by removing the manifest m3u8 file from the hls url path
+                            let arr = this.hlsUrl.split('/');
+                            arr.length--;
+                            let path = arr.join('/');
+
+                            // Return the full uri to the audio track
+                            resolve(path + '/' + track.uri);
+                        } else {
+                            reject('Unable to find audio track');
+                        }
+                    } else {
+                        reject('Unable to find audio track');
+                    }
+                } else {
+                    reject('Unable to find audio track')
+                }
+
+            }).catch(err => {
+                console.error(err.message);
+            });
         });
     }
 }

@@ -3,7 +3,7 @@ class episode extends ui {
         super();
 
         this.displayName = "";
-        this.publishDate = "";
+        this.eventDate = "";
         this.description = "";
         this.hlsUrl = "";
         this.imgUrl = "";
@@ -26,11 +26,8 @@ class episode extends ui {
         let appFrame = this._topLevelParent.appFrame;
 
         this._image.addEventListener('click', e => {
-            appFrame.imgUrl = this.imgUrl;
-            appFrame.hlsUrl = this.hlsUrl;
-            appFrame.hlsTitle = this.displayName;
-            appFrame.hlsDescription = this.description;
-            appFrame.ShowPlayer();
+            appFrame.loadEpisode(this);
+
             // update instance of analytics
             if (env.app.analyticsUrl) {
                 this.Set({
