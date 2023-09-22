@@ -4,19 +4,26 @@ class appFrame extends ui {
 
         this.title = "Title comes here"
         this.sectionName = "";
+        this.isAuthenticated = false;
+        this.language = "eng";
+
+        // Current episode
+        this.currentEpisodeId = "";
         this.hlsTitle = "";
         this.hlsDescription = "";
         this.imgUrl = "";
         this.hlsUrl = "";
         this.hlsEventDate = "";
+
+        // Player
         this._player = undefined;   // Used for videoJS player object reference
         this.playerMode = "video"; // options: 'video', 'audio'
         this.playerOpen = false;
         this.audioLoading = false;
-        this.isAuthenticated = false;
+
+        // Helpers
         this._parser = new m3u8Parser.Parser();
-        this._dateFormatter = new Intl.DateTimeFormat('en-KE', { dateStyle: 'long', timeStyle: 'short' }),
-        this.language = "eng";
+        this._dateFormatter = new Intl.DateTimeFormat('en-KE', { dateStyle: 'long', timeStyle: 'short' });
     }
 
     get html() {
@@ -61,8 +68,8 @@ class appFrame extends ui {
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <button id="@{_btnAudioPlay}" title="Play audio" class="icon-[material-symbols--play-arrow-rounded] text-slate-400 cursor-pointer h-10 w-10 hover:text-slate-200"></button>
-                        <button id="@{_btnAudioPause}" title="Pause audio" class="hidden icon-[material-symbols--pause-rounded] text-slate-400 cursor-pointer h-10 w-10 hover:text-slate-200"></button>
+                        <button id="@{_btnAudioPlay}" title="Play audio" class="icon-[material-symbols--play-arrow-rounded] text-slate-400 h-10 w-10 hover:text-slate-200"></button>
+                        <button id="@{_btnAudioPause}" title="Pause audio" class="hidden icon-[material-symbols--pause-rounded] text-slate-400 h-10 w-10 hover:text-slate-200"></button>
                         
                         <svg id="@{_audioLoadingIndicator}" class="animate-spin text-white h-10 w-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -75,6 +82,22 @@ class appFrame extends ui {
                     <div id="@{_videoPlayer}" class="hidden landscape:w-6/12 portrait:w-full aspect-[3/2] bg-slate-700 landscape:border-r-2 landscape:border-r-slate-900 portrait:border-b-2 portrait:border-b-slate-900">
                         <!-- video player -->
                         <div class="aspect-video w-full">
+                            <!-- video data -->
+                            <div class="flex justify-between gap-3">
+                                <div class="py-2 pl-4">
+                                    <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
+                                    <p class="font-sans text-slate-400 text-xs">
+                                        <span>@{hlsEventDate}</span>
+                                        <span id="@{_descriptionDivider}" hidden>·</span>
+                                        <span>@{hlsDescription}</span>
+                                    </p>
+                                </div>
+                                <div class="flex items-start pt-1.5 pr-1.5">
+                                    <button id="@{_videoPlayerCloseButton}" title="Close player" class="icon-[material-symbols--close-rounded] text-slate-300 h-6 w-6 hover:text-slate-100">
+                                        <span class="sr-only">Close player</span>
+                                    </button>
+                                </div>
+                            </div>
                             <video
                                 id="@{_playerElement}"
                                 class="video-js h-full w-full"
@@ -88,15 +111,6 @@ class appFrame extends ui {
                                     <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
                                 </p>
                             </video>
-                        </div>
-                        <!-- video data -->
-                        <div class="py-2 px-4">
-                            <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
-                            <p class="font-sans text-slate-400 text-xs">
-                                <span>@{hlsEventDate}</span>
-                                <span id="@{_descriptionDivider}" hidden>·</span>
-                                <span>@{hlsDescription}</span>
-                            </p>
                         </div>
                     </div>
                     
@@ -181,6 +195,10 @@ class appFrame extends ui {
         
         this._btnEnableAudioPlayer.addEventListener('click', () => {
             this.playerMode = 'audio';
+        });
+
+        this._videoPlayerCloseButton.addEventListener('click', () => {
+            this.closeVideoPlayer();
         });
 
         this.on('playerMode', newPlayerMode => {
@@ -293,6 +311,13 @@ class appFrame extends ui {
     }
 
     loadEpisode(episode) {
+        console.log(episode.name)
+        if (episode.name && this.currentEpisodeId == episode.name) {
+            return;
+        }
+
+        this.currentEpisodeId = episode.name;
+
         if (this.playerOpen) {
             this._player.pause();
             this._player.currentTime(0);
@@ -358,6 +383,12 @@ class appFrame extends ui {
 
         this._miniPlayer.classList.add('hidden');
         this._videoPlayer.classList.remove('hidden');
+    }
+
+    closeVideoPlayer() {
+        this._player.pause();
+        this.currentEpisodeId = "";
+        this._videoPlayer.classList.add('hidden');
     }
 
     setPlayerModeButtonToAudio() {
