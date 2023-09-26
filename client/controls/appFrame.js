@@ -27,8 +27,8 @@ class appFrame extends ui {
     }
 
     get html() {
-        return `
-        <div class="flex flex-col h-screen bg-slate-800 overflow-hidden scrollbar-hide select-none">
+        return /*html*/`
+        <div class="flex flex-col h-screen bg-slate-800 select-none">
             <!-- title -->
             <div class="fixed flex items-center justify-between top-0 left-0 right-0 px-4 h-12 bg-slate-900">
                 <h1 class="text-slate-300 font-sans text-lg flex items-center">
@@ -57,7 +57,8 @@ class appFrame extends ui {
             <div class="fixed flex flex-col top-12 left-0 right-0 bottom-16">
                 <!-- audio player -->
                 <div id="@{_miniPlayer}" class="w-full bg-slate-700 p-2 border-b-2 border-b-slate-900 flex flex-row items-center hidden">
-                    <img src="@{imgUrl}" class="aspect-video rounded bg-cover h-10"></img>
+                    <img id="@{_miniPlayerImg}" src="@{imgUrl}" class="aspect-video rounded bg-cover h-10" />
+                    <div id="@{_miniPlayerVideo}" class="aspect-video rounded h-16 md:h-24 cursor-pointer hover:opacity-75"></div>
                     <div class="ml-2 flex-1">
                         <p class="text-slate-100 font-sans text-sm">@{hlsTitle}</p>
                         <p class="font-sans text-slate-400 text-xs">
@@ -71,20 +72,20 @@ class appFrame extends ui {
                         <button id="@{_btnAudioPlay}" title="Play audio" class="icon-[material-symbols--play-arrow-rounded] text-slate-400 h-10 w-10 hover:text-slate-200"></button>
                         <button id="@{_btnAudioPause}" title="Pause audio" class="hidden icon-[material-symbols--pause-rounded] text-slate-400 h-10 w-10 hover:text-slate-200"></button>
                         
-                        <svg id="@{_audioLoadingIndicator}" class="animate-spin text-white h-10 w-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <svg id="@{_audioLoadingIndicator}" class="hidden animate-spin text-white h-10 w-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
                     </div>
                 </div>
-                <div class="flex flex-grow landscape:flex-row portrait:flex-col overflow-y-scroll scrollbar-hide">
+                <div class="flex flex-col overflow-y-scroll" id="@{_scrollContainer}">
                     <!-- video div -->
-                    <div id="@{_videoPlayer}" class="hidden landscape:w-6/12 portrait:w-full aspect-[3/2] bg-slate-700 landscape:border-r-2 landscape:border-r-slate-900 portrait:border-b-2 portrait:border-b-slate-900">
+                    <div id="@{_videoPlayer}" class="hidden md:w-2/3 aspect-[3/2] bg-slate-700 md:mx-auto md:my-4 rounded-md">
                         <!-- video player -->
-                        <div class="aspect-video w-full">
+                        <div id="@{_playerElementContainer}" class="aspect-video w-full">
                             <!-- video data -->
                             <div class="flex justify-between gap-3">
-                                <div class="py-2 pl-4">
+                                <div class="py-4 pl-5">
                                     <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
                                     <p class="font-sans text-slate-400 text-xs">
                                         <span>@{hlsEventDate}</span>
@@ -93,6 +94,10 @@ class appFrame extends ui {
                                     </p>
                                 </div>
                                 <div class="flex items-start pt-1.5 pr-1.5">
+                                    <button id="@{_videoPlayerMinimizeButton}" title="Close player" class="icon-[material-symbols--minimize-rounded] text-slate-300 h-6 w-6 hover:text-slate-100 -mt-0.5">
+                                        <span class="sr-only">Close player</span>
+                                    </button>
+
                                     <button id="@{_videoPlayerCloseButton}" title="Close player" class="icon-[material-symbols--close-rounded] text-slate-300 h-6 w-6 hover:text-slate-100">
                                         <span class="sr-only">Close player</span>
                                     </button>
@@ -115,7 +120,7 @@ class appFrame extends ui {
                     </div>
                     
                     <!-- child controls -->
-                    <div id="@{_controlsDiv}" class="overflow-y-scroll w-full flex-1 block p-4"></div>
+                    <div id="@{_controlsDiv}" class="w-full flex-1 block p-4"></div>
                 </div>
             </div>
 
@@ -200,6 +205,10 @@ class appFrame extends ui {
         this._videoPlayerCloseButton.addEventListener('click', () => {
             this.closeVideoPlayer();
         });
+        
+        this._videoPlayerMinimizeButton.addEventListener('click', () => {
+            this.minimizeVideoPlayer();
+        });
 
         this.on('playerMode', newPlayerMode => {
             if (newPlayerMode == 'audio') {
@@ -226,6 +235,20 @@ class appFrame extends ui {
             } else {
                 this._audioLoadingIndicator.classList.add('hidden');
             }
+        });
+
+        this._scrollContainer.addEventListener("scroll", event => {
+            if (this.playerMode !== 'video') {
+                return;
+            }
+
+            if (event.target.scrollTop > 100) {
+                this.minimizeVideoPlayer();
+            }
+        });
+
+        this._miniPlayerVideo.addEventListener('click', e => {
+            this.maximizeVideoPlayer();
         });
     }
 
@@ -311,7 +334,6 @@ class appFrame extends ui {
     }
 
     loadEpisode(episode) {
-        console.log(episode.name)
         if (episode.name && this.currentEpisodeId == episode.name) {
             return;
         }
@@ -372,6 +394,9 @@ class appFrame extends ui {
         this._miniPlayer.classList.remove('hidden');
         this._videoPlayer.classList.add('hidden');
 
+        this._miniPlayerImg.classList.remove('hidden');
+        this._miniPlayerVideo.classList.add('hidden');
+
         this.getAudioStream().then(url => {
             this.reloadPlayerUrl(url);
             this.audioLoading = false;
@@ -383,6 +408,39 @@ class appFrame extends ui {
 
         this._miniPlayer.classList.add('hidden');
         this._videoPlayer.classList.remove('hidden');
+    }
+
+    minimizeVideoPlayer() {
+        // Show mini player
+        this._miniPlayer.classList.remove('hidden');
+        this._videoPlayer.classList.add('hidden');
+
+        // Move the video player
+        this._miniPlayerImg.classList.add('hidden');
+        this._miniPlayerVideo.classList.remove('hidden');
+
+        this._playerElement.classList.add('pointer-events-none');
+
+        this._miniPlayerVideo.append(this._playerElement);
+
+        // Set correct state of mini player
+        const wasPaused = this._player.paused();
+        if (wasPaused) {
+            this._btnAudioPlay.classList.remove('hidden');
+            this._btnAudioPause.classList.add('hidden');
+        } else {
+            this._btnAudioPlay.classList.add('hidden');
+            this._btnAudioPause.classList.remove('hidden');
+        }
+    }
+
+    maximizeVideoPlayer() {
+        this._miniPlayer.classList.add('hidden');
+        this._videoPlayer.classList.remove('hidden');
+
+        this._playerElement.classList.remove('pointer-events-none');
+
+        document.getElementsByClassName('video-js')[0].prepend(this._playerElement);
     }
 
     closeVideoPlayer() {
