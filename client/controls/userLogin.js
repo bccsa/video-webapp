@@ -11,7 +11,7 @@ class userLogin extends ui {
         return `
         <div class="flex flex-col items-center w-full">
             <div id="@{_userDetails}" style="display: none;" class="">
-                <img src="@{userPicture}" class="m-auto mb-2 rounded-full w-20" onerror="this.style.display='none'"></img>
+                <img src="@{userPicture}" class="m-auto mb-2 rounded-full w-20" onerror="this.style.display='none'" />
                 <p class="text-slate-100">Welcome <span>@{userName}</span>!</p>
             </div>
             <button id="@{_login}" type="button" class="mt-2 mb-2 rounded bg-slate-400 hover:bg-slate-300 h-12 w-48 max-w-full text-slate-800 font-bold py-2 px-4">
