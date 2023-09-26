@@ -68,7 +68,9 @@ class appFrame extends ui {
                         </p>
                     </div>
 
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-4">
+                        <button id="@{_btnMiniplayerMaximize}" title="Show large video player" class="hidden icon-[material-symbols--open-in-full-rounded] text-slate-400 h-8 w-8 hover:text-slate-200"></button>
+
                         <button id="@{_btnAudioPlay}" title="Play audio" class="icon-[material-symbols--play-arrow-rounded] text-slate-400 h-10 w-10 hover:text-slate-200"></button>
                         <button id="@{_btnAudioPause}" title="Pause audio" class="hidden icon-[material-symbols--pause-rounded] text-slate-400 h-10 w-10 hover:text-slate-200"></button>
                         
@@ -250,6 +252,10 @@ class appFrame extends ui {
         this._miniPlayerVideo.addEventListener('click', e => {
             this.maximizeVideoPlayer();
         });
+
+        this._btnMiniplayerMaximize.addEventListener('click', e => {
+            this.maximizeVideoPlayer();
+        });
     }
 
     resetBtn(ref) {
@@ -394,6 +400,8 @@ class appFrame extends ui {
         this._miniPlayer.classList.remove('hidden');
         this._videoPlayer.classList.add('hidden');
 
+        this._btnMiniplayerMaximize.classList.add('hidden');
+
         this._miniPlayerImg.classList.remove('hidden');
         this._miniPlayerVideo.classList.add('hidden');
 
@@ -414,6 +422,8 @@ class appFrame extends ui {
         // Show mini player
         this._miniPlayer.classList.remove('hidden');
         this._videoPlayer.classList.add('hidden');
+
+        this._btnMiniplayerMaximize.classList.remove('hidden');
 
         // Move the video player
         this._miniPlayerImg.classList.add('hidden');
@@ -437,6 +447,8 @@ class appFrame extends ui {
     maximizeVideoPlayer() {
         this._miniPlayer.classList.add('hidden');
         this._videoPlayer.classList.remove('hidden');
+
+        this._btnMiniplayerMaximize.classList.add('hidden');
 
         this._playerElement.classList.remove('pointer-events-none');
 
