@@ -445,6 +445,8 @@ class appFrame extends ui {
     }
 
     maximizeVideoPlayer() {
+        this._scrollContainer.scrollTop = 0;
+
         this._miniPlayer.classList.add('hidden');
         this._videoPlayer.classList.remove('hidden');
 
