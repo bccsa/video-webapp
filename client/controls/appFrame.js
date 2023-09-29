@@ -379,6 +379,8 @@ class appFrame extends ui {
     }
 
     reloadPlayerUrl(url) {
+        document.getElementsByClassName('video-js')[0].prepend(this._playerElement);
+
         const currentTime = this._player.currentTime();
         const wasPaused = this._player.paused();
 
