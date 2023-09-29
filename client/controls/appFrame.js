@@ -86,8 +86,8 @@ class appFrame extends ui {
                         <!-- video player -->
                         <div id="@{_playerElementContainer}" class="aspect-video w-full">
                             <!-- video data -->
-                            <div class="flex justify-between gap-3">
-                                <div class="py-4 pl-5">
+                            <div class="flex justify-between gap-3 p-4">
+                                <div>
                                     <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
                                     <p class="font-sans text-slate-400 text-xs">
                                         <span>@{hlsEventDate}</span>
@@ -95,13 +95,9 @@ class appFrame extends ui {
                                         <span>@{hlsDescription}</span>
                                     </p>
                                 </div>
-                                <div class="flex items-start pt-1.5 pr-1.5">
-                                    <button id="@{_videoPlayerMinimizeButton}" title="Close player" class="icon-[material-symbols--minimize-rounded] text-slate-300 h-6 w-6 hover:text-slate-100 -mt-0.5">
-                                        <span class="sr-only">Close player</span>
-                                    </button>
-
-                                    <button id="@{_videoPlayerCloseButton}" title="Close player" class="icon-[material-symbols--close-rounded] text-slate-300 h-6 w-6 hover:text-slate-100">
-                                        <span class="sr-only">Close player</span>
+                                <div class="flex items-center">
+                                    <button id="@{_videoPlayerMinimizeButton}" title="Minimize player" class="icon-[material-symbols--close-fullscreen-rounded] text-slate-300 h-8 w-8 hover:text-slate-100 -mt-0.5">
+                                        <span class="sr-only">Minimize player</span>
                                     </button>
                                 </div>
                             </div>
@@ -202,10 +198,6 @@ class appFrame extends ui {
         
         this._btnEnableAudioPlayer.addEventListener('click', () => {
             this.playerMode = 'audio';
-        });
-
-        this._videoPlayerCloseButton.addEventListener('click', () => {
-            this.closeVideoPlayer();
         });
         
         this._videoPlayerMinimizeButton.addEventListener('click', () => {
@@ -457,12 +449,6 @@ class appFrame extends ui {
         this._playerElement.classList.remove('pointer-events-none');
 
         document.getElementsByClassName('video-js')[0].prepend(this._playerElement);
-    }
-
-    closeVideoPlayer() {
-        this._player.pause();
-        this.currentEpisodeId = "";
-        this._videoPlayer.classList.add('hidden');
     }
 
     setPlayerModeButtonToAudio() {
