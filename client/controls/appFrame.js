@@ -381,7 +381,10 @@ class appFrame extends ui {
         const wasPaused = this._player.paused();
 
         this._player.src({ type: 'application/x-mpegURL', src: url });
-        this._player.currentTime(currentTime);
+
+        if (currentTime != 0) {
+            this._player.currentTime(currentTime);
+        }
 
         if (wasPaused) {
             this._btnAudioPlay.classList.remove('hidden');
