@@ -310,6 +310,8 @@ class appFrame extends ui {
             this.setBtn(this._btnHome);
             this.resetBtn(this._btnLive);
             this.resetBtn(this._btnUser);
+
+            this._player.tech_.options().vhs.bandwidth = undefined;
         }
     }
 
@@ -319,6 +321,8 @@ class appFrame extends ui {
             this.setBtn(this._btnLive);
             this.resetBtn(this._btnHome);
             this.resetBtn(this._btnUser);
+
+            this._player.tech_.options().vhs.bandwidth = 100000;
         }
     }
 
