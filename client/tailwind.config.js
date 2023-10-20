@@ -7,7 +7,11 @@ module.exports = {
     "./index.{html,js}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        'tall': { 'raw': '(min-height: 775px)' },
+      }
+    },
   },
   plugins: [
     addDynamicIconSelectors(),

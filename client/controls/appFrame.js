@@ -82,7 +82,7 @@ class appFrame extends ui {
                 </div>
                 <div class="flex flex-col overflow-y-scroll" id="@{_scrollContainer}">
                     <!-- video div -->
-                    <div id="@{_videoPlayer}" class="hidden md:w-2/3 bg-slate-700 md:mx-auto md:my-4 rounded-md">
+                    <div id="@{_videoPlayer}" class="hidden md:w-1/3 tall:w-2/3 bg-slate-700 md:mx-auto md:my-4 rounded-md">
                         <!-- video player -->
                         <div id="@{_playerElementContainer}" class="aspect-video w-full">
                             <!-- video data -->
