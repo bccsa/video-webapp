@@ -310,6 +310,8 @@ class appFrame extends ui {
             this.setBtn(this._btnHome);
             this.resetBtn(this._btnLive);
             this.resetBtn(this._btnUser);
+
+            this._player.tech_.options().vhs.bandwidth = undefined;
         }
     }
 
@@ -319,6 +321,8 @@ class appFrame extends ui {
             this.setBtn(this._btnLive);
             this.resetBtn(this._btnHome);
             this.resetBtn(this._btnUser);
+
+            this._player.tech_.options().vhs.bandwidth = 100000;
         }
     }
 
@@ -377,7 +381,10 @@ class appFrame extends ui {
         const wasPaused = this._player.paused();
 
         this._player.src({ type: 'application/x-mpegURL', src: url });
-        this._player.currentTime(currentTime);
+
+        if (currentTime != 0) {
+            this._player.currentTime(currentTime);
+        }
 
         if (wasPaused) {
             this._btnAudioPlay.classList.remove('hidden');
