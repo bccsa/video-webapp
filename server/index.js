@@ -5,6 +5,7 @@ const express = require("express");
 var fallback = require('express-history-api-fallback');
 const http = require("http");
 const path = require("path");
+const google = require("./google");
 require('dotenv').config({ path: path.join(__dirname, "../.env") });
 var jwt = require('jsonwebtoken');
 var showdown  = require('showdown'); // markdown to html converter
@@ -85,6 +86,7 @@ clientIO.on('connection', socket => {
             if (decoded) {
                 // Mark socket as authenticated
                 socket.data.authenticated = true;
+                socket.data.personId = decoded["https://login.bcc.no/claims/personId"];
             } 
         } catch (err) {
             console.log('unable to decode JWT: ' + err.message);
@@ -92,9 +94,49 @@ clientIO.on('connection', socket => {
     }
 
     if (socket.data.authenticated || auth0_bypass) {
-        // Send initial data to client
+        google.init(process.env.TICKETS_GOOGLE_SHEET_ID, process.env.TICKETS_KEY_PATH);
+
         dbObjects.sections().then(sections => {
-            socket.emit('data', sections);
+            // TODO dynamically get events
+            google.get("Summer Conference 2023!A1:AI1").then(headerRows => {
+                const headers = headerRows[0];
+
+                google.get("Summer Conference 2023!A2:AI").then(sheetData => {
+                    let event = {
+                        controlType: "event",
+                        displayName: "Summer Conference 2023", // TODO dynamically set event
+                    };
+    
+                    // TODO take family into account
+                    let tickets = sheetData.filter(row => row[3].includes(socket.data.personId)); // row 3 = D = person id
+
+                    // Convert tickets array to object
+                    tickets = tickets.map(ticket => {
+                        const obj = {
+                            controlType: "ticket",
+                        };
+                        headers.forEach((header, index) => {
+                            obj[header] = ticket[index];
+                        });
+                        return obj;
+                    });
+    
+                    Object.assign(event, tickets);
+                    
+                    // Create a ModularUI section for tickets
+                    const ticketSection = {
+                        controlType: "section",
+                        displayName: "Tickets",
+                        '0': event, // TODO dynamically set event
+                    };
+
+                    // Send initial data to client
+                    socket.emit('data', {
+                        ...sections,
+                        Tickets: ticketSection,
+                    });
+                });
+            })
         });
     }
 });

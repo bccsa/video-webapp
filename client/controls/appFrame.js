@@ -40,8 +40,7 @@ class appFrame extends ui {
                     <span class="font-light float-right">@{sectionName}</span>
                 </h1>
 
-                <div class="flex gap-x-1">
-                    
+                <div class="flex gap-x-1" id="@{_modeSwitcher}">
                     <button id="@{_btnEnableVideoPlayer}" class="flex items-center cursor-pointer rounded gap-1 px-2 py-1 text-sm text-slate-200 bg-slate-500 shadow">
                         <div title="Play audio" class="icon-[material-symbols--smart-display-rounded] cursor-pointer h-5 w-5"></div>
                         Video
@@ -128,6 +127,7 @@ class appFrame extends ui {
                     <button id=@{_btnHome} class="icon-[material-symbols--home-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></button>
                     <button id=@{_btnLive} class="icon-[material-symbols--live-tv-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></button>
                     <button id=@{_btnUser} class="icon-[material-symbols--person-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></button>
+                    <button id=@{_btnTickets} class="icon-[material-symbols--confirmation-number-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></button>
                 </div>
             </div>
         </div>
@@ -150,6 +150,8 @@ class appFrame extends ui {
             }
         });
 
+        this._initPlayer();
+
         // Buttons event handlers
         this._btnHome.addEventListener('click', e => {
             this.ShowHome();
@@ -158,10 +160,12 @@ class appFrame extends ui {
             this.ShowLive();
         });
 
-        this._initPlayer();
-
         this._btnUser.addEventListener('click', e => {
             this.ShowUser();
+        });
+
+        this._btnTickets.addEventListener('click', e => {
+            this.ShowTickets();
         });
 
         // Select initial content based on stored / current path
@@ -292,6 +296,15 @@ class appFrame extends ui {
                     this.ShowUser();
                 }
                 break;
+            case '/tickets':
+                if (!this._controls.Tickets) {
+                    this.once('Tickets', section => {
+                        this.ShowTickets();
+                    });
+                } else {
+                    this.ShowTickets();
+                }
+                break;
             default:
                 if (!this._controls.VOD) {
                     this.once('VOD', section => {
@@ -310,6 +323,8 @@ class appFrame extends ui {
             this.setBtn(this._btnHome);
             this.resetBtn(this._btnLive);
             this.resetBtn(this._btnUser);
+            this.resetBtn(this._btnTickets);
+            this._modeSwitcher.classList.remove('hidden');
 
             this._player.tech_.options().vhs.bandwidth = undefined;
         }
@@ -321,6 +336,8 @@ class appFrame extends ui {
             this.setBtn(this._btnLive);
             this.resetBtn(this._btnHome);
             this.resetBtn(this._btnUser);
+            this.resetBtn(this._btnTickets);
+            this._modeSwitcher.classList.remove('hidden');
 
             this._player.tech_.options().vhs.bandwidth = 100000;
         }
@@ -332,6 +349,19 @@ class appFrame extends ui {
             this.setBtn(this._btnUser);
             this.resetBtn(this._btnHome);
             this.resetBtn(this._btnLive);
+            this.resetBtn(this._btnTickets);
+            this._modeSwitcher.classList.add('hidden');
+        }
+    }
+
+    ShowTickets() {
+        if (this.Tickets) {
+            this.Tickets.Show();
+            this.setBtn(this._btnTickets);
+            this.resetBtn(this._btnHome);
+            this.resetBtn(this._btnLive);
+            this.resetBtn(this._btnUser);
+            this._modeSwitcher.classList.add('hidden');
         }
     }
 
