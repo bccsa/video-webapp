@@ -7,6 +7,7 @@ on:
       - 'client/**'
       - 'server/**'
       - 'docker-files/Server.Dockerfile'
+      - '.github/workflows/server-prod.yml'
       
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:

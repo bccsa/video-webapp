@@ -12,6 +12,7 @@ on:
       - 'cms/scripts/pg-yamltodb.sh'
       - 'cms/snapshot/CMS-DB.yaml'
       - 'cms/snapshot/directus-db.yaml'
+      - '.github/workflows/cms-staging.yml'
       
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
