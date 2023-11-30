@@ -44,9 +44,9 @@ jobs:
         --env="SOCKET_URL=${{ secrets.SOCKET_URL }}" 
         --env="PORT=${{ secrets.DOCKER_PORT }}"
         --env="PRIVACY_POLICY=${{ secrets.PRIVACY_POLICY }}"
+        --env="TICKETS_GOOGLE_SHEET_ID=${{ secrets.TICKETS_GOOGLE_SHEET_ID }}"
+        --env="TICKETS_GOOGLE_API_KEY=${{ secrets.TICKETS_GOOGLE_API_KEY }}"
         --env="CACHE_MAXAGE=${{ env.CACHE_MAXAGE }}"
-        --env="TICKETS_GOOGLE_SHEET_ID=${{ env.TICKETS_GOOGLE_SHEET_ID }}"
-        --env="TICKETS_GOOGLE_API_KEY=${{ env.TICKETS_GOOGLE_API_KEY }}"
         --restart unless-stopped 
         --name=${{ secrets.DOCKER_CONTAINER }} 
         ${{ secrets.DOCKER_IMAGE }}
