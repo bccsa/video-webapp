@@ -49,11 +49,17 @@ class tickets {
                             const ticketObject = {
                                 controlType: "ticket",
                                 name: ticket[conference.nameColumn],
+                                age: ticket[conference.ageColumn],
                             };
+                
                             conference.ticketInfoColumns.forEach((column) => {
-                                const header = headers[column];
-                                ticketObject[header] = ticket[column];
+                                ticketObject[column] = {
+                                    controlType: "ticketInfo",
+                                    title: headers[column],
+                                    content: ticket[column],
+                                };
                             });
+
                             return ticketObject;
                         });
     
