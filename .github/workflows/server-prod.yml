@@ -45,6 +45,8 @@ jobs:
         --env="PORT=${{ secrets.DOCKER_PORT }}"
         --env="PRIVACY_POLICY=${{ secrets.PRIVACY_POLICY }}"
         --env="CACHE_MAXAGE=${{ env.CACHE_MAXAGE }}"
+        --env="TICKETS_GOOGLE_SHEET_ID=${{ env.TICKETS_GOOGLE_SHEET_ID }}"
+        --env="TICKETS_GOOGLE_API_KEY=${{ env.TICKETS_GOOGLE_API_KEY }}"
         --restart unless-stopped 
         --name=${{ secrets.DOCKER_CONTAINER }} 
         ${{ secrets.DOCKER_IMAGE }}
