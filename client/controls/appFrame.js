@@ -236,7 +236,7 @@ class appFrame extends ui {
         });
 
         this._scrollContainer.addEventListener("scroll", event => {
-            if (this.playerMode !== 'video') {
+            if (this.playerMode !== 'video' || this.currentEpisodeId == '') {
                 return;
             }
 
