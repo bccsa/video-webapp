@@ -21,11 +21,11 @@ class tickets {
                     name: conference[0],
                     startDate: conference[1],
                     endDate: conference[2],
-                    ticketInfoColumns: conference[3],
-                    nameColumn: conference[4],
-                    personIdColumn: conference[5],
-                    familyIdColumn: conference[6],
-                    ageColumn: conference[7],
+                    ticketInfoColumns: conference[3].split(",").map(c => this.getColumnNumber(c)),
+                    nameColumn: this.getColumnNumber(conference[4]),
+                    personIdColumn: this.getColumnNumber(conference[5]),
+                    familyIdColumn: this.getColumnNumber(conference[6]),
+                    ageColumn: this.getColumnNumber(conference[7]),
                 }
             });
 
@@ -42,18 +42,19 @@ class tickets {
                         };
     
                         // TODO take family into account
-                        const personIdColumn = this.getColumnNumber(conference.personIdColumn);
-                        let tickets = sheetData.filter(row => row[personIdColumn].includes(personId));
+                        let tickets = sheetData.filter(row => row[conference.personIdColumn].includes(personId));
 
                         // Convert tickets array to modularUI object, with the headers as keys
                         tickets = tickets.map(ticket => {
-                            const obj = {
+                            const ticketObject = {
                                 controlType: "ticket",
+                                name: ticket[conference.nameColumn],
                             };
-                            headers.forEach((header, index) => {
-                                obj[header] = ticket[index];
+                            conference.ticketInfoColumns.forEach((column) => {
+                                const header = headers[column];
+                                ticketObject[header] = ticket[column];
                             });
-                            return obj;
+                            return ticketObject;
                         });
     
                         Object.assign(event, tickets);
