@@ -41,8 +41,13 @@ class tickets {
                             displayName: conference.name,
                         };
     
-                        // TODO take family into account
-                        let tickets = sheetData.filter(row => row[conference.personIdColumn].includes(personId));
+                        const person = sheetData.find(row => row[conference.personIdColumn].includes(personId));
+
+                        if (!person) {
+                            resolve(event);
+                        }
+
+                        let tickets = sheetData.filter(row => row[conference.familyIdColumn].includes(person[conference.familyIdColumn]));
 
                         // Convert tickets array to modularUI object, with the headers as keys
                         tickets = tickets.map(ticket => {

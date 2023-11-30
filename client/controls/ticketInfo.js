@@ -8,15 +8,15 @@ class ticketInfo extends ui {
 
     get html() {
         return /*html*/`
-            <div id="@{_mainDiv}">
-                <div class="text-slate-200 font-sans text-md">@{title}</div>
-                <div class="text-slate-200 font-sans text-md">@{content}</div>
+            <div id="@{_mainDiv}" class="bg-slate-100 rounded mb-4" >
+                <div class="text-slate-900 font-sans text-md">@{title}</div>
+                <div class="text-slate-900 font-sans text-md">@{content}</div>
             </div>
         `;
     }
     
     Init() {
-        if (this.content === '0') {
+        if (this.content === '0' || this.content === '') {
             this._mainDiv.hidden = true;
         }
     }
