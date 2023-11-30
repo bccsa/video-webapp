@@ -96,7 +96,7 @@ clientIO.on('connection', socket => {
     }
 
     if (socket.data.authenticated || auth0_bypass) {
-        google.init(process.env.TICKETS_GOOGLE_SHEET_ID, process.env.TICKETS_KEY_PATH);
+        google.init(process.env.TICKETS_GOOGLE_SHEET_ID, process.env.TICKETS_GOOGLE_API_KEY);
 
         dbObjects.sections().then(sections => {
             ticketsApi.getTickets(socket.data.personId).then((ticketSection) => {

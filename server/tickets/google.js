@@ -1,7 +1,3 @@
-// ========================================
-// External libraries 
-// ========================================
-
 const { google } =  require('googleapis');
 
 module.exports = {
@@ -9,12 +5,11 @@ module.exports = {
      * Init
      * @param {Object} env - environment
      */
-    init (sheetId, keysPath) {
-        if (!sheetId || !keysPath) {
-            throw new Error("No sheet id or keys path given");
+    init (sheetId, apiKey) {
+        if (!sheetId || !apiKey) {
+            throw new Error("No sheet id or API key given");
         }
-        
-        const keys = require(keysPath)
+        const keys = JSON.parse(Buffer.from(apiKey, "base64"));
         this.sheetId = sheetId
         this.client = new google.auth.JWT(
             keys.client_email,
