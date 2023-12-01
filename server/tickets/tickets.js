@@ -1,6 +1,12 @@
 const google = require("./google");
 
 class tickets {
+    cache = {
+        age: null,
+        conferences: null,
+        sheetData: {},
+    }
+
     /**
      * Transform an Excel column name into a number
      * @param {string} column Column name (like 'A', 'B', 'AB')
@@ -15,6 +21,30 @@ class tickets {
      * @param {string} personId - The Brunstad SSO person/family id
      */
     getTickets(personId) {
+        const oneMinuteAgo = new Date(new Date().getTime() - 60 * 1000)
+        if (!this.cache.age || this.cache.age < oneMinuteAgo) {
+            google.init(process.env.TICKETS_GOOGLE_SHEET_ID, process.env.TICKETS_GOOGLE_API_KEY);
+
+            return this.getTicketsFromGoogle(personId);
+        }
+
+        return this.getTicketsFromCache(personId);
+    }
+
+    getTicketsFromCache(personId) {
+        const events = this.cache.conferences.map(conference => {
+            const sheetData = this.cache.sheetData[conference.name];
+            return this.createEventFromData(conference, sheetData, personId);
+        });
+
+        const ticketSection = this.createTicketSection(events);
+
+        return new Promise((resolve, reject) => {
+            return resolve(ticketSection);
+        });
+    }
+
+    getTicketsFromGoogle(personId) {
         return google.get("Configuration!A3:H").then(conferencesArray => {
             const conferences = conferencesArray.map(conference => {
                 return {
@@ -34,48 +64,17 @@ class tickets {
                 return endDate >= new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
             });
 
+            this.cache.conferences = conferences;
+
             const conferencePromises = [];
 
             conferences.forEach(conference => {
                 conferencePromises.push(new Promise((resolve, reject) => {        
                     return google.get(`${conference.name}!A1:ZZ`).then(sheetData => {
-                        const headers = sheetData[0];
+                        this.cache.age = new Date();
+                        this.cache.sheetData[conference.name] = sheetData;
 
-                        let event = {
-                            controlType: "event",
-                            displayName: conference.name,
-                            startDate: conference.startDate,
-                            endDate: conference.endDate,
-                        };
-    
-                        const person = sheetData.find(row => row[conference.personIdColumn].includes(personId));
-
-                        if (!person) {
-                            resolve(event);
-                        }
-
-                        let tickets = sheetData.filter(row => row[conference.familyIdColumn].includes(person[conference.familyIdColumn]));
-
-                        // Convert tickets array to modularUI object, with the headers as keys
-                        tickets = tickets.map(ticket => {
-                            const ticketObject = {
-                                controlType: "ticket",
-                                name: ticket[conference.nameColumn],
-                                age: ticket[conference.ageColumn],
-                            };
-                
-                            conference.ticketInfoColumns.forEach((column) => {
-                                ticketObject[column] = {
-                                    controlType: "ticketInfo",
-                                    title: headers[column],
-                                    content: ticket[column],
-                                };
-                            });
-
-                            return ticketObject;
-                        });
-    
-                        Object.assign(event, tickets);
+                        const event = this.createEventFromData(conference, sheetData, personId);
 
                         resolve(event);
                     }).catch(err => reject(err));
@@ -83,13 +82,59 @@ class tickets {
             });
 
             return Promise.all(conferencePromises).then(events => {
-                return {
-                    controlType: "section",
-                    displayName: "Tickets",
-                    ...events,
-                };
+                return this.createTicketSection(events);
             });
         });
+    }
+
+    createEventFromData(conference, sheetData, personId) {
+        const headers = sheetData[0];
+
+        let event = {
+            controlType: "event",
+            displayName: conference.name,
+            startDate: conference.startDate,
+            endDate: conference.endDate,
+        };
+
+        const person = sheetData.find(row => row[conference.personIdColumn].includes(personId));
+
+        if (!person) {
+            return event;
+        }
+
+        let tickets = sheetData.filter(row => row[conference.familyIdColumn].includes(person[conference.familyIdColumn]));
+
+        // Convert tickets array to modularUI object, with the headers as keys
+        tickets = tickets.map(ticket => {
+            const ticketObject = {
+                controlType: "ticket",
+                name: ticket[conference.nameColumn],
+                age: ticket[conference.ageColumn],
+            };
+
+            conference.ticketInfoColumns.forEach((column) => {
+                ticketObject[column] = {
+                    controlType: "ticketInfo",
+                    title: headers[column],
+                    content: ticket[column],
+                };
+            });
+
+            return ticketObject;
+        });
+
+        Object.assign(event, tickets);
+
+        return event;
+    }
+
+    createTicketSection(events) {
+        return {
+            controlType: "section",
+            displayName: "Tickets",
+            ...events,
+        };
     }
 }
 
