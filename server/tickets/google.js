@@ -29,7 +29,6 @@ module.exports = {
         this.client.authorize((err) => {
             if(err) {
                 console.log(err);
-                setTimeout(auth , 60000);
                 return;
             } else {
                 console.log('Google Sheets Authenticated');
