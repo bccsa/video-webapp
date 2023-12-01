@@ -104,15 +104,20 @@ class tickets {
             displayName: conference.name,
             startDate: conference.startDate,
             endDate: conference.endDate,
+            noTickets: false,
         };
 
         const person = sheetData.find(row => row[conference.personIdColumn].includes(personId));
 
         if (!person) {
-            return event;
+            return this.createNoTicketsResponse(event);
         }
 
         let tickets = sheetData.filter(row => row[conference.familyIdColumn].includes(person[conference.familyIdColumn]));
+
+        if (tickets.length == 0) {
+            return this.createNoTicketsResponse(event);
+        }
 
         // Convert tickets array to modularUI object, with the headers as keys
         tickets = tickets.map(ticket => {
@@ -160,11 +165,16 @@ class tickets {
         return this.createTicketSection([
             {
                 controlType: "event",
-                displayName: "No tickets found",
+                displayName: "No events found",
                 startDate: null,
                 endDate: null,
             }
         ]);
+    }
+
+    createNoTicketsResponse(event) {
+        event.noTickets = true;
+        return event;
     }
 }
 
