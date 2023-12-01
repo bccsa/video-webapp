@@ -32,6 +32,12 @@ class tickets {
     }
 
     getTicketsFromCache(personId) {
+        if (!this.cache.conferences || this.cache.conferences.length == 0) {
+            return new Promise((resolve, reject) => {
+                return resolve(this.createNoEventsResponse());
+            });
+        }
+
         const events = this.cache.conferences.map(conference => {
             const sheetData = this.cache.sheetData[conference.name];
             return this.createEventFromData(conference, sheetData, personId);
@@ -46,6 +52,10 @@ class tickets {
 
     getTicketsFromGoogle(personId) {
         return google.get("Configuration!A11:H").then(conferencesArray => {
+            if (!conferencesArray || conferencesArray.length == 0) {
+                return this.createNoEventsResponse();
+            }
+
             const conferences = conferencesArray.map(conference => {
                 return {
                     name: conference[0],
@@ -94,15 +104,20 @@ class tickets {
             displayName: conference.name,
             startDate: conference.startDate,
             endDate: conference.endDate,
+            noTickets: false,
         };
 
         const person = sheetData.find(row => row[conference.personIdColumn].includes(personId));
 
         if (!person) {
-            return event;
+            return this.createNoTicketsResponse(event);
         }
 
         let tickets = sheetData.filter(row => row[conference.familyIdColumn].includes(person[conference.familyIdColumn]));
+
+        if (tickets.length == 0) {
+            return this.createNoTicketsResponse(event);
+        }
 
         // Convert tickets array to modularUI object, with the headers as keys
         tickets = tickets.map(ticket => {
@@ -144,6 +159,22 @@ class tickets {
             displayName: "Tickets",
             ...events,
         };
+    }
+
+    createNoEventsResponse() {
+        return this.createTicketSection([
+            {
+                controlType: "event",
+                displayName: "No events found",
+                startDate: null,
+                endDate: null,
+            }
+        ]);
+    }
+
+    createNoTicketsResponse(event) {
+        event.noTickets = true;
+        return event;
     }
 }
 
