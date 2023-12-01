@@ -124,10 +124,10 @@ class appFrame extends ui {
             <!-- menu -->
             <div class="fixed bottom-0 left-0 right-0 h-16 bg-slate-900 px-6 flex justify-center">
                 <div class="flex justify-between items-center h-full w-96">
-                    <button id=@{_btnHome} class="icon-[material-symbols--home-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></button>
-                    <button id=@{_btnLive} class="icon-[material-symbols--live-tv-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></button>
-                    <button id=@{_btnUser} class="icon-[material-symbols--person-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></button>
-                    <button id=@{_btnTickets} class="icon-[material-symbols--confirmation-number-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></button>
+                    <button title="Video on demand" id=@{_btnHome} class="icon-[material-symbols--home-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></button>
+                    <button title="Live video" id=@{_btnLive} class="icon-[material-symbols--live-tv-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></button>
+                    <button title="Tickets" id=@{_btnTickets} class="icon-[material-symbols--confirmation-number-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></button>
+                    <button title="User" id=@{_btnUser} class="icon-[material-symbols--person-outline-rounded] text-slate-400 hover:text-indigo-300 h-10 w-10"></button>
                 </div>
             </div>
         </div>
