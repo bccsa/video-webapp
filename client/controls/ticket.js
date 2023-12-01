@@ -59,15 +59,14 @@ class ticket extends ui {
     get html() {
         return /*html*/`
             <div class="rounded bg-slate-200 mb-4 shadow">
-                <div id="@{_header}" class="p-4 rounded-t flex justify-between cursor-pointer">
+                <div id="@{_header}" class="p-4 rounded-t flex items-center justify-between cursor-pointer">
                     <h3 class="font-sans text-md font-semibold flex items-center gap-2">
                         <span id="@{_icon}" class="icon-[material-symbols--confirmation-number-outline-rounded] w-6 h-6"></span>
                         <span id="@{_name}">@{name}</span>
                     </h3>
-                    <button>
-                        <span id="@{_collapseIcon}" class="icon-[material-symbols--expand-less-rounded] w-8 h-8"></span>
-                        <span id="@{_expandIcon}" class="icon-[material-symbols--expand-more-rounded] w-8 h-8 hidden"></span>
-                    </button>
+
+                    <span id="@{_collapseIcon}" class="icon-[material-symbols--expand-less-rounded] w-8 h-8"></span>
+                    <span id="@{_expandIcon}" class="icon-[material-symbols--expand-more-rounded] w-8 h-8 hidden"></span>
                 </div>
                 <div class="p-4" id="@{_controlsDiv}"></div>
             </div>

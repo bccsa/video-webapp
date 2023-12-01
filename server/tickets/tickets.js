@@ -39,6 +39,8 @@ class tickets {
                         let event = {
                             controlType: "event",
                             displayName: conference.name,
+                            startDate: conference.startDate,
+                            endDate: conference.endDate,
                         };
     
                         const person = sheetData.find(row => row[conference.personIdColumn].includes(personId));
