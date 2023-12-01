@@ -45,7 +45,7 @@ class tickets {
     }
 
     getTicketsFromGoogle(personId) {
-        return google.get("Configuration!A3:H").then(conferencesArray => {
+        return google.get("Configuration!A11:H").then(conferencesArray => {
             const conferences = conferencesArray.map(conference => {
                 return {
                     name: conference[0],
@@ -55,7 +55,6 @@ class tickets {
                     nameColumn: this.getColumnNumber(conference[4]),
                     personIdColumn: this.getColumnNumber(conference[5]),
                     familyIdColumn: this.getColumnNumber(conference[6]),
-                    ageColumn: this.getColumnNumber(conference[7]),
                 }
             }).filter(conference => {
                 const endDate = new Date(conference.endDate);
@@ -110,7 +109,6 @@ class tickets {
             const ticketObject = {
                 controlType: "ticket",
                 name: ticket[conference.nameColumn],
-                age: ticket[conference.ageColumn],
             };
 
             conference.ticketInfoColumns.forEach((column) => {
