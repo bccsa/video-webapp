@@ -109,6 +109,7 @@ class tickets {
             const ticketObject = {
                 controlType: "ticket",
                 name: ticket[conference.nameColumn],
+                isCurrentUser: ticket[conference.personIdColumn].includes(personId),
             };
 
             conference.ticketInfoColumns.forEach((column) => {
@@ -120,6 +121,16 @@ class tickets {
             });
 
             return ticketObject;
+        });
+
+        tickets.sort((a, b) => {
+            if (a.isCurrentUser) {
+                return -1;
+            }
+            if (b.isCurrentUser) {
+                return 1;
+            }
+            return a.name.localeCompare(b.name);
         });
 
         Object.assign(event, tickets);
