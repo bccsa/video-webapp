@@ -8,7 +8,7 @@ class event extends ui {
 
         this.ticketNumber = 0;
 
-        this._dateFormatter = new Intl.DateTimeFormat('en-ZA', { dateStyle: 'long' });
+        this._dateFormatter = new Intl.DateTimeFormat('en-KE', { dateStyle: 'long' });
     }
 
     get html() {
