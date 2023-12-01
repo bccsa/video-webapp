@@ -32,6 +32,12 @@ class tickets {
     }
 
     getTicketsFromCache(personId) {
+        if (!this.cache.conferences || this.cache.conferences.length == 0) {
+            return new Promise((resolve, reject) => {
+                return resolve(this.createNoEventsResponse());
+            });
+        }
+
         const events = this.cache.conferences.map(conference => {
             const sheetData = this.cache.sheetData[conference.name];
             return this.createEventFromData(conference, sheetData, personId);
@@ -46,6 +52,10 @@ class tickets {
 
     getTicketsFromGoogle(personId) {
         return google.get("Configuration!A11:H").then(conferencesArray => {
+            if (!conferencesArray || conferencesArray.length == 0) {
+                return this.createNoEventsResponse();
+            }
+
             const conferences = conferencesArray.map(conference => {
                 return {
                     name: conference[0],
@@ -144,6 +154,17 @@ class tickets {
             displayName: "Tickets",
             ...events,
         };
+    }
+
+    createNoEventsResponse() {
+        return this.createTicketSection([
+            {
+                controlType: "event",
+                displayName: "No tickets found",
+                startDate: null,
+                endDate: null,
+            }
+        ]);
     }
 }
 
