@@ -59,7 +59,7 @@ class ticket extends ui {
     get html() {
         return /*html*/`
             <div class="rounded bg-slate-200 mb-4 shadow">
-                <div id="@{_header}" class="p-4 rounded-t flex items-center justify-between cursor-pointer">
+                <div id="@{_header}" class="p-4 rounded-t flex items-center justify-between cursor-pointer" title="Collapse ticket">
                     <h3 class="font-sans text-md font-semibold flex items-center gap-2">
                         <span id="@{_icon}" class="icon-[material-symbols--confirmation-number-outline-rounded] w-6 h-6"></span>
                         <span id="@{_name}">@{name}</span>
