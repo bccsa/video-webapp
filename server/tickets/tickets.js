@@ -27,6 +27,11 @@ class tickets {
                     familyIdColumn: this.getColumnNumber(conference[6]),
                     ageColumn: this.getColumnNumber(conference[7]),
                 }
+            }).filter(conference => {
+                const endDate = new Date(conference.endDate);
+
+                // Only keep events that end on a date after yesterday
+                return endDate >= new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
             });
 
             const conferencePromises = [];
