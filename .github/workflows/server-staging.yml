@@ -7,6 +7,7 @@ on:
       - 'client/**'
       - 'server/**'
       - 'docker-files/Server.Dockerfile'
+      - '.github/workflows/server-staging.yml'
       
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -44,6 +45,8 @@ jobs:
         --env="SOCKET_URL=${{ secrets.SOCKET_URL }}" 
         --env="PORT=${{ secrets.DOCKER_PORT }}"
         --env="PRIVACY_POLICY=${{ secrets.PRIVACY_POLICY }}"
+        --env="TICKETS_GOOGLE_SHEET_ID=${{ secrets.TICKETS_GOOGLE_SHEET_ID }}"
+        --env="TICKETS_GOOGLE_API_KEY=${{ secrets.TICKETS_GOOGLE_API_KEY }}"
         --env="CACHE_MAXAGE=${{ env.CACHE_MAXAGE }}"
         --restart unless-stopped 
         --name=${{ secrets.DOCKER_CONTAINER }} 

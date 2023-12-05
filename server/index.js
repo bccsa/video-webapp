@@ -5,6 +5,8 @@ const express = require("express");
 var fallback = require('express-history-api-fallback');
 const http = require("http");
 const path = require("path");
+const google = require("./tickets/google");
+const { tickets } = require("./tickets/tickets");
 require('dotenv').config({ path: path.join(__dirname, "../.env") });
 var jwt = require('jsonwebtoken');
 var showdown  = require('showdown'); // markdown to html converter
@@ -20,6 +22,7 @@ db = new postgres({
     port: process.env.DB_PORT
 });
 let dbObjects = new dataObjects(db);
+let ticketsApi = new tickets();
 
 // Express client web-server
 // -------------------------
@@ -85,6 +88,7 @@ clientIO.on('connection', socket => {
             if (decoded) {
                 // Mark socket as authenticated
                 socket.data.authenticated = true;
+                socket.data.personId = decoded["https://login.bcc.no/claims/personId"];
             } 
         } catch (err) {
             console.log('unable to decode JWT: ' + err.message);
@@ -92,9 +96,14 @@ clientIO.on('connection', socket => {
     }
 
     if (socket.data.authenticated || auth0_bypass) {
-        // Send initial data to client
         dbObjects.sections().then(sections => {
-            socket.emit('data', sections);
+            ticketsApi.getTickets(socket.data.personId).then((ticketSection) => {
+                // Send initial data to client
+                socket.emit('data', {
+                    ...sections,
+                    Tickets: ticketSection,
+                });
+            })
         });
     }
 });
