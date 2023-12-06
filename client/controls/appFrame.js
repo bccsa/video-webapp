@@ -80,6 +80,12 @@ class appFrame extends ui {
                     </div>
                 </div>
                 <div class="flex flex-col overflow-y-scroll" id="@{_scrollContainer}">
+                    <div id="@{_noAccessMessage}" class="flex justify-center hidden">
+                        <div class="inline-block px-6 py-2 my-4 bg-blue-300 text-blue-900 rounded shadow max-w-2xl">
+                            It seems you don't have access to our content. Please contact your BCCSA contact person to get access. If your access is confirmed, reload the page.
+                        </div>
+                    </div>
+
                     <!-- video div -->
                     <div id="@{_videoPlayer}" class="hidden md:w-2/3 bg-slate-700 md:mx-auto md:my-4 rounded-md">
                         <!-- video player -->
@@ -252,6 +258,10 @@ class appFrame extends ui {
         this._btnMiniplayerMaximize.addEventListener('click', e => {
             this.maximizeVideoPlayer();
         });
+    }
+
+    showNoAccessMessage() {
+        this._noAccessMessage.classList.remove('hidden');
     }
 
     resetBtn(ref) {

@@ -35,7 +35,9 @@ class dataObjects {
             let s;
             this.db.privilegedGuests().then(privilegedGuests => {
                 if (!hasMembership && !Object.keys(privilegedGuests).includes(userEmail)) {
-                    resolve({});
+                    resolve({
+                        'noAccess': true,
+                    });
                     return;
                 }
             }).then(() => {
