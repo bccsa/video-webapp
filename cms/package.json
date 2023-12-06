@@ -5,7 +5,7 @@
   "scripts": {
     "start": "npx directus start",
     "schema:update": "npx directus schema apply --yes ./snapshot/directus-db.yaml && ./scripts/pg-update.sh",
-    "schema:generate-snapshot": "./scripts/pg-dbtoyaml.sh"
+    "schema:generate-snapshot": "npx directus schema snapshot --yes ./snapshot/directus-db.yaml && ./scripts/pg-dbtoyaml.sh"
   },
   "keywords": [],
   "author": "",

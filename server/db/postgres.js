@@ -140,6 +140,13 @@ class postgres {
     episode(CollectionID) {
         return this._query('SELECT * FROM episode_collection_view WHERE collection_id=$1 ORDER BY id DESC', [CollectionID], 'id');
     }
+
+    /**
+     * Return all privileged guests as a promise
+     */
+    privilegedGuests() {
+        return this._query('SELECT * FROM privileged_guests', [], 'email');
+    }
 }
 
 module.exports.postgres = postgres;

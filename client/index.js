@@ -134,6 +134,10 @@ function initSocket(token) {
     // Listen for data events, and forward to modular-ui controls
     socket.on('data', data => {
         controls.appFrame.SetData(data);
+
+        if (data.noAccess) {
+            controls.appFrame.showNoAccessMessage();
+        }
     });
 }
 
