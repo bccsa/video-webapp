@@ -112,6 +112,15 @@ schema public:
     owner_column: id
     owner_table: episode
     start_value: 1
+  sequence privileged_guests_id_seq:
+    cache_value: 1
+    data_type: integer
+    increment_by: 1
+    max_value: 2147483647
+    min_value: null
+    owner_column: id
+    owner_table: privileged_guests
+    start_value: 1
   sequence section_id_seq:
     cache_value: 1
     data_type: integer
@@ -1249,6 +1258,19 @@ schema public:
           table: episode
     primary_key:
       episode_collection_pkey:
+        columns:
+        - id
+  table privileged_guests:
+    columns:
+    - id:
+        default: nextval('public.privileged_guests_id_seq'::regclass)
+        not_null: true
+        type: integer
+    - email:
+        not_null: true
+        type: text
+    primary_key:
+      privileged_guests_pkey:
         columns:
         - id
   table section:

@@ -88,7 +88,7 @@ clientIO.on('connection', socket => {
             if (decoded) {
                 // Mark socket as authenticated
                 socket.data.authenticated = true;
-                socket.data.personId = decoded["https://login.bcc.no/claims/personId"];
+                socket.data.metadata = decoded['https://app.bcc.africa/metadata'];
             } 
         } catch (err) {
             console.log('unable to decode JWT: ' + err.message);
@@ -96,8 +96,8 @@ clientIO.on('connection', socket => {
     }
 
     if (socket.data.authenticated || auth0_bypass) {
-        dbObjects.sections().then(sections => {
-            ticketsApi.getTickets(socket.data.personId).then((ticketSection) => {
+        dbObjects.sections(socket.data.metadata.email, socket.data.metadata.hasMembership).then(sections => {
+            ticketsApi.getTickets(socket.data.metadata.personId, socket.data.metadata.hasMembership).then((ticketSection) => {
                 // Send initial data to client
                 socket.emit('data', {
                     ...sections,
