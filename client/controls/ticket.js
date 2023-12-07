@@ -28,8 +28,8 @@ class ticket extends ui {
     }
     
     Init() {
-        // Open up this item if it's the only ticket in the event
-        if (Object.keys(this._parent._controls).length == 1) {
+        // Open up this item if it's the first ticket in the event
+        if (this._parent._controls[0].name == this.name) {
             this.expand();
         }
 
