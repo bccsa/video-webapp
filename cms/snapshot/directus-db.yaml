@@ -14,11 +14,11 @@ collections:
       display_template: '{{displayName}}'
       group: null
       hidden: false
-      icon: null
+      icon: video_library
       item_duplication_fields: null
       note: null
       singleton: false
-      sort: null
+      sort: 2
       sort_field: null
       translations: null
       unarchive_value: null
@@ -36,7 +36,7 @@ collections:
       display_template: '{{displayName}}'
       group: null
       hidden: false
-      icon: null
+      icon: videocam
       item_duplication_fields:
         - collection.collection_id
         - collection.episode_id
@@ -46,7 +46,7 @@ collections:
         - imgUrl
       note: null
       singleton: false
-      sort: null
+      sort: 3
       sort_field: null
       translations: null
       unarchive_value: null
@@ -68,12 +68,34 @@ collections:
       item_duplication_fields: null
       note: null
       singleton: false
-      sort: null
+      sort: 4
       sort_field: null
       translations: null
       unarchive_value: null
     schema:
       name: episode_collection
+  - collection: privileged_guests
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: privileged_guests
+      color: null
+      display_template: '{{email}}'
+      group: null
+      hidden: false
+      icon: person
+      item_duplication_fields: null
+      note: null
+      singleton: false
+      sort: 5
+      sort_field: null
+      translations: null
+      unarchive_value: null
+    schema:
+      name: privileged_guests
   - collection: section
     meta:
       accountability: all
@@ -86,11 +108,11 @@ collections:
       display_template: '{{displayName}}'
       group: null
       hidden: false
-      icon: null
+      icon: folder
       item_duplication_fields: null
       note: null
       singleton: false
-      sort: null
+      sort: 1
       sort_field: null
       translations: null
       unarchive_value: null
@@ -611,6 +633,84 @@ fields:
       table: episode_collection
       data_type: integer
       default_value: nextval('episode_collection_id_seq'::regclass)
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: privileged_guests
+    field: email
+    type: string
+    meta:
+      collection: privileged_guests
+      conditions: null
+      display: null
+      display_options: null
+      field: email
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options:
+        iconLeft: email
+        placeholder: user@example.com
+      readonly: false
+      required: true
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: email
+      table: privileged_guests
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: true
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: privileged_guests
+    field: id
+    type: integer
+    meta:
+      collection: privileged_guests
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: privileged_guests
+      data_type: integer
+      default_value: nextval('privileged_guests_id_seq'::regclass)
       max_length: null
       numeric_precision: 32
       numeric_scale: 0

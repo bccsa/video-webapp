@@ -112,6 +112,15 @@ schema public:
     owner_column: id
     owner_table: episode
     start_value: 1
+  sequence privileged_guests_id_seq:
+    cache_value: 1
+    data_type: integer
+    increment_by: 1
+    max_value: 2147483647
+    min_value: null
+    owner_column: id
+    owner_table: privileged_guests
+    start_value: 1
   sequence section_id_seq:
     cache_value: 1
     data_type: integer
@@ -123,12 +132,13 @@ schema public:
     start_value: 1
   table collection:
     columns:
+    - displayName:
+        default: NULL::character varying
+        type: character varying(255)
     - id:
         default: nextval('public.collection_id_seq'::regclass)
         not_null: true
         type: integer
-    - displayName:
-        type: character varying(255)
     - section_id:
         type: integer
     foreign_keys:
@@ -1198,35 +1208,37 @@ schema public:
         - id
   table episode:
     columns:
-    - id:
-        default: nextval('public.episode_id_seq'::regclass)
-        not_null: true
-        type: integer
-    - displayName:
-        type: character varying(255)
     - description:
         type: text
-    - hlsUrl:
-        type: character varying(255)
-    - imgUrl:
+    - displayName:
         type: character varying(255)
     - eventDate:
         type: timestamp without time zone
     - expiryDate:
         type: timestamp without time zone
+    - hlsUrl:
+        default: NULL::character varying
+        type: character varying(255)
+    - id:
+        default: nextval('public.episode_id_seq'::regclass)
+        not_null: true
+        type: integer
+    - imgUrl:
+        default: NULL::character varying
+        type: character varying(255)
     primary_key:
       episode_pkey:
         columns:
         - id
   table episode_collection:
     columns:
-    - id:
-        default: nextval('public.episode_collection_id_seq'::regclass)
-        not_null: true
+    - collection_id:
         type: integer
     - episode_id:
         type: integer
-    - collection_id:
+    - id:
+        default: nextval('public.episode_collection_id_seq'::regclass)
+        not_null: true
         type: integer
     foreign_keys:
       episode_collection_collection_id_foreign:
@@ -1251,20 +1263,38 @@ schema public:
       episode_collection_pkey:
         columns:
         - id
+  table privileged_guests:
+    columns:
+    - id:
+        default: nextval('public.privileged_guests_id_seq'::regclass)
+        not_null: true
+        type: integer
+    - email:
+        not_null: true
+        type: character varying(255)
+    primary_key:
+      privileged_guests_pkey:
+        columns:
+        - id
+    unique_constraints:
+      privileged_guests_email_unique:
+        columns:
+        - email
   table section:
     columns:
+    - analytics_type:
+        default: NULL::character varying
+        type: character varying(255)
+    - displayName:
+        type: character varying(255)
     - id:
         default: nextval('public.section_id_seq'::regclass)
         not_null: true
         type: integer
-    - displayName:
+    - url_postfix:
         type: character varying(255)
     - url_prefix:
         default: NULL::character varying
-        type: character varying(255)
-    - url_postfix:
-        type: character varying(255)
-    - analytics_type:
         type: character varying(255)
     primary_key:
       section_pkey:

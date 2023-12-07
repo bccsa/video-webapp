@@ -21,45 +21,58 @@ class dataObjects {
 
 
     /**
-     * Get sections with linked colletions and episodes in object format
+     * Get sections with linked collections and episodes in object format
+     * @param {string} userEmail Email address of the current user
+     * @param {boolean} hasMembership Whether the current user has BCC membership
      * @returns Promise
      */
-    sections() {
+    sections(userEmail, hasMembership) {
         return new Promise((resolve, reject) => {
-            if (!this.db) reject('No database connection');
+            if (!this.db) {
+                reject('No database connection');
+            }
 
             let s;
-            this.db.section().then(sections => {
-                s = sections;
-                let sList = [];
-                Object.values(sections).forEach(section => {
-                    section.controlType = "section";
+            this.db.privilegedGuests().then(privilegedGuests => {
+                if (!hasMembership && !Object.keys(privilegedGuests).includes(userEmail)) {
+                    resolve({
+                        'noAccess': true,
+                    });
+                    return;
+                }
+            }).then(() => {
+                this.db.section().then(sections => {
+                    s = sections;
+                    let sList = [];
+                    Object.values(sections).forEach(section => {
+                        section.controlType = "section";
 
-                    sList.push(new Promise((resolve, reject) => {
-                        this.db.collection(section.id).then(collections => {
-                            Object.assign(section, collections);
-    
-                            let cList = [];
-                            Object.values(collections).forEach(collection => {
-                                collection.controlType = "collection";
-    
-                                cList.push(new Promise((resolve, reject) => {
-                                    this.db.episode(collection.id).then(episodes => {
-                                        Object.assign(collection, episodes);
-    
-                                        Object.values(episodes).forEach(episode => {
-                                            episode.controlType = "episode"
-                                        });
-    
-                                        resolve();
-                                    }).catch(err => reject(err));
-                                }));
-                            });
-                            Promise.all(cList).then(() => { resolve() });
-                        }).catch(err => reject(err));
-                    }));
-                });
-                Promise.all(sList).then(() => { resolve(s) });
+                        sList.push(new Promise((resolve, reject) => {
+                            this.db.collection(section.id).then(collections => {
+                                Object.assign(section, collections);
+        
+                                let cList = [];
+                                Object.values(collections).forEach(collection => {
+                                    collection.controlType = "collection";
+        
+                                    cList.push(new Promise((resolve, reject) => {
+                                        this.db.episode(collection.id).then(episodes => {
+                                            Object.assign(collection, episodes);
+        
+                                            Object.values(episodes).forEach(episode => {
+                                                episode.controlType = "episode"
+                                            });
+        
+                                            resolve();
+                                        }).catch(err => reject(err));
+                                    }));
+                                });
+                                Promise.all(cList).then(() => { resolve() });
+                            }).catch(err => reject(err));
+                        }));
+                    });
+                    Promise.all(sList).then(() => { resolve(s) });
+                }).catch(err => reject(err));
             }).catch(err => reject(err));
         })
     }
