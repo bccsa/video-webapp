@@ -7,58 +7,34 @@ class ticketInfo extends ui {
 
         this.ticketClasses = [
             [
-                'bg-blue-300',
-                'text-blue-950',
-                'bg-blue-200',
-                'text-blue-900',
+                'bg-tuscany-300',
+                'text-tuscany-950',
+                'bg-tuscany-200',
+                'text-tuscany-900',
             ],
             [
-                'bg-green-300',
-                'text-green-950',
-                'bg-green-200',
-                'text-green-900',
+                'bg-soya-bean-300',
+                'text-soya-bean-950',
+                'bg-soya-bean-200',
+                'text-soya-bean-900',
             ],
             [
-                'bg-purple-300',
-                'text-purple-950',
-                'bg-purple-200',
-                'text-purple-900',
+                'bg-porsche-300',
+                'text-porsche-950',
+                'bg-porsche-200',
+                'text-porsche-900',
             ],
             [
-                'bg-red-300',
-                'text-red-950',
-                'bg-red-200',
-                'text-red-900',
+                'bg-pewter-300',
+                'text-pewter-950',
+                'bg-pewter-200',
+                'text-pewter-900',
             ],
             [
-                'bg-cyan-300',
-                'text-cyan-950',
-                'bg-cyan-200',
-                'text-cyan-900',
-            ],
-            [
-                'bg-orange-300',
-                'text-orange-950',
-                'bg-orange-200',
-                'text-orange-900',
-            ],
-            [
-                'bg-violet-300',
-                'text-violet-950',
-                'bg-violet-200',
-                'text-violet-900',
-            ],
-            [
-                'bg-pink-300',
-                'text-pink-950',
-                'bg-pink-200',
-                'text-pink-900',
-            ],
-            [
-                'bg-yellow-300',
-                'text-yellow-950',
-                'bg-yellow-200',
-                'text-yellow-900',
+                'bg-acapulco-300',
+                'text-acapulco-950',
+                'bg-acapulco-200',
+                'text-acapulco-900',
             ],
         ];
     }
@@ -66,8 +42,8 @@ class ticketInfo extends ui {
     get html() {
         return /*html*/`
             <div class="overflow-hidden">
-                <div id="@{_mainDiv}" class="rounded mb-4 shadow relative" >
-                    <div id="@{_header}" class="text-center text-md rounded-t px-8 py-2">@{title}</div>
+                <div class="rounded mb-4 shadow relative" >
+                    <div id="@{_header}" class="text-center text-md rounded-t px-8 py-2 font-medium">@{title}</div>
                     <div id="@{_content}" class="text-center px-8 py-2 rounded-b">@{content}</div>
 
                     <div class="absolute inset-y-0 -left-4 flex items-center justify-center">
