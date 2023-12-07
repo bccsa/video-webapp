@@ -128,11 +128,13 @@ class tickets {
             };
 
             conference.ticketInfoColumns.forEach((column) => {
-                ticketObject[column] = {
-                    controlType: "ticketInfo",
-                    title: headers[column],
-                    content: ticket[column],
-                };
+                if (ticket[column] && ticket[column] !== "0" && ticket[column].toLowerCase() !== "no") {
+                    ticketObject[column] = {
+                        controlType: "ticketInfo",
+                        title: headers[column],
+                        content: ticket[column],
+                    };
+                }
             });
 
             return ticketObject;
