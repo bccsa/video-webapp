@@ -7,8 +7,6 @@ class event extends ui {
         this.endDate = "";
         this.noTickets = "";
 
-        this.ticketNumber = 0;
-
         this._dateFormatter = new Intl.DateTimeFormat('en-KE', { dateStyle: 'long' });
     }
 
