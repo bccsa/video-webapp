@@ -52,7 +52,6 @@ var clientEnv = {
         domain: process.env.AUTH0_DOMAIN,
         clientId: process.env.AUTH0_CLIENT_ID,
         audience: process.env.AUTH0_AUDIENCE,
-        bypass: process.env.AUTH0_BYPASS
     }
 }
 
@@ -76,11 +75,9 @@ const clientIO = new Server(clientHttp, {
     }
 });
 
-let auth0_bypass = process.env.AUTH0_BYPASS;
-
 // Client socket.io connections
 clientIO.on('connection', socket => {
-    if (socket.handshake && socket.handshake.auth && socket.handshake.auth.token || auth0_bypass) {
+    if (socket.handshake && socket.handshake.auth && socket.handshake.auth.token) {
         try {
             // verify JWT token. ref: https://github.com/auth0/node-jsonwebtoken
             let decoded = jwt.verify(socket.handshake.auth.token, process.env.AUTH0_SECRET, { algorithms: [process.env.AUTH0_ALGORITHM] });
@@ -94,7 +91,7 @@ clientIO.on('connection', socket => {
         }
     }
 
-    if (socket.data.authenticated || auth0_bypass) {
+    if (socket.data.authenticated) {
         dbObjects.sections(socket.data.metadata.email, socket.data.metadata.hasMembership).then(sections => {
             ticketsApi.getTickets(socket.data.metadata.personId, socket.data.metadata.hasMembership).then((ticketSection) => {
                 // Send initial data to client

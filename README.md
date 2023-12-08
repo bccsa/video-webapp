@@ -40,11 +40,11 @@ npm ci
 ```
 
 ### 2. Main environment
-Create a `.env` file in the root of the project. Start by copying the example file, then adjust variables as needed, in particular the database credentials:
+Create a `.env` file in the root of the project. Start by copying the example file, then adjust variables as needed, in particular the database and Auth0 credentials:
 ```shell
 cp .env.example .env
 ```
-
+Ask a team member for existing Auth0 credentials or create your own Auth0 instance, [see below](#auth0-configuration).
 
 ### 3. Client
 Install dependencies:
@@ -135,13 +135,11 @@ npm run schema:update
 ---
 
 ## Auth0 configuration
-Auth0 can be bypassed in your development environment by setting the `AUTH0_BYPASS` parameter in the `.env` file in the project route to `true`.
-
-If you need to work on Auth0 related features, create a new application in Auth0's control panel with the following settings (only non-default settings listed):
+If you need to work on Auth0 related features and don't want to or can't use an existing instance, create a new application in Auth0's control panel with the following settings (only non-default settings listed):
 * Application type: Single Page Application
-* Allowed Callback URLs: http://localhost:8080,https://your.app.url
-* Allowed Logout URLs: http://localhost:8080,https://your.app.url
-* Allowed Web Origins: http://localhost:8080,https://your.app.url
+* Allowed Callback URLs: http://localhost:8080
+* Allowed Logout URLs: http://localhost:8080
+* Allowed Web Origins: http://localhost:8080
 * Refresh Token Rotation: Rotation selected
 
 Create an API for your application in the Auth0 control panel. The API identifier should be set as the AUTH0_AUDIENCE environmental variable.

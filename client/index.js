@@ -28,13 +28,6 @@ fetch('env')
 
 // Wait for appFrame to be initialized
 controls.on('appFrame', () => {
-    if (env.auth0.bypass == true || env.auth0.bypass == "true") {
-        // Force login state to authenticated in bypass mode
-        controls.appFrame.isAuthenticated = true;
-
-        return initSocket('');
-    }
-
     // Auth0 ref: https://auth0.com/docs/quickstart/spa/vanillajs/01-login 
     auth0.createAuth0Client({
         domain: env.auth0.domain,
@@ -82,12 +75,6 @@ controls.on('appFrame', () => {
             } else {
                 // Keep track of selected location for redirection after user login
                 localStorage.setItem("pathname", window.location.pathname);
-
-                // Connect to Socket.io server with empty auth token (unauthenticated connection)
-                // This can be used to show content to non-logged in users
-                if (env.auth0.AUTH0_BYPASS) {
-                    initSocket('');
-                }
 
                 // Show user page (with login)
                 if (controls.appFrame.User) {
