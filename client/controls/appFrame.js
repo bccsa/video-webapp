@@ -80,9 +80,16 @@ class appFrame extends ui {
                     </div>
                 </div>
                 <div class="flex flex-col overflow-y-scroll" id="@{_scrollContainer}">
-                    <div id="@{_noAccessMessage}" class="flex justify-center hidden">
+                    <div id="@{_noAccessMessage}" class="flex justify-center hidden mx-4">
                         <div class="inline-block px-6 py-2 my-4 bg-blue-300 text-blue-900 rounded shadow max-w-2xl">
-                            It seems you don't have access to our content. Please contact your BCCSA contact person to get access. If your access is confirmed, reload the page.
+                            It seems you don't have access to our content. Please contact your BCCSA contact person to get access. When your access is confirmed, reload the page.
+                        </div>
+                    </div>
+                    
+                    <div id="@{_loginErrorMessage}" class="flex justify-center hidden mx-4">
+                        <div class="inline-block text-center px-6 py-2 my-4 bg-red-300 text-red-900 rounded shadow max-w-2xl">
+                            <p>There was an error logging in. Please try again or contact us if the problem persists.</p>
+                            <p class="text-xs mt-2">Technical details: <span id="@{_loginErrorMessageTechnicalDetails}" class="font-mono"></span></p>
                         </div>
                     </div>
 
@@ -141,6 +148,13 @@ class appFrame extends ui {
     }
 
     Init() {
+        if (window.location.search.includes('error')) {
+            this._loginErrorMessage.classList.remove('hidden');
+            const params = new URLSearchParams(window.location.search);
+            this._loginErrorMessageTechnicalDetails.innerText = `${params.get('error')} ${params.get('error_description')}`;
+        }
+
+
         // Title divider
         this.on('sectionName', data => {
             if (data) {
