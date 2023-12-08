@@ -58,7 +58,7 @@ controls.on('appFrame', () => {
                         controls.appFrame.isAuthenticated = a;
                     });
                 }).catch(err => {
-                    console.error(err.message);
+                    controls.appFrame.showLoginErrorMessage("Error handling callback: " + err);
                 });
             } else if (auth && query.includes("code=") && query.includes("state=")) {
                 window.history.replaceState({}, document.title, "/");//
@@ -70,7 +70,7 @@ controls.on('appFrame', () => {
                     // Connect to Socket.io server
                     initSocket(token);
                 }).catch(err => {
-                    console.error(err.message);
+                    controls.appFrame.showLoginErrorMessage("Error getting token: " + err);
                 });
             } else {
                 // Keep track of selected location for redirection after user login

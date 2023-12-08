@@ -149,9 +149,8 @@ class appFrame extends ui {
 
     Init() {
         if (window.location.search.includes('error')) {
-            this._loginErrorMessage.classList.remove('hidden');
             const params = new URLSearchParams(window.location.search);
-            this._loginErrorMessageTechnicalDetails.innerText = `${params.get('error')} ${params.get('error_description')}`;
+            this.showLoginErrorMessage(`${params.get('error')} ${params.get('error_description')}`);
         }
 
 
@@ -276,6 +275,11 @@ class appFrame extends ui {
 
     showNoAccessMessage() {
         this._noAccessMessage.classList.remove('hidden');
+    }
+
+    showLoginErrorMessage(technicalDetails) {
+        this._loginErrorMessage.classList.remove('hidden');
+        this._loginErrorMessageTechnicalDetails.innerText = technicalDetails;
     }
 
     resetBtn(ref) {
