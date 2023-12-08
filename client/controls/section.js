@@ -26,7 +26,7 @@ class section extends ui {
         this._parent.sectionName = this.displayName;
 
         // Set the window location to include path
-        window.history.replaceState('', document.title, window.location.origin + '/' + this.displayName.toLowerCase());
+        window.history.replaceState('', document.title, window.location.origin + '/' + this.displayName.toLowerCase() + window.location.search);
 
         super.Show();
     }
