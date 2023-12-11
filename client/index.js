@@ -27,9 +27,9 @@ fetch('env')
     });
 
 // Wait for appFrame to be initialized
-controls.on('appFrame', () => {
+controls.on('appFrame', async () => {
     // Auth0 ref: https://auth0.com/docs/quickstart/spa/vanillajs/01-login 
-    auth0.createAuth0Client({
+    const client = await auth0.createAuth0Client({
         domain: env.auth0.domain,
         clientId: env.auth0.clientId,
         authorizationParams: {
@@ -38,55 +38,47 @@ controls.on('appFrame', () => {
         },
         cacheLocation: 'localstorage',
         useRefreshTokens: true
-    }).then(res => {
-        // Set global reference to Auth0 client
-        auth0Client = res;
-
-        // Handle authentication callbacks (via query string parameters)
-        auth0Client.isAuthenticated().then(async auth => {
-            // Set login state
-            controls.appFrame.isAuthenticated = auth;
-
-            // Only parse auth query string if not already authenticated
-            const query = window.location.search;
-            if (!controls.appFrame.isAuthenticated && query.includes("code=") && query.includes("state=")) {
-                await auth0Client.handleRedirectCallback().then(async res => {
-                    window.history.replaceState({}, document.title, "/");
-
-                    // Set login state after login
-                    await auth0Client.isAuthenticated().then(a => {
-                        controls.appFrame.isAuthenticated = a;
-                    });
-                }).catch(err => {
-                    controls.appFrame.showLoginErrorMessage("Error handling callback: " + err);
-                });
-            } else if (auth && query.includes("code=") && query.includes("state=")) {
-                window.history.replaceState({}, document.title, "/");//
-            }
-
-            if (controls.appFrame.isAuthenticated) {
-                // Get the auth token
-                auth0Client.getTokenSilently().then(token => {
-                    // Connect to Socket.io server
-                    initSocket(token);
-                }).catch(err => {
-                    controls.appFrame.showLoginErrorMessage("Error getting token: " + err);
-                });
-            } else {
-                // Keep track of selected location for redirection after user login
-                localStorage.setItem("pathname", window.location.pathname);
-
-                // Show user page (with login)
-                if (controls.appFrame.User) {
-                    controls.appFrame.ShowUser();
-                } else {
-                    controls.appFrame.one('User', () => {
-                        controls.appFrame.ShowUser();
-                    });
-                }
-            }
-        });
     });
+
+    // Set global reference to Auth0 client
+    auth0Client = client;
+
+    const query = window.location.search;
+    if (query.includes("code=") && query.includes("state=")) {
+        try {
+            await auth0Client.handleRedirectCallback();
+
+            // Clear query string
+            window.history.replaceState({}, document.title, "/");
+        } catch (err) {
+            controls.appFrame.showLoginErrorMessage(err);
+        }
+    }
+
+    const isAuthenticated = await auth0Client.isAuthenticated();
+
+    // Set login state
+    controls.appFrame.isAuthenticated = isAuthenticated;
+    
+    if (isAuthenticated) {
+        // Get the auth token
+        const token = await auth0Client.getTokenSilently();
+        
+        // Connect to Socket.io server
+        return initSocket(token);
+    }
+
+    // Keep track of selected location for redirection after user login
+    localStorage.setItem("pathname", window.location.pathname);
+
+    // Show user page (with login)
+    if (controls.appFrame.User) {
+        controls.appFrame.ShowUser();
+    } else {
+        controls.appFrame.one('User', () => {
+            controls.appFrame.ShowUser();
+        });
+    }
 });
 
 /**
