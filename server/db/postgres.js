@@ -101,7 +101,7 @@ class postgres {
                 let p = [];
                 if (Array.isArray(Params)) { p = Params };
                 this._dbClient.query(QueryString, p).then(res => {
-                    let list = {};
+                    const list = {};
                     // Convert array to object
                     if (res && res.rows) {
                         res.rows.forEach(r => {
@@ -128,14 +128,16 @@ class postgres {
     /**
      * Return all collections of a given section that have an available episode as a promise
      * @param {Number} SectionID 
+     * @param {boolean} guestOnly When true, only get collections with episodes that are accessible by privileged guests
      */
     collection(SectionID, guestOnly) {
-        return this._query(`SELECT collection.id, collection."displayName" FROM collection JOIN episode_collection ON episode_collection.collection_id = collection.id JOIN episode ON episode_collection.episode_id = episode.id WHERE collection.section_id = $1 AND (episode."expiryDate" >= now() OR episode."expiryDate" IS NULL) ${guestOnly ? 'AND privileged_guest_access=TRUE' : ''} ORDER BY collection.id DESC;`, [SectionID], 'id');
+        return this._query(`SELECT collection.id, collection."displayName" FROM collection JOIN episode_collection ON episode_collection.collection_id = collection.id JOIN episode ON episode_collection.episode_id = episode.id WHERE collection.section_id = $1 AND (episode."expiryDate" >= now() OR episode."expiryDate" IS NULL) ${guestOnly ? 'AND privileged_guest_access=TRUE' : ''} GROUP BY collection.id ORDER BY collection.id DESC;`, [SectionID], 'displayName');
     }
 
     /**
      * Return all episodes in a collection as a promise
      * @param {*} CollectionID 
+     * @param {boolean} guestOnly When true, only get episodes that are accessible by privileged guests
      */
     episode(CollectionID, guestOnly) {
         return this._query(`SELECT * FROM episode_collection_view WHERE collection_id=$1 ${guestOnly ? 'AND privileged_guest_access=TRUE' : ''} ORDER BY id DESC`, [CollectionID], 'id');
