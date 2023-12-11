@@ -129,22 +129,22 @@ class postgres {
      * Return all collections of a given section that have an available episode as a promise
      * @param {Number} SectionID 
      */
-    collection(SectionID) {
-        return this._query('SELECT collection.id, collection."displayName" FROM collection JOIN episode_collection ON episode_collection.collection_id = collection.id JOIN episode ON episode_collection.episode_id = episode.id WHERE collection.section_id = $1 AND (episode."expiryDate" >= now() OR episode."expiryDate" IS NULL) ORDER BY collection.id DESC;', [SectionID], 'id');
+    collection(SectionID, guestOnly) {
+        return this._query(`SELECT collection.id, collection."displayName" FROM collection JOIN episode_collection ON episode_collection.collection_id = collection.id JOIN episode ON episode_collection.episode_id = episode.id WHERE collection.section_id = $1 AND (episode."expiryDate" >= now() OR episode."expiryDate" IS NULL) ${guestOnly ? 'AND privileged_guest_access=TRUE' : ''} ORDER BY collection.id DESC;`, [SectionID], 'id');
     }
 
     /**
      * Return all episodes in a collection as a promise
      * @param {*} CollectionID 
      */
-    episode(CollectionID) {
-        return this._query('SELECT * FROM episode_collection_view WHERE collection_id=$1 ORDER BY id DESC', [CollectionID], 'id');
+    episode(CollectionID, guestOnly) {
+        return this._query(`SELECT * FROM episode_collection_view WHERE collection_id=$1 ${guestOnly ? 'AND privileged_guest_access=TRUE' : ''} ORDER BY id DESC`, [CollectionID], 'id');
     }
 
     /**
      * Return all privileged guests as a promise
      */
-    privilegedGuests() {
+    privilegedGuests() {    
         return this._query('SELECT * FROM privileged_guests', [], 'email');
     }
 }

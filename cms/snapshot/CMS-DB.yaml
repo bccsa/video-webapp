@@ -1226,6 +1226,10 @@ schema public:
     - imgUrl:
         default: NULL::character varying
         type: character varying(255)
+    - privileged_guest_access:
+        default: 'false'
+        not_null: true
+        type: boolean
     primary_key:
       episode_pkey:
         columns:
@@ -1324,6 +1328,8 @@ schema public:
         type: timestamp without time zone
     - expiryDate:
         type: timestamp without time zone
+    - privileged_guest_access:
+        type: boolean
     definition: |2-
        SELECT episode.id,
           collection.id AS collection_id,
@@ -1333,7 +1339,8 @@ schema public:
           episode."imgUrl",
           section.analytics_type,
           episode."eventDate",
-          episode."expiryDate"
+          episode."expiryDate",
+          episode.privileged_guest_access
          FROM public.episode_collection
            JOIN public.episode ON episode_collection.episode_id = episode.id
            JOIN public.collection ON episode_collection.collection_id = collection.id

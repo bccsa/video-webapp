@@ -530,6 +530,48 @@ fields:
       has_auto_increment: false
       foreign_key_table: null
       foreign_key_column: null
+  - collection: episode
+    field: privileged_guest_access
+    type: boolean
+    meta:
+      collection: episode
+      conditions: null
+      display: boolean
+      display_options:
+        labelOff: 'No'
+        labelOn: 'Yes'
+      field: privileged_guest_access
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Visible for privileged guests
+      readonly: false
+      required: false
+      sort: null
+      special:
+        - cast-boolean
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: privileged_guest_access
+      table: episode
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: episode_collection
     field: collection_id
     type: integer

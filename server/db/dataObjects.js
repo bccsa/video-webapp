@@ -34,13 +34,16 @@ class dataObjects {
 
             let s;
             this.db.privilegedGuests().then(privilegedGuests => {
-                if (!hasMembership && !Object.keys(privilegedGuests).includes(userEmail)) {
+                const privilegedGuestsList = Object.keys(privilegedGuests);
+                if (!hasMembership && !privilegedGuestsList.includes(userEmail)) {
                     resolve({
                         'noAccess': true,
                     });
                     return;
                 }
             }).then(() => {
+                const guestOnly = !hasMembership;
+
                 this.db.section().then(sections => {
                     s = sections;
                     let sList = [];
@@ -48,7 +51,7 @@ class dataObjects {
                         section.controlType = "section";
 
                         sList.push(new Promise((resolve, reject) => {
-                            this.db.collection(section.id).then(collections => {
+                            this.db.collection(section.id, guestOnly).then(collections => {
                                 Object.assign(section, collections);
         
                                 let cList = [];
@@ -56,7 +59,7 @@ class dataObjects {
                                     collection.controlType = "collection";
         
                                     cList.push(new Promise((resolve, reject) => {
-                                        this.db.episode(collection.id).then(episodes => {
+                                        this.db.episode(collection.id, guestOnly).then(episodes => {
                                             Object.assign(collection, episodes);
         
                                             Object.values(episodes).forEach(episode => {
