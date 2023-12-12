@@ -7,7 +7,7 @@ class event extends ui {
         this.endDate = "";
         this.noTickets = "";
 
-        this._dateFormatter = new Intl.DateTimeFormat('en-KE', { dateStyle: 'long' });
+        this._dateFormatter = new Intl.DateTimeFormat('en-KE', { dateStyle: 'long', timeZone: 'Africa/Johannesburg' });
     }
 
     get html() {

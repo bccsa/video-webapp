@@ -23,7 +23,7 @@ class appFrame extends ui {
 
         // Helpers
         this._parser = new m3u8Parser.Parser();
-        this._dateFormatter = new Intl.DateTimeFormat('en-KE', { dateStyle: 'long', timeStyle: 'short' });
+        this._dateFormatter = new Intl.DateTimeFormat('en-KE', { dateStyle: 'long', timeStyle: 'short', timeZone: 'Africa/Johannesburg' });
     }
 
     get html() {
