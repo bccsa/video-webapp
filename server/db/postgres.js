@@ -126,12 +126,24 @@ class postgres {
     }
 
     /**
-     * Return all collections of a given section that have an available episode as a promise
+     * Return all collections of a given section that have an available episode, sorted by latest episode event date
      * @param {Number} SectionID 
      * @param {boolean} guestOnly When true, only get collections with episodes that are accessible by privileged guests
      */
     collection(SectionID, guestOnly) {
-        return this._query(`SELECT collection.id, collection."displayName" FROM collection JOIN episode_collection ON episode_collection.collection_id = collection.id JOIN episode ON episode_collection.episode_id = episode.id WHERE collection.section_id = $1 AND (episode."expiryDate" >= now() OR episode."expiryDate" IS NULL) ${guestOnly ? 'AND privileged_guest_access=TRUE' : ''} GROUP BY collection.id ORDER BY collection.id DESC;`, [SectionID], 'displayName');
+        return this._query(`SELECT sorted_collection.id, sorted_collection."displayName" FROM (
+            SELECT episode."eventDate", episode."expiryDate", episode_collection.collection_id, collection.*,
+                 rank() OVER (
+                     PARTITION BY episode_collection.collection_id
+                     ORDER BY "eventDate" DESC
+                 )
+               FROM episode
+               JOIN episode_collection ON episode_collection.episode_id = episode.id
+               JOIN collection ON episode_collection.collection_id = collection.id
+               ${guestOnly ? 'WHERE privileged_guest_access=TRUE' : ''}
+            ) sorted_collection
+            WHERE RANK=1 AND section_id=$1 AND ("expiryDate" >= now() OR "expiryDate" IS NULL)
+            ORDER BY "eventDate" DESC;`, [SectionID], 'displayName');
     }
 
     /**
