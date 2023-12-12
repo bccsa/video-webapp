@@ -133,16 +133,16 @@ class postgres {
     collection(SectionID, guestOnly) {
         return this._query(`SELECT sorted_collection.id, sorted_collection."displayName" FROM (
             SELECT episode."eventDate", episode."expiryDate", episode_collection.collection_id, collection.*,
-                 rank() OVER (
-                     PARTITION BY episode_collection.collection_id
-                     ORDER BY "eventDate" DESC
-                 )
-               FROM episode
-               JOIN episode_collection ON episode_collection.episode_id = episode.id
-               JOIN collection ON episode_collection.collection_id = collection.id
-               ${guestOnly ? 'WHERE privileged_guest_access=TRUE' : ''}
+                rank() OVER (
+                    PARTITION BY episode_collection.collection_id
+                    ORDER BY "eventDate" DESC
+                )
+                FROM episode
+                JOIN episode_collection ON episode_collection.episode_id = episode.id
+                JOIN collection ON episode_collection.collection_id = collection.id
+                ${guestOnly ? 'WHERE privileged_guest_access=TRUE AND' : 'WHERE'} ("expiryDate" >= now() OR "expiryDate" IS NULL)
             ) sorted_collection
-            WHERE RANK=1 AND section_id=$1 AND ("expiryDate" >= now() OR "expiryDate" IS NULL)
+            WHERE RANK=1 AND section_id=$1
             ORDER BY "eventDate" DESC;`, [SectionID], 'displayName');
     }
 
