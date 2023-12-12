@@ -155,6 +155,10 @@ schema public:
       collection_pkey:
         columns:
         - id
+    unique_constraints:
+      collection_displayname_unique:
+        columns:
+        - displayName
   table directus_activity:
     columns:
     - id:
