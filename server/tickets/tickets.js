@@ -126,7 +126,7 @@ class tickets {
 
         // Only search for family members if the user has a family
         if (familyId || familyId.trim() != "") {
-            tickets = sheetData.filter(row => row[conference.familyIdColumn].includes(familyId));
+            tickets = sheetData.filter(row => row[conference.familyIdColumn] == familyId);
         }
 
         if (tickets.length == 0) {
