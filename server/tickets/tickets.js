@@ -120,7 +120,14 @@ class tickets {
             return this.createNoTicketsResponse(event);
         }
 
-        let tickets = sheetData.filter(row => row[conference.familyIdColumn].includes(person[conference.familyIdColumn]));
+        const familyId = person[conference.familyIdColumn];
+
+        let tickets = [person];
+
+        // Only search for family members if the user has a family
+        if (familyId || familyId.trim() != "") {
+            tickets = sheetData.filter(row => row[conference.familyIdColumn].includes(familyId));
+        }
 
         if (tickets.length == 0) {
             return this.createNoTicketsResponse(event);
