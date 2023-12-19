@@ -62,7 +62,7 @@ class appFrame extends ui {
                         <p class="text-slate-100 font-sans text-sm">@{hlsTitle}</p>
                         <p class="font-sans text-slate-400 text-xs">
                             <span>@{hlsEventDate}</span>
-                            <span id="@{_descriptionDivider}" hidden>·</span>
+                            <span id="@{_descriptionDividerMiniPlayer}" hidden>·</span>
                             <span>@{hlsDescription}</span>
                         </p>
                     </div>
@@ -103,7 +103,7 @@ class appFrame extends ui {
                                     <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
                                     <p class="font-sans text-slate-400 text-xs">
                                         <span>@{hlsEventDate}</span>
-                                        <span id="@{_descriptionDivider}" hidden>·</span>
+                                        <span id="@{_descriptionDividerVideoPlayer}" hidden>·</span>
                                         <span>@{hlsDescription}</span>
                                     </p>
                                 </div>
@@ -419,9 +419,11 @@ class appFrame extends ui {
         }
 
         if (!this.hlsEventDate || !this.hlsDescription) {
-            this._descriptionDivider.hidden = true;
+            this._descriptionDividerMiniPlayer.hidden = true;
+            this._descriptionDividerVideoPlayer.hidden = true;
         } else {
-            this._descriptionDivider.hidden = false;
+            this._descriptionDividerMiniPlayer.hidden = false;
+            this._descriptionDividerVideoPlayer.hidden = false;
         }
 
         if (this.playerMode == 'audio') {
