@@ -88,8 +88,11 @@ module.exports = {
           '800': '#894223',
           '900': '#6e3820',
           '950': '#3b1a0f',
-        },    
-      }
+        },
+      },
+      screens: {
+        'tall': { 'raw': '(min-height: 775px)' },
+      },
     },
   },
   plugins: [

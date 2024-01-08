@@ -5,7 +5,6 @@ const express = require("express");
 var fallback = require('express-history-api-fallback');
 const http = require("http");
 const path = require("path");
-const google = require("./tickets/google");
 const { tickets } = require("./tickets/tickets");
 require('dotenv').config({ path: path.join(__dirname, "../.env") });
 var jwt = require('jsonwebtoken');
@@ -53,7 +52,6 @@ var clientEnv = {
         domain: process.env.AUTH0_DOMAIN,
         clientId: process.env.AUTH0_CLIENT_ID,
         audience: process.env.AUTH0_AUDIENCE,
-        bypass: process.env.AUTH0_BYPASS
     }
 }
 
@@ -77,27 +75,25 @@ const clientIO = new Server(clientHttp, {
     }
 });
 
-let auth0_bypass = process.env.AUTH0_BYPASS;
-
 // Client socket.io connections
 clientIO.on('connection', socket => {
-    if (socket.handshake && socket.handshake.auth && socket.handshake.auth.token || auth0_bypass) {
+    if (socket.handshake && socket.handshake.auth && socket.handshake.auth.token) {
         try {
             // verify JWT token. ref: https://github.com/auth0/node-jsonwebtoken
             let decoded = jwt.verify(socket.handshake.auth.token, process.env.AUTH0_SECRET, { algorithms: [process.env.AUTH0_ALGORITHM] });
             if (decoded) {
                 // Mark socket as authenticated
                 socket.data.authenticated = true;
-                socket.data.personId = decoded["https://login.bcc.no/claims/personId"];
+                socket.data.metadata = decoded['https://app.bcc.africa/metadata'];
             } 
         } catch (err) {
             console.log('unable to decode JWT: ' + err.message);
         }
     }
 
-    if (socket.data.authenticated || auth0_bypass) {
-        dbObjects.sections().then(sections => {
-            ticketsApi.getTickets(socket.data.personId).then((ticketSection) => {
+    if (socket.data.authenticated) {
+        dbObjects.sections(socket.data.metadata.email, socket.data.metadata.hasMembership).then(sections => {
+            ticketsApi.getTickets(socket.data.metadata.personId, socket.data.metadata.hasMembership).then((ticketSection) => {
                 // Send initial data to client
                 socket.emit('data', {
                     ...sections,

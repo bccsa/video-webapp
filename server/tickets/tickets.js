@@ -19,8 +19,15 @@ class tickets {
 
     /**
      * @param {string} personId - The Brunstad SSO person/family id
+     * @param {boolean} hasMembership - Whether the person has BCC membership
      */
-    getTickets(personId) {
+    getTickets(personId, hasMembership) {
+        if (!hasMembership) {
+            return new Promise((resolve, reject) => {
+                return resolve(this.createNoEventsResponse());
+            });
+        }
+
         const oneMinuteAgo = new Date(new Date().getTime() - 60 * 1000)
         if (!this.cache.age || this.cache.age < oneMinuteAgo) {
             google.init(process.env.TICKETS_GOOGLE_SHEET_ID, process.env.TICKETS_GOOGLE_API_KEY);

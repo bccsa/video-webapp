@@ -23,7 +23,7 @@ class appFrame extends ui {
 
         // Helpers
         this._parser = new m3u8Parser.Parser();
-        this._dateFormatter = new Intl.DateTimeFormat('en-KE', { dateStyle: 'long', timeStyle: 'short' });
+        this._dateFormatter = new Intl.DateTimeFormat('en-KE', { dateStyle: 'long', timeStyle: 'short', timeZone: 'Africa/Johannesburg' });
     }
 
     get html() {
@@ -62,7 +62,7 @@ class appFrame extends ui {
                         <p class="text-slate-100 font-sans text-sm">@{hlsTitle}</p>
                         <p class="font-sans text-slate-400 text-xs">
                             <span>@{hlsEventDate}</span>
-                            <span id="@{_descriptionDivider}" hidden>·</span>
+                            <span id="@{_descriptionDividerMiniPlayer}" hidden>·</span>
                             <span>@{hlsDescription}</span>
                         </p>
                     </div>
@@ -80,8 +80,21 @@ class appFrame extends ui {
                     </div>
                 </div>
                 <div class="flex flex-col overflow-y-scroll" id="@{_scrollContainer}">
+                    <div id="@{_noAccessMessage}" class="flex justify-center hidden mx-4">
+                        <div class="inline-block px-6 py-2 my-4 bg-blue-300 text-blue-900 rounded shadow max-w-2xl">
+                            It seems you don't have access to our content. Please contact your BCCSA contact person to get access. When your access is confirmed, reload the page.
+                        </div>
+                    </div>
+                    
+                    <div id="@{_loginErrorMessage}" class="flex justify-center hidden mx-4">
+                        <div class="inline-block text-center px-6 py-2 my-4 bg-red-300 text-red-900 rounded shadow max-w-2xl">
+                            <p>There was an error logging in. Please try again or contact us if the problem persists.</p>
+                            <p class="text-xs mt-2">Technical details: <span id="@{_loginErrorMessageTechnicalDetails}" class="font-mono"></span></p>
+                        </div>
+                    </div>
+
                     <!-- video div -->
-                    <div id="@{_videoPlayer}" class="hidden md:w-2/3 bg-slate-700 md:mx-auto md:my-4 rounded-md">
+                    <div id="@{_videoPlayer}" class="hidden md:w-1/3 tall:w-2/3 bg-slate-700 md:mx-auto md:my-4 rounded-md">
                         <!-- video player -->
                         <div id="@{_playerElementContainer}" class="aspect-video w-full">
                             <!-- video data -->
@@ -90,7 +103,7 @@ class appFrame extends ui {
                                     <p class="text-slate-100 font-sans text-md">@{hlsTitle}</p>
                                     <p class="font-sans text-slate-400 text-xs">
                                         <span>@{hlsEventDate}</span>
-                                        <span id="@{_descriptionDivider}" hidden>·</span>
+                                        <span id="@{_descriptionDividerVideoPlayer}" hidden>·</span>
                                         <span>@{hlsDescription}</span>
                                     </p>
                                 </div>
@@ -135,6 +148,12 @@ class appFrame extends ui {
     }
 
     Init() {
+        if (window.location.search.includes('error')) {
+            const params = new URLSearchParams(window.location.search);
+            this.showLoginErrorMessage(`${params.get('error')} ${params.get('error_description')}`);
+        }
+
+
         // Title divider
         this.on('sectionName', data => {
             if (data) {
@@ -252,6 +271,15 @@ class appFrame extends ui {
         this._btnMiniplayerMaximize.addEventListener('click', e => {
             this.maximizeVideoPlayer();
         });
+    }
+
+    showNoAccessMessage() {
+        this._noAccessMessage.classList.remove('hidden');
+    }
+
+    showLoginErrorMessage(technicalDetails) {
+        this._loginErrorMessage.classList.remove('hidden');
+        this._loginErrorMessageTechnicalDetails.innerText = technicalDetails;
     }
 
     resetBtn(ref) {
@@ -391,9 +419,11 @@ class appFrame extends ui {
         }
 
         if (!this.hlsEventDate || !this.hlsDescription) {
-            this._descriptionDivider.hidden = true;
+            this._descriptionDividerMiniPlayer.hidden = true;
+            this._descriptionDividerVideoPlayer.hidden = true;
         } else {
-            this._descriptionDivider.hidden = false;
+            this._descriptionDividerMiniPlayer.hidden = false;
+            this._descriptionDividerVideoPlayer.hidden = false;
         }
 
         if (this.playerMode == 'audio') {

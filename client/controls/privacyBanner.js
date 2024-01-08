@@ -13,7 +13,7 @@ class privacyBanner extends ui {
             <button type="button" id="@{_btnShowModal}"
             class="m-2 rounded bg-slate-400 hover:bg-slate-300 h-12 w-48 max-w-full text-slate-800 font-bold py-2 px-4">Privacy Policy</button>
             <button type="button" id="@{_btnAccept}"
-            class="m-2 rounded bg-green-700 hover:bg-green-500 h-12 w-48 max-w-full text-slate-800 font-bold py-2 px-4">Accept</button>
+            class="m-2 rounded bg-green-600 hover:bg-green-500 h-12 w-48 max-w-full text-slate-800 font-bold py-2 px-4">Accept</button>
         </div>
 
         <!-- Modal -->
