@@ -4,6 +4,13 @@ let auth0Client;
 let env;
 let socket;
 
+// Remove all local storage contents if we suspect the user might have outdated Auth0 login information
+const migratedAuth0Tenant = localStorage.getItem("migratedAuth0Tenant");
+if (!migratedAuth0Tenant) {
+    localStorage.clear();
+    localStorage.setItem("migratedAuth0Tenant", "1");
+}
+
 // Get env settings
 fetch('env')
     .then(response => response.json())
