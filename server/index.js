@@ -85,9 +85,12 @@ clientIO.on('connection', socket => {
                 // Mark socket as authenticated
                 socket.data.authenticated = true;
                 socket.data.metadata = decoded['https://app.bcc.africa/metadata'];
-            } 
+            } else {
+                socket.emit('authError')
+            }
         } catch (err) {
             console.log('unable to decode JWT: ' + err.message);
+            socket.emit('authError')
         }
     }
 
