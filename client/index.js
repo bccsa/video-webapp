@@ -68,11 +68,17 @@ controls.on('appFrame', async () => {
     controls.appFrame.isAuthenticated = isAuthenticated;
     
     if (isAuthenticated) {
-        // Get the auth token
-        const token = await auth0Client.getTokenSilently();
+        try {
+            // Get the auth token
+            const token = await auth0Client.getTokenSilently();
+                    
+            // Connect to Socket.io server
+            return initSocket(token);
+        } catch (err) {
+            console.log('Error getting auth token. Forcing logout.');
+            clearAuth();
+        }
         
-        // Connect to Socket.io server
-        return initSocket(token);
     }
 
     // Keep track of selected location for redirection after user login
@@ -108,6 +114,19 @@ function initSocket(token) {
             controls.appFrame.showNoAccessMessage();
         }
     });
+
+    socket.on('authError', async () => {
+        console.log('authError. Forcing logout');
+        clearAuth();
+    })
+}
+
+function clearAuth() {
+    Object.keys(localStorage).filter(k => k.includes('auth0spajs')).forEach(key => {
+        localStorage.removeItem(key);
+    })
+
+    location.reload();
 }
 
 
