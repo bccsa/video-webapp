@@ -114,9 +114,10 @@ class tickets {
             noTickets: false,
         };
 
-        const person = sheetData.find(row => row[conference.personIdColumn].includes(personId));
+        const person = sheetData.find(row => row[conference.personIdColumn]?.includes(personId));
 
         if (!person) {
+            console.log('person not found: ' + personId)
             return this.createNoTicketsResponse(event);
         }
 
